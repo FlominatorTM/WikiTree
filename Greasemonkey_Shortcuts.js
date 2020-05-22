@@ -23,10 +23,14 @@ for (var i=0; ulNode = document.getElementsByTagName("ul")[i]; i++)
   }
 }
 
-//remove "Edit Profile of" from tab title after saving
-if((window.location + "").indexOf("?") == -1)
+
+if((window.location + "").indexOf("?") == -1 && ""+document.title.indexOf("Edit") != -1)
 {
-	document.title = document.getElementsByTagName("h1")[0].innerText.replace("Edit Profile of", "");
+  //remove "Edit Profile of" from tab title after saving
+	//document.title = document.getElementsByTagName("h1")[0].innerText.replace("Edit Profile of", "");
+  
+  //go to private view after saving
+  window.location=window.location+"?public=1";
 }
 
 
@@ -35,4 +39,11 @@ var previewButton = document.getElementsByName("preview")[0];
 if(null != previewButton)
 {
   previewButton.accessKey="p";
+}
+
+//remove duplicate shortcut
+var wpSaves = document.getElementsByName("wpSave");
+if(null != wpSaves)
+{
+  wpSaves[0].accessKey = "";
 }
