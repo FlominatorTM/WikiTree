@@ -47,3 +47,13 @@ if(null != wpSaves)
 {
   wpSaves[0].accessKey = "";
 }
+
+
+var inputMiddleName = document.getElementById('mMiddleName');
+if(null != inputMiddleName)
+{
+  if(inputMiddleName.value == "")
+  {
+    document.getElementById('mStatus_MiddleName_blank').checked = true;
+  }
+}

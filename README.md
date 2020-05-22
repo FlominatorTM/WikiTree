@@ -13,4 +13,4 @@ modifies WikiTree's user interface
 + keyboard shortcuts for edit and preview
 + removing redundant shortcut for save in order to make it work
 + showing private profile after saving instead of leaving edit mask open
- 
++ automatically select "no middle" name if field is empty
