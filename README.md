@@ -9,8 +9,4 @@ generates formatted source citations from church book duplicates at Landesarchiv
 ## Greasemonkey scripts
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
 ### Shortcuts
-modifies WikiTree's user interface
-+ keyboard shortcuts for edit and preview
-+ removing redundant shortcut for save in order to make it work
-+ showing private profile after saving instead of leaving edit mask open
-+ automatically select "no middle" name if field is empty
+modifies WikiTree's user interface, see https://github.com/FlominatorTM/WikiTree/blob/master/Greasemonkey_Shortcuts.js for details on features
