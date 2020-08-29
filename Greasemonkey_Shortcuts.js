@@ -1,10 +1,20 @@
 // ==UserScript==
 // @name          WikiTree input
 // @namespace     https://www.wikitree.com/
-// @description   adding some shortcuts and changing some links
+// @description   adding some shortcuts and changing some links (see below for details)
 // @match https://www.wikitree.com/*
 // @include   https://www.wikitree.com/
 // ==/UserScript==
+
+/*
+Features:
+
+- keyboard shortcuts for edit (E) and preview (P), see browser manual for details (in Firefox is ALT + SHIFT + shortcut)
+- removing redundant shortcut for save in order to make it work (this is a bug in the WikiTree UI)
+- showing private profile after saving instead of leaving edit mask open
+- automatically select "no middle" name if field is empty when editing a profile
+
+*/
 
 //shortcut e for edit button
 for (var i=0; ulNode = document.getElementsByTagName("ul")[i]; i++)
