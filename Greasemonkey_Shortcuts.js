@@ -12,8 +12,8 @@ Features:
 - keyboard shortcuts for edit (E) and preview (P), see browser manual for details (in Firefox is ALT + SHIFT + shortcut)
 - removing redundant shortcut for save in order to make it work (this is a bug in the WikiTree UI)
 - showing private profile after saving instead of leaving edit mask open
-- automatically select "no middle" name if field is empty when editing a profile
-
+- automatically select "no middle name" if field is empty when editing a profile
+- show message box when there is no category present
 */
 
 //shortcut e for edit button
@@ -58,7 +58,7 @@ if(null != wpSaves)
   wpSaves[0].accessKey = "";
 }
 
-
+// automatically check "no middle name"
 var inputMiddleName = document.getElementById('mMiddleName');
 if(null != inputMiddleName)
 {
@@ -66,4 +66,25 @@ if(null != inputMiddleName)
   {
     document.getElementById('mStatus_MiddleName_blank').checked = true;
   }
+}
+
+insert_link_before("span", "previewbox", '<a name="preview_box">');
+
+//show message box when there is no "Category" present
+var wpTextbox = document.getElementById('wpTextbox1');
+if(wpTextbox != null && wpTextbox.value.indexOf("Category") == -1)
+{
+	alert("Category is missing");
+}
+
+//Insert any tag before any element with an id
+function insert_link_before(tagname, previous_element, linkcode)
+{
+	var vl_logout = document.getElementById(previous_element);
+ 	if (vl_logout) 
+ 	{
+ 		var ins_li = document.createElement(tagname);
+ 		ins_li.innerHTML=/* */linkcode;/* */
+ 		 vl_logout.parentNode.insertBefore(ins_li, vl_logout);
+ 	}
 }
