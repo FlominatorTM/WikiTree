@@ -14,6 +14,7 @@ Features:
 - showing private profile after saving instead of leaving edit mask open
 - automatically select "no middle name" if field is empty when editing a profile
 - show message box when there is no category present
+- replace German country names by English ones
 */
 
 //shortcut e for edit button
@@ -75,6 +76,20 @@ var wpTextbox = document.getElementById('wpTextbox1');
 if(wpTextbox != null && wpTextbox.value.indexOf("Category") == -1)
 {
 	alert("Category is missing");
+}
+
+//replace German country names by English ones
+var birthLocation = document.getElementById('mBirthLocation');
+if(birthLocation != null)
+{
+  birthLocation.value = birthLocation.value.replace("Deutschland", "Germany").replace("Vereinigte Staaten", "United States");
+}
+
+//replace German country names by English ones
+var deathLocation = document.getElementById('mDeathLocation');
+if(deathLocation != null)
+{
+  deathLocation.value = deathLocation.value.replace("Deutschland", "Germany").replace("Vereinigte Staaten", "United States");
 }
 
 //Insert any tag before any element with an id
