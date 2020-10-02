@@ -20,7 +20,6 @@ Features:
 //shortcut e for edit button
 for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].children[j]; j++)
 {
-  alert(aNode.title)
   if(aNode.title == "Edit Profile and Family Relationships" || aNode.title == "Edit this Profile")
   {
     aNode.accessKey="e";
