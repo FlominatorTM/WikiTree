@@ -16,28 +16,24 @@ Features:
 - replace German country names by English ones
 */
 
+
 //shortcut e for edit button
-for (var i=0; ulNode = document.getElementsByTagName("ul")[i]; i++)
+for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].children[j]; j++)
 {
-  if(ulNode.className == "profile-tabs")
+  alert(aNode.title)
+  if(aNode.title == "Edit Profile and Family Relationships" || aNode.title == "Edit this Profile")
   {
-    for (var j=0; aNode = ulNode.children[j]; j++)
-    {
-      if(aNode.title == "Edit Profile and Family Relationships" || aNode.title == "Edit this Profile")
-      {
-        aNode.accessKey="e";
-        break;
-      }
-    }
+    aNode.accessKey="e";
     break;
   }
 }
+
 
 //go to private view after saving
 if(window.location == "https://www.wikitree.com/wiki/Special:EditPerson")
 {
   var personID = document.getElementsByClassName("pureCssMenui0")[1].firstChild.innerHTML;
-  window.location="https://www.wikitree.com/wiki/" + personID + "?public=1;
+  window.location="https://www.wikitree.com/wiki/" + personID + "?public=1";
 }
 
 //shortcut p for preview button
