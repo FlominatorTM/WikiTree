@@ -69,6 +69,7 @@ if(wpTextbox != null && wpTextbox.value.indexOf("Category") == -1)
 }
 
 //replace German country names by English ones
+/*
 var birthLocation = document.getElementById('mBirthLocation');
 if(birthLocation != null)
 {
@@ -80,7 +81,7 @@ var deathLocation = document.getElementById('mDeathLocation');
 if(deathLocation != null)
 {
   deathLocation.value = deathLocation.value.replace("Deutschland", "Germany").replace("Vereinigte Staaten", "United States");
-}
+}*/
 
 //Insert any tag before any element with an id
 function insert_link_before(tagname, previous_element, linkcode)
