@@ -3,6 +3,9 @@ tools for working with WikiTree
 
 ## Bookmarklets
 see https://en.wikipedia.org/wiki/Bookmarklet
+### FindAGrave
+generates template link based on the FindAGrave page currently displayed in browser
+
 ### LABW
 generates formatted source citations from church book duplicates at Landesarchiv Baden-Württemberg (e.g. from https://www2.landesarchiv-bw.de/ofs21/olf/struktur.php?bestand=10028 )
 
