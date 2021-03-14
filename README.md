@@ -3,6 +3,10 @@ tools for working with WikiTree
 
 ## Bookmarklets
 see https://en.wikipedia.org/wiki/Bookmarklet
+
+###ArchivesBasRhin
+generates formatted source citations from church books at http://archives.bas-rhin.fr/
+
 ### FindAGrave
 generates [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) code based on the memorial ID of the FindAGrave page currently displayed in browser
 
