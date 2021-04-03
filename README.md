@@ -4,6 +4,9 @@ tools for working with WikiTree
 ## Bookmarklets
 see https://en.wikipedia.org/wiki/Bookmarklet
 
+### AllEditLinks
+makes all links to wiki pages (e.g. in a contributions list) point directly to "edit profile"
+
 ### ArchivesBasRhin
 generates formatted source citations from church books at http://archives.bas-rhin.fr/
 

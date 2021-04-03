@@ -13,7 +13,7 @@ Features:
 - showing private profile after saving instead of leaving edit mask open
 - automatically select "no middle name" if field is empty when editing a profile
 - show message box when there is no category present
-- copy URL parameter wpSummary into the summary field 
+- replace German country names by English ones
 */
 
 
@@ -77,6 +77,8 @@ if(match==null && wpTextbox != null && wpTextbox.value.indexOf("Category") == -1
 {
 	alert("Category is missing");
 }
+
+
 
 //replace German country names by English ones
 /*
