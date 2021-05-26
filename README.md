@@ -20,3 +20,6 @@ generates formatted source citations from church book duplicates at Landesarchiv
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
 ### Shortcuts
 modifies WikiTree's user interface, see https://github.com/FlominatorTM/WikiTree/blob/master/Greasemonkey_Shortcuts.js for details on features
+
+### FamilySearch
+adds microfilm and (if available) image number to the citation template (only works for manual copy and paste, not for the copy link provided by FamilySearch) 
