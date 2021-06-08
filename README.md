@@ -16,6 +16,9 @@ generates [external link template](https://www.wikitree.com/wiki/Template:FindAG
 ### LABW
 generates formatted source citations from church book duplicates at Landesarchiv Baden-Württemberg (e.g. from https://www2.landesarchiv-bw.de/ofs21/olf/struktur.php?bestand=10028 )
 
+### WikiTreeCountDescendants
+displays the number of descendants (per generation and in total) when being on "Descendant List" like https://www.wikitree.com/genealogy/Molesworth-Descendants-131
+
 ## Greasemonkey scripts
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
 ### Shortcuts
