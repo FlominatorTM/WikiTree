@@ -26,8 +26,8 @@ for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
 		brBeforeHere = spanRootsSearch.nextSibling.nextSibling;
 		if(null == brBeforeHere)
 		{
-      var unsafeWindow = window.wrappedJSObject;
-      var insertTag = document.createElement("span");
+			var unsafeWindow = window.wrappedJSObject;
+			var insertTag = document.createElement("span");
 			insertTag.innerHTML=/* */'<h1><a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a></h1>';/* */
 			spanRootsSearch.parentNode.insertBefore(insertTag, spanRootsSearch);
 		 
