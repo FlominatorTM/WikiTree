@@ -14,8 +14,33 @@ Features:
 - automatically select "no middle name" if field is empty when editing a profile
 - show message box when there is no category present
 - copy URL parameter wpSummary into the summary field 
+- show "Add FamilySearch ID" if needed
 */
 
+//show link to add FamilySearch ID if not present
+for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
+{
+	if(strongNode.textContent == "Research")
+	{
+		spanRootsSearch = strongNode.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling;
+		brBeforeHere = spanRootsSearch.nextSibling.nextSibling;
+		if(null == brBeforeHere)
+		{
+      var unsafeWindow = window.wrappedJSObject;
+      var insertTag = document.createElement("span");
+			insertTag.innerHTML=/* */'<h1><a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a></h1>';/* */
+			spanRootsSearch.parentNode.insertBefore(insertTag, spanRootsSearch);
+		 
+			/* HTML of profile without FamilySearch ID looks like this
+			<span class="large"><strong>Research</strong></span><br/>
+			<a href="https://apps.wikitree.com/apps/york1423/rootssearch/?profile=Huber-4117" target="_blank">RootsSearch for Lorenz Huber</a>: conveniently search 20+ genealogy websites.
+			<span class="SMALL">[<a href="/wiki/RootsSearch" target="_Help" title="More information about the RootsSearch app">more info</a>]</span>
+			</div>
+			</div> <!-- end 7 -->
+			*/
+		}//if
+	}//if
+}//for
 
 //shortcut e for edit button
 for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].children[j]; j++)
