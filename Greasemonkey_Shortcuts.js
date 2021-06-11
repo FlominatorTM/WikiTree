@@ -15,6 +15,7 @@ Features:
 - show message box when there is no category present
 - copy URL parameter wpSummary into the summary field 
 - show "Add FamilySearch ID" if needed
+- do not open links on result page of "Add FamilySearch ID" in new window
 */
 
 //show link to add FamilySearch ID if not present
@@ -41,6 +42,18 @@ for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
 		}//if
 	}//if
 }//for
+
+//do not open links from the FamilySearch connection result page in new window
+if (window.location.search.match(/Special:EditFamilySearch/))
+{
+  for (var i=0; aNode = document.getElementsByTagName("a")[i]; i++)
+  {
+    if(aNode.target="_blank")
+    {
+      aNode.target="";
+    }
+  }
+}
 
 //shortcut e for edit button
 for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].children[j]; j++)
