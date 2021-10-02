@@ -9,7 +9,6 @@
 /*
 Features:
 - keyboard shortcuts for edit (E) and preview (P), see browser manual for details (in Firefox is ALT + SHIFT + shortcut)
-- removing redundant shortcut for save in order to make it work (this is a bug in the WikiTree UI)
 - showing private profile after saving instead of leaving edit mask open
 - automatically select "no middle name" if field is empty when editing a profile
 - show message box when there is no category present
@@ -27,9 +26,11 @@ for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
 		brBeforeHere = spanRootsSearch.nextSibling.nextSibling;
 		if(null == brBeforeHere)
 		{
-			var unsafeWindow = window.wrappedJSObject;
-			var insertTag = document.createElement("span");
-			insertTag.innerHTML=/* */'<h1><a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a></h1>';/* */
+      var unsafeWindow = window.wrappedJSObject;
+      var insertTag = document.createElement("span");
+      var linkAddFamilySearch = '<a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a>';
+      var linkSearchFamilyTree = '<a href="https://www.familysearch.org/tree/find/name">search</a>';
+			insertTag.innerHTML=/* */'<h3>'+ linkAddFamilySearch +'</h3><br>' + linkSearchFamilyTree ;/* */
 			spanRootsSearch.parentNode.insertBefore(insertTag, spanRootsSearch);
 		 
 			/* HTML of profile without FamilySearch ID looks like this
@@ -67,7 +68,7 @@ for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].childre
 
 
 //go to private view after saving
-if(window.location == "https://www.wikitree.com/wiki/Special:EditPerson")
+if(window.location.search.match(/errcode=saved/) != null)
 {
   var personID = document.getElementsByClassName("pureCssMenui0")[1].firstChild.innerHTML;
   window.location="https://www.wikitree.com/wiki/" + personID + "?public=1";
@@ -80,13 +81,7 @@ if(null != previewButton)
   previewButton.accessKey="p";
 }
 
-//remove duplicate shortcut
-var wpSaves = document.getElementsByName("wpSave");
-if(null != wpSaves)
-{
-  wpSaves[0].accessKey = "";
-}
-
+  
 // automatically check "no middle name"
 var inputMiddleName = document.getElementById('mMiddleName');
 if(null != inputMiddleName)
