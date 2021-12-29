@@ -15,6 +15,7 @@ Features:
 - copy URL parameter wpSummary into the summary field 
 - show "Add FamilySearch ID" if needed
 - do not open links on result page of "Add FamilySearch ID" in new window
+- remove right column in edit mode and make input field bigger instead
 */
 
 //show link to add FamilySearch ID if not present
@@ -67,7 +68,7 @@ for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].childre
 }
 
 
-//go to private view after saving
+//go to private view after saving (currently not working for FreeSpace pages
 if(window.location.search.match(/errcode=saved/) != null)
 {
   var personID = document.getElementsByClassName("pureCssMenui0")[1].firstChild.innerHTML;
@@ -106,9 +107,23 @@ if(match!=null)
 //show message box when there is no "Category" present
 //except summary was provided, because then I want to be fast
 var wpTextbox = document.getElementById('wpTextbox1');
-if(match==null && wpTextbox != null && wpTextbox.value.indexOf("Category") == -1)
+
+
+if(wpTextbox != null)
 {
-	alert("Category is missing");
+  if(match==null && wpTextbox.value.indexOf("Category") == -1)
+  {
+    alert("Category is missing");
+  }
+  
+  //remove right column in edit mode and made textbox bigger
+  wpTextbox.cols="1000"
+
+  var rightColumn = document.getElementsByClassName('six columns omega')[0];
+  rightColumn.remove();
+ 
+  var editdiv = document.getElementsByClassName('ten columns alpha')[0];
+  editdiv.style.width = "100%";
 }
 
 //replace German country names by English ones
