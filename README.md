@@ -11,7 +11,7 @@ makes all links to wiki pages (e.g. in a contributions list) point directly to "
 generates formatted source citations from church books at http://archives.bas-rhin.fr/
 
 ### FindAGrave
-generates [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) code based on the memorial ID of the FindAGrave page currently displayed in browser
+generates combines the citation prepared by FindAGrave with [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) for the  memorial currently displayed in browser (inpired by [this post](https://www.wikitree.com/g2g/569133/citation-help-findagrave-now-provides-citation-suggestion) by Allison Mackler)
 
 ### LABW
 generates formatted source citations from church book duplicates at Landesarchiv Baden-Württemberg (e.g. from https://www2.landesarchiv-bw.de/ofs21/olf/struktur.php?bestand=10028 )
