@@ -1,4 +1,5 @@
-import requests
+import requests, datetime
+import dateutil.parser
 link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=germany&limit=5000'
 f = requests.get(link)
 
@@ -7,6 +8,7 @@ members = []
 # myDict["john"] = "johns value"
 # myDict["jeff"] = "jeffs value
 memberPageContent = f.text
+
 
 isFirstRound = True
 for member in memberPageContent.split('class="large"><a href="/wiki/'):
@@ -26,10 +28,10 @@ for member in memberPageContent.split('class="large"><a href="/wiki/'):
     # print (str(indexNameBeginns))
     # print (str(indexNameEnds))
     if indexNameBeginns > 0:
-        theUser["ID"] = member[0:indexIdEnds];
+        theUser["id"] = member[0:indexIdEnds];
         theUser["name"] = member[indexNameBeginns:indexNameEnds];
         
-        link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=1&who=" + theUser["ID"];
+        link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=1&who=" + theUser["id"];
         f = requests.get(link)
         contribPage = f.text;
         beginnOfHistory = "<span class='HISTORY-DATE'>";
@@ -39,8 +41,30 @@ for member in memberPageContent.split('class="large"><a href="/wiki/'):
         # print ( str (indexDate))
         # print ( str (indexDateEnd))
         # print ( contribPage[indexDate:indexDateEnd] )
-        theUser["lastEdit"] = contribPage[indexDate:indexDateEnd]
+        theUser["lastEditFormatted"] = contribPage[indexDate:indexDateEnd]
+        theUser["lastEdit"] = dateutil.parser.parse(theUser["lastEditFormatted"])
         members.append(theUser)
         print(theUser)
-        print(str(len(members)))
         
+        # if len(members) > 5:
+            # break
+print(str(len(members)))
+# sortedMembers = 
+
+f = open("members.htm", "w")
+f.write("<html><head></head><body><table>")
+for member in sorted(members, key=lambda d: d['lastEdit']):
+    f.write("<tr>")
+    f.write("<td>")
+    f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
+    f.write("</td>")
+    f.write("<td>")
+    f.write(member["name"])
+    f.write("</td>")
+    f.write("<td>")
+    f.write( member["lastEditFormatted"])
+    f.write("</td>")
+    f.write("</tr>")
+f.write("</table></body>")
+f.close()
+    
