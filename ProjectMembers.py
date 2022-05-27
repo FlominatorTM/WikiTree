@@ -5,6 +5,8 @@ link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=germany&limit=
 f = requests.get(link)
 memberPageContent = f.text
 
+
+checkInSubstring = "It’s Germany Project check-in time again"
 members = []
 
 # <span class="large"><a href="/wiki/Straub-620" target="_blank" title="">Florian Straub</a></span>
@@ -29,17 +31,24 @@ for member in memberPageContent.split('class="large"><a href="/wiki/'):
         
         link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=1&who=" + theUser["id"];
         f = requests.get(link)
-        contribPage = f.text;
+        contribPage = f.text
         beginnOfHistory = "<span class='HISTORY-DATE'>";
         indexDate = contribPage.find(beginnOfHistory) + len(beginnOfHistory)
         indexDateEnd = contribPage.find('</span>', indexDate);
         # print ( contribPage[indexDate:indexDateEnd] )
         theUser["lastEditFormatted"] = contribPage[indexDate:indexDateEnd]
         theUser["lastEdit"] = dateutil.parser.parse(theUser["lastEditFormatted"])
+        
+        link = 'https://www.wikitree.com/wiki/' + theUser["id"]
+        f = requests.get(link)
+        userPage = f.text
+        
+        theUser["check-in-requested"] = checkInSubstring in userPage
+        
         members.append(theUser)
         print(theUser)
         
-        # if len(members) > 5:
+        # if len(members) > 2:
             # break
 print(str(len(members)))
 
@@ -55,6 +64,12 @@ for member in sorted(members, key=lambda d: d['lastEdit']):
     f.write("</td>")
     f.write("<td>")
     f.write( member["lastEditFormatted"])
+    f.write("</td>")
+    f.write("<td>")
+    if member["check-in-requested"]:
+        f.write("yes")
+    else:
+        f.write("no")
     f.write("</td>")
     f.write("</tr>")
 f.write("</table></body>")
