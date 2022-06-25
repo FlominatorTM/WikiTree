@@ -16,6 +16,9 @@ generates combines the citation prepared by FindAGrave with [external link templ
 ### LABW
 generates formatted source citations from church book duplicates at Landesarchiv Baden-Württemberg (e.g. from https://www2.landesarchiv-bw.de/ofs21/olf/struktur.php?bestand=10028 )
 
+### WikipediaDeLocationCategories
+generates template code for creating a category when being on place article in German Wikipedia
+
 ### WikiTreeCountDescendants
 displays the number of descendants (per generation and in total) when being on "Descendant List" like https://www.wikitree.com/genealogy/Molesworth-Descendants-131
 
