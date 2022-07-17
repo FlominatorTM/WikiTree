@@ -7,7 +7,14 @@ var dateFormatted = d.toLocaleString("en-GB", {
 	year: 'numeric'
 	});
 
-var baseSwedish = window.getSelection()+'';
+var baseSwedish = '';
+for (var i=0; valNode = document.getElementsByClassName("value")[i]; i++)
+{
+	if(valNode.innerText.search("sida")>-1)
+	{
+		baseSwedish = valNode.innerText;
+	}
+}
 var baseEnglish = baseSwedish.replace("bildid", "Image ID").replace("sida", "p.");
 var number = prompt("nr");
 var name = prompt("name");
