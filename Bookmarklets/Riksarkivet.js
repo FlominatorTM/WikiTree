@@ -8,8 +8,7 @@ var dateFormatted = d.toLocaleString("en-GB", {
 	});
 
 var baseSwedish = window.getSelection()+'';
-var baseEnglish = baseSwedish.replace("bildid", "Image ID");
-var baseEnglish = baseSwedish.replace("sida", "p.");
+var baseEnglish = baseSwedish.replace("bildid", "Image ID").replace("sida", "p.");
 var number = prompt("nr");
 var name = prompt("name");
 var customPart = ", nr. " + number +", "+ name + "; ";
