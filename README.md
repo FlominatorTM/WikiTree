@@ -10,6 +10,12 @@ makes all links to wiki pages (e.g. in a contributions list) point directly to "
 ### ArchivesBasRhin
 generates formatted source citations from church books at http://archives.bas-rhin.fr/
 
+### Compgen Grabstein-Projekt
+generates formatted source citations from gravestone entries like https://grabsteine.genealogy.net/tomb.php?cem=5385&tomb=481 (supports manual text selection)
+
+### Compgen Online-OFBs
+generates formatted source citations from people entries like https://www.online-ofb.de/famreport.php?ofb=buehlertal&ID=I7793&nachname=STRAUB  (experimentally supports manual text selection)
+
 ### FindAGrave
 generates combines the citation prepared by FindAGrave with [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) for the  memorial currently displayed in browser (inpired by [this post](https://www.wikitree.com/g2g/569133/citation-help-findagrave-now-provides-citation-suggestion) by Allison Mackler)
 
