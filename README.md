@@ -10,6 +10,9 @@ makes all links to wiki pages (e.g. in a contributions list) point directly to "
 ### ArchivesBasRhin
 generates formatted source citations from church books at http://archives.bas-rhin.fr/
 
+### Antenati
+calls [Antenati Citation Builder](https://apps.wikitree.com/apps/clarke11007/antenati.php) when being on a record like https://www.antenati.san.beniculturali.it/ark:/12657/an_ua267608/wEKr932
+
 ### Compgen Grabstein-Projekt
 generates formatted source citations from gravestone entries like https://grabsteine.genealogy.net/tomb.php?cem=5385&tomb=481 (supports manual text selection)
 
