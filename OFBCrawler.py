@@ -17,8 +17,8 @@ def get_related_ids(url, coming_from_id, steps):
     this_id = get_id_from_url(url)
     if this_id == searching_for:
         G.add_edge(this_id, coming_from_id, weight=steps)
-        print("we're done here")
         print_and_optimize(start, searching_for)
+        print("we're done here in theory, but let's see if we can find something shorter anyway")
         return
     
     visited_ids.append(this_id)
@@ -40,7 +40,7 @@ def get_related_ids(url, coming_from_id, steps):
                         # other_ids.append(other_id)
                         try:
                             get_related_ids("https://www.online-ofb.de/" + href, this_id, steps+1)
-                        except: 
+                        except RecursionError: 
                             print ("too many recursions")
                     else:
                         G.add_edge(other_id, this_id, weight=(steps+1))
@@ -48,7 +48,7 @@ def get_related_ids(url, coming_from_id, steps):
 def print_and_optimize (node_from, node_to):
     path =nx.dijkstra_path(G, node_from, node_to) 
     f = open("paths_from_"+ start +".txt", "a")
-    f.write(str(node) + ";" + str(len(path)) + ";" + str(path) + "\n" )
+    f.write(str(node_to) + ";" + str(len(path)) + ";" + str(path) + "\n" )
     f.close()
 
 #via https://www.codingem.com/python-maximum-recursion-depth/
@@ -66,7 +66,7 @@ visited_ids = []
 start = "I5319";
 searching_for = "I2770"
 
-with recursion_depth(5000):
+with recursion_depth(10000):
     get_related_ids('https://www.online-ofb.de/famreport.php?ofb=asslar&ID='+start, "initial call searching for " + searching_for, 0)
 
 for node in G.nodes:
