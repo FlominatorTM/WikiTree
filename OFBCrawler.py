@@ -1,4 +1,4 @@
-import requests, sys
+import requests, sys, networkx as nx
 from bs4 import BeautifulSoup
 
 def get_id_from_url(url):
@@ -16,8 +16,10 @@ def get_name_from_title(title):
 def get_related_ids(url, coming_from_id, steps):
     this_id = get_id_from_url(url)
     if this_id == searching_for:
+        G.add_edge(this_id, coming_from_id, weight=steps)
         print("we're done here")
-        sys.exit()
+        print_and_optimize(start, searching_for)
+        return
     
     visited_ids.append(this_id)
     print(url)
@@ -25,9 +27,7 @@ def get_related_ids(url, coming_from_id, steps):
     name = get_name_from_title(soup.find("title").contents[0])
     info_line = "#" + (str) (len(visited_ids)) + ": " + this_id + " => "+ name +" coming from " + coming_from_id
     print (info_line)
-    f = open("connection.txt", "a")
-    f.write(this_id+";" + name.replace("\"", "") +";"+coming_from_id +";" + str(steps)+"\n")
-    f.close()
+    G.add_edge(this_id, coming_from_id, weight=steps)
     for a_tag in soup.findAll("a"):
         href = (str) (a_tag.attrs.get("href"))
         if href is not None and href is not "":
@@ -43,24 +43,32 @@ def get_related_ids(url, coming_from_id, steps):
                         except: 
                             print ("too many recursions")
                     else:
-                        line = other_id+";" + "dupe" +";"+this_id +";" + str(steps+1)+"\n";
-                        f = open("connection.txt", "a")
-                        f.write(line)
-                        f.close()   
+                        G.add_edge(other_id, this_id, weight=(steps+1))
+                        
+def print_and_optimize (node_from, node_to):
+    path =nx.dijkstra_path(G, node_from, node_to) 
+    f = open("paths_from_"+ start +".txt", "a")
+    f.write(str(node) + ";" + str(len(path)) + ";" + str(path) + "\n" )
+    f.close()
 
+#via https://www.codingem.com/python-maximum-recursion-depth/
+class recursion_depth:
+    def __init__(self, limit):
+        self.limit = limit
+        self.default_limit = sys.getrecursionlimit()
+    def __enter__(self):
+        sys.setrecursionlimit(self.limit)
+    def __exit__(self, type, value, traceback):
+        sys.setrecursionlimit(self.default_limit)
+        
+G = nx.Graph()
 visited_ids = []
+start = "I5319";
 searching_for = "I2770"
 
-f = open("connection.txt", "w")
-f.write("ID;Name;Origin;Steps\n")
-f.close()
-    
-get_related_ids('https://www.online-ofb.de/famreport.php?ofb=asslar&ID=I5319', "initial call searching for " + searching_for, 0)
+with recursion_depth(5000):
+    get_related_ids('https://www.online-ofb.de/famreport.php?ofb=asslar&ID='+start, "initial call searching for " + searching_for, 0)
 
-
-
-# f = requests.get(url)
-# memberPageContent = f.text
-# print(f.text)
-
+for node in G.nodes:
+    print_and_optimize(start, node)
 
