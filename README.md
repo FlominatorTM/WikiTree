@@ -25,6 +25,10 @@ generates combines the citation prepared by FindAGrave with [external link templ
 ### LABW
 generates formatted source citations from church book duplicates at Landesarchiv Baden-Württemberg (e.g. from https://www2.landesarchiv-bw.de/ofs21/olf/struktur.php?bestand=10028 )
 
+###Matricula
+generates formatted source citations from church books at Matricula (e.g. from https://data.matricula-online.eu/de/deutschland/paderborn/DE_EBAP_10114/KB001-01-T/?pg=139 )
+
+
 ### Riksarkivet
 generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.riksarkivet.se/bildvisning/C0013667_00133 )
 
