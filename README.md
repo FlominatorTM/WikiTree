@@ -32,6 +32,9 @@ generates formatted source citations from church books at Matricula (e.g. from h
 ### Riksarkivet
 generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.riksarkivet.se/bildvisning/C0013667_00133 )
 
+### WikidataLocationCategories
+generates template code for creating a category when being on place entry in Wikidata
+
 ### WikipediaDeLocationCategories
 generates template code for creating a category when being on place article in German Wikipedia
 
