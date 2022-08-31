@@ -38,6 +38,9 @@ generates template code for creating a category when being on place entry in Wik
 ### WikipediaDeLocationCategories
 generates template code for creating a category when being on place article in German Wikipedia
 
+### WikipediaItLocationCategories
+generates template code for creating a category when being on place article in Italian Wikipedia
+
 ### WikiTreeCountDescendants
 displays the number of descendants (per generation and in total) when being on "Descendant List" like https://www.wikitree.com/genealogy/Molesworth-Descendants-131
 
