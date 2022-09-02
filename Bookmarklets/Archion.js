@@ -7,11 +7,25 @@ for (var i=1; valNode = breadCrumbList.getElementsByTagName("a")[i]; i++)
 	citation += " > " + valNode.innerText;
 }
 
-var permaLinkDiv = document.getElementsByClassName("inner")[0];
-var permaLink = permaLinkDiv.getElementsByTagName("a")[0].innerText;
-var select_id = document.getElementsByClassName("page-select")[0];
-var imageName = select_id.options[select_id.selectedIndex].text;
+var permaLinkDivs = document.getElementsByClassName("inner")[0];
+var permaLink;
+if(null != permaLinkDivs && permaLinkDivs.length > 0)
+{
+	permaLinkDiv = permaLinkDivs[0];
+	permaLink = permaLinkDiv.getElementsByTagName("a")[0].innerText;
+}
+else
+{
+	permaLink = prompt("Please enter permalink or enable permalink and try again");
+}
 
-citation += "> picture [" + permaLink + " " + imageName +"], #";
+if (permaLink != null)
+{
+	var select_id = document.getElementsByClassName("page-select")[0];
+	var imageName = select_id.options[select_id.selectedIndex].text;
 
-alert(citation);
+	citation += "> picture [" + permaLink + " " + imageName +"], #";
+
+	alert(citation);
+}
+void(0);
