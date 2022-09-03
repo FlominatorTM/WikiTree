@@ -7,7 +7,7 @@ for (var i=1; valNode = breadCrumbList.getElementsByTagName("a")[i]; i++)
 	citation += " > " + valNode.innerText;
 }
 
-var permaLinkDivs = document.getElementsByClassName("inner")[0];
+var permaLinkDivs = document.getElementsByClassName("inner");
 var permaLink;
 if(null != permaLinkDivs && permaLinkDivs.length > 0)
 {
