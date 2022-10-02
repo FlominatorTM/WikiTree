@@ -5,16 +5,23 @@ var numMembersTD = document.getElementsByClassName('level2 fieldC fieldL fieldB'
 
 var points = [];
 var dict = {};
-
+var numMembers = [];
+var indexMembers = 0;
 for (var i=0; tdNode = nameTDs[i]; i++)
 {
 	var pointsForThisTeam = parseFloat(pointTDs[i].innerText.replace(".", "").replace(",", ""));
 	
-	var numberTeamMembers = 1;
-	if (null != numMembersTD[i])
+	var numberTeamMembers = 0;
+	if(nameTDs[i].nextSibling.className == "level2 groupC groupL groupR groupT")
 	{
-		numberTeamMembers = parseFloat(numMembersTD[i].innerText);
+		numberTeamMembers = 1;
 	}
+	else
+	{
+		numberTeamMembers = parseFloat(numMembersTD[indexMembers].innerText);
+		indexMembers++;
+	}
+	
 	var normalizedPoints = pointsForThisTeam / numberTeamMembers;
 	normalizedPoints = Math.round(normalizedPoints*100)/100;
 	dict[normalizedPoints] = tdNode.innerText;
