@@ -34,6 +34,9 @@ generates formatted source citations from church books at Matricula (e.g. from h
 ### Riksarkivet
 generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.riksarkivet.se/bildvisning/C0013667_00133 )
 
+### ThonNormalized
+generates scores normalized points based on the official score sheet for [SourceAThon](https://wikitree.sdms.si/Challenges/SourceAThon/TeamAndUser.htm) and [ConnectAThon](https://wikitree.sdms.si/Challenges/ConnectAThon/TeamAndUser.htm)
+
 ### WikidataLocationCategories
 generates template code for creating a category when being on place entry in Wikidata
 
