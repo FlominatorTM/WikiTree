@@ -1,4 +1,5 @@
 javascript:
+/* known issues: doesn't work with identical averages */
 var nameTDs = document.getElementsByClassName('level1 groupC groupL groupR groupT');
 var pointTDs = document.getElementsByClassName('level1 fieldC fieldR fieldT fieldB');
 var numMembersTD = document.getElementsByClassName('level2 fieldC fieldL fieldB');
