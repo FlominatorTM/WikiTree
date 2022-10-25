@@ -37,6 +37,9 @@ generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.
 ### ThonNormalized
 generates scores normalized points based on the official score sheet for [SourceAThon](https://wikitree.sdms.si/Challenges/SourceAThon/TeamAndUser.htm) and [ConnectAThon](https://wikitree.sdms.si/Challenges/ConnectAThon/TeamAndUser.htm)
 
+### TrustedListEmail
+collects all email adresses from one page (e.g. the Trusted List of a profile) and puts them into a new email
+
 ### WikidataLocationCategories
 generates template code for creating a category when being on place entry in Wikidata
 
