@@ -16,5 +16,15 @@ for (var i=0; i < allAnkerNodes.length ; i++)
 		} 
 	} 
 }  
-alert("{{CategoryInfoBox Location\n|parent=\n|project=\n|team=\n|" + coor + "\n"+ wikidata + "\n}}"); 
+var output = "{{CategoryInfoBox Location\n|parent=\n|project=\n|team=\n|" + coor + "\n"+ wikidata + "\n}}";
+
+if (navigator.userAgent.includes("Chrome")) 
+{
+	prompt("", output); 
+}
+else
+{
+	alert(output);
+}
+
 void(0);
