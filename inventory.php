@@ -234,6 +234,7 @@ function retrieve_current_list($cat/*$catenc, $template, $other_cat_enc="", $tem
 			if(isset($row[$index_categories]) && trim($row[$index_categories]) != "" && $row[$index_categories]!="All Categories")
 			{
 				$categories = explode("\r\n", $row[$index_categories]);
+				sort($categories);
 				$num_cats = count($categories);
 				for($i=0;$i<$num_cats;$i++)
 				{
@@ -244,7 +245,8 @@ function retrieve_current_list($cat/*$catenc, $template, $other_cat_enc="", $tem
 			$line = utf8_encode("* [[".$row[$index_wikitree_id]."|". $row[$index_full_name]."]]");
 			if($categories_in_a_line!="")
 			{
-				$line.= ": " . substr($categories_in_a_line, 0, strlen($categories_in_a_line)-2) /*removing last ", "*/;
+				$trimmed_cats = substr($categories_in_a_line, 0, strlen($categories_in_a_line)-2) /*removing last ", "*/ ;
+				$line.= ": <small>" . $trimmed_cats . "</small>" ;
 			}
 			$line.="\n";
 			$bulleted_list.= $line;
