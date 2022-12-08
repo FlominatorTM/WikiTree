@@ -129,7 +129,7 @@ function compare_lists($needles, $haystack)
 	{
 		set_time_limit(120);
 		echo ".";
-		$onlyOneNewArticle = explode("]]:", $newLine);
+		$onlyOneNewArticle = explode("|", $newLine);
 		if(	stristr( $onlyOneNewArticle[0], "*" ) 
 		 &&	!stristr($haystack, $onlyOneNewArticle[0] )
 		 &&	!stristr($haystack, str_replace('_', ' ', $onlyOneNewArticle[0] ))
