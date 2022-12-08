@@ -9,7 +9,7 @@
 
 //$article = "Benutzer:Flominator/Zukunft";
 
-
+get_wiki_tree_plus_date();
 
 $cat = $_REQUEST['cat'];
 $article =  $_REQUEST['space'];
@@ -25,7 +25,7 @@ $server = "$lang.$project.org";
 $number_of_current_entries = 0;
 
 $plainfuture_text = retrieve_current_list($catenc, $template, $other_cat_enc, $template_missing);	*/
-$plainfuture_text =retrieve_current_list(str_replace("_", " ", urldecode($cat)));	 //"Germany Family Brick Walls"
+$plainfuture_text = retrieve_current_list(str_replace("_", " ", urldecode($cat)));	 //"Germany Family Brick Walls"
 $plain_text = get_plain_text_from_article(urldecode($article)); //"Space:Germany_Family_Brick_Wall_Category_Content"
 /*
 //echo "<hr>$plainfuture_text<hr>";
@@ -34,6 +34,7 @@ $plain_text = get_plain_text_from_article(urldecode($article)); //"Space:Germany
 // echo '<form id="editform" name="editform" method="post" action="https://www.wikitree.com/wiki/Space:Germany_Family_Brick_Wall_Category_Content" enctype="multipart/form-data">';
 echo "<textarea  name=\"wpTextbox1\">";
 //echo  extract_and_update_introduction($plain_text);
+echo "== Content as of " . get_wiki_tree_plus_date() . " ==\n";
 echo $plainfuture_text;
 echo "\n&nbsp;Count: $number_of_current_entries";
 echo "</textarea><br>";
@@ -111,6 +112,17 @@ function get_plain_text_from_article($article)
 	echo $page."<br>";
 	$json = json_decode(file_get_contents($page));
 	return $json[0]->profile->bio;
+}
+
+function get_wiki_tree_plus_date()
+{
+	global $server;
+	$page = "https://wikitree.sdms.si/function/WTWebProfileSearch/Profiles.htm?Format=JSON";
+	$json = json_decode(file_get_contents($page));
+	$iso_date_parts = explode("-", $json->debug->dataDate);
+	$wtp_time = mktime(0, 0, 0, $iso_date_parts[1], $iso_date_parts[2], $iso_date_parts[0]);
+	// setlocale(LC_TIME, "en_US");
+	return strftime("%e %B %Y", $wtp_time);
 }
 
 function compare_lists($needles, $haystack)
