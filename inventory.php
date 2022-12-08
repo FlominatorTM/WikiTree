@@ -2,50 +2,21 @@
 <?php 
 //hacky beginning of a version of https://github.com/FlominatorTM/wikipedia_inventory using WikiTree
 
-// $LastChangedDate$
-// $Rev$
-//shows the entries from zukunft that have been removed
-// include("shared_inc/wiki_functions.inc.php");
-
-//$article = "Benutzer:Flominator/Zukunft";
-
-get_wiki_tree_plus_date();
-
 $cat = $_REQUEST['cat'];
 $article =  $_REQUEST['space'];
-/*
-$other_cat_enc = urlencode($_REQUEST['other_cat']);
-$template = urlencode($_REQUEST['template']);
-$template_missing = $_REQUEST['template_missing'] == "true";
-$catenc = urlencode($cat); //Wikipedia%3AZukunft
-$articleenc = name_in_url($article);
-$lang = "de";
-$project = "wikipedia";
-$server = "$lang.$project.org";
-$number_of_current_entries = 0;
 
-$plainfuture_text = retrieve_current_list($catenc, $template, $other_cat_enc, $template_missing);	*/
 $plainfuture_text = retrieve_current_list(str_replace("_", " ", urldecode($cat)));	 //"Germany Family Brick Walls"
 $plain_text = get_plain_text_from_article(urldecode($article)); //"Space:Germany_Family_Brick_Wall_Category_Content"
-/*
-//echo "<hr>$plainfuture_text<hr>";
-*/
-//echo '<form method="post" action="https://'.$server.'/w/index.php?action=submit&title='. $articleenc .'" target="_blank">'."\n";
-// echo '<form id="editform" name="editform" method="post" action="https://www.wikitree.com/wiki/Space:Germany_Family_Brick_Wall_Category_Content" enctype="multipart/form-data">';
+
 echo "<textarea  name=\"wpTextbox1\">";
 //echo  extract_and_update_introduction($plain_text);
 echo "== Content as of " . get_wiki_tree_plus_date() . " ==\n";
 echo $plainfuture_text;
 echo "\n&nbsp;Count: $number_of_current_entries";
 echo "</textarea><br>";
-//echo '<input type="hidden" value="1" name="wpSection" />';
-// set_up_media_wiki_input_fields("Inventar-Seite mit inventory.php aktualisiert", "Inventar-Seite aktualisieren", $articleenc);
-// echo "</form>\n";
 
 $entries_removed = compare_lists($plain_text, $plainfuture_text);
 $entries_added= compare_lists($plainfuture_text, $plain_text);
-
-// echo '<form method="post" id="diff_form" action="https://'.$server.'/w/index.php?action=submit&title='. urlencode('Wikipedia:Spielwiese') .'" target="_blank">'."\n";*/
 
 echo "<textarea  name=\"wpTextbox1\">";
 echo ":via [[".$article."]]\n";
@@ -55,12 +26,7 @@ echo "\n===new===\n";
 print_diff_list($entries_added);
 echo "</textarea><br>";
 
-/*echo '<input type="hidden" value="new" name="wpSection" />';
-set_up_media_wiki_input_fields("Änderungen", "Änderungen anschauen", urlencode('Wikipedia:Spielwiese'));
-echo "</form>\n";
-
-
-function extract_and_update_introduction($plain_text)
+/*function extract_and_update_introduction($plain_text)
 {
     $introduction = extract_section_zero($plain_text);
     $LAST_UPDATE_PARAMETER = "LastUpdate";
@@ -82,25 +48,17 @@ function extract_section_zero($plain_text)
     $indexOfEnd = strpos($plain_text, $endOfIntroduction) + strlen($endOfIntroduction);
     return substr($plain_text, 0, $indexOfEnd);
 }*/
+
 function print_diff_list($entries_removed)
 {
     global $cat;
     $since = $_REQUEST['last'];
     $use_diff = ($since != "");
-$use_diff = false;
-    
+	$use_diff = false;
 
     foreach($entries_removed AS $removed)
     {
 		echo $removed."\n";
-        // $article_with_link = str_replace(": [[:Kategorie:$cat|$cat]]", "", $removed);
-        // $article = extract_link_target($article_with_link);
-        // echo $article_with_link;
-        // if($use_diff) 
-        // {
-            // echo " ([$url_prefix". name_in_url($article) . " diff])";
-        // }
-        // echo "\n";
     }
     echo "\n Changes: ". count($entries_removed);
 }
@@ -134,9 +92,8 @@ function compare_lists($needles, $haystack)
 	$results = array();
 	// $hits = 0;
 	$paragraphsRemoved = explode("\n",$needles);
-	// echo "-->";
-	 // echo "--><h2> haystack</h2><textarea>$haystack</textarea>";
-	 // echo "<h2> needles</h2><textarea>$needles</textarea>";
+	//echo "--><h2> haystack</h2><textarea>$haystack</textarea>";
+	//echo "<h2> needles</h2><textarea>$needles</textarea>";
 	foreach($paragraphsRemoved AS $newLine)
 	{
 		set_time_limit(120);
@@ -148,7 +105,6 @@ function compare_lists($needles, $haystack)
 		 &&	!stristr(str_replace('_', ' ',$haystack),  $onlyOneNewArticle[0] )
 		)
 		{
-			// echo str_replace('_', ' ', $newLine) ."\n";
 			$results[] = str_replace('_', ' ', $newLine);
 			$hits++;
 		}
