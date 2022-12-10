@@ -46,6 +46,9 @@ generates template code for creating a category when being on place entry in Wik
 ### WikipediaDeLocationCategories
 generates template code for creating a category when being on place article in German Wikipedia
 
+### WikipediaDeFromSelectedText
+opens a new German Wikipedia tab by using the text selected in the current tab
+
 ### WikipediaItLocationCategories
 generates template code for creating a category when being on place article in Italian Wikipedia
 
