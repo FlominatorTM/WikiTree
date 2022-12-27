@@ -2,7 +2,7 @@
 tools for working with WikiTree
 
 ## Bookmarklets
-see https://en.wikipedia.org/wiki/Bookmarklet and [Greg's instructions on how to install bookmarklets](https://youtu.be/50M-w_yXHzs) 
+see [Wikipedia's article about bookmarklets](https://en.wikipedia.org/wiki/Bookmarklet), [Greg's instructions on how to install bookmarklets](https://youtu.be/50M-w_yXHzs) and [my video on how to install and use the category bookmarklets](https://www.youtube.com/watch?v=okOe7sHjuQs&t=51s)
 
 ### AllEditLinks
 makes all links to wiki pages (e.g. in a contributions list) point directly to "edit profile"
