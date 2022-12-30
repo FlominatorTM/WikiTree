@@ -1,7 +1,16 @@
 javascript:  
 /* creates template for a category when being on entry of German Wikipedia article about the place */
-var lat = document.getElementsByClassName("latitude")[0].innerHTML + ""; 
-var lon = document.getElementsByClassName("longitude")[0].innerHTML + ""; 
+var lat = "";
+var lon = "";
+try
+{
+	lat = document.getElementsByClassName("latitude")[0].innerHTML + ""; 
+	lon = document.getElementsByClassName("longitude")[0].innerHTML + ""; 
+}
+catch(err)
+{
+	alert("careful: no coordinates found");
+}
 var coor = "coordinate=" + lat + "," + lon;  
 var wikidata = "|wikidataID=";  
 var allAnkerNodes = document.getElementsByTagName("a"); 
