@@ -40,6 +40,9 @@ generates scores normalized points based on the official score sheet for [Source
 ### TrustedListEmail
 collects all email adresses from one page (e.g. the Trusted List of a profile) and puts them into a new email
 
+### WieWasWie
+opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www.wiewaswie.nl/nl/detail/29373347 )
+
 ### WikidataLocationCategories
 generates template code for creating a category when being on place entry in Wikidata
 
