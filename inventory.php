@@ -148,8 +148,8 @@ function retrieve_current_list($cat/*$catenc, $template, $other_cat_enc="", $tem
 
 {
 	global $number_of_current_entries;
-	// $url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.htm?Query=CategoryFull%3D".$cat."&MaxProfiles=1500&Format=CSV";
-	$url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.htm?Query=subcat9=\"". urlencode("$cat")."\"&MaxProfiles=1500&Format=CSV";
+	// $url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.csv?Query=CategoryFull%3D".$cat."&MaxProfiles=1500&Format=CSV";
+	$url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.csv?Query=subcat9=\"". urlencode("$cat")."\"&MaxProfiles=1500&Format=CSV";
 	echo $url."<br>";
 	
 	
