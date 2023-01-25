@@ -75,7 +75,7 @@ function get_plain_text_from_article($article)
 function get_wiki_tree_plus_date()
 {
 	global $server;
-	$page = "https://wikitree.sdms.si/function/WTWebProfileSearch/Profiles.htm?Format=JSON";
+	$page = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.json?Format=JSON";
 	$json = json_decode(file_get_contents($page));
 	$iso_date_parts = explode("-", $json->debug->dataDate);
 	$wtp_time = mktime(0, 0, 0, $iso_date_parts[1], $iso_date_parts[2], $iso_date_parts[0]);
@@ -148,8 +148,8 @@ function retrieve_current_list($cat/*$catenc, $template, $other_cat_enc="", $tem
 
 {
 	global $number_of_current_entries;
-	// $url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Profiles.htm?Query=CategoryFull%3D".$cat."&MaxProfiles=1500&Format=CSV";
-	$url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Profiles.htm?Query=subcat9=\"". urlencode("$cat")."\"&MaxProfiles=1500&Format=CSV";
+	// $url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.htm?Query=CategoryFull%3D".$cat."&MaxProfiles=1500&Format=CSV";
+	$url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.htm?Query=subcat9=\"". urlencode("$cat")."\"&MaxProfiles=1500&Format=CSV";
 	echo $url."<br>";
 	
 	
