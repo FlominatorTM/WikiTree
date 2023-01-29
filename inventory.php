@@ -77,7 +77,7 @@ function get_wiki_tree_plus_date()
 	global $server;
 	$page = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.json?Format=JSON";
 	$json = json_decode(file_get_contents($page));
-	$iso_date_parts = explode("-", $json->debug->dataDate);
+	$iso_date_parts = explode("-", $json->debug->categoriesDate);
 	$wtp_time = mktime(0, 0, 0, $iso_date_parts[1], $iso_date_parts[2], $iso_date_parts[0]);
 	// setlocale(LC_TIME, "en_US");
 	return strftime("%e %B %Y", $wtp_time);
