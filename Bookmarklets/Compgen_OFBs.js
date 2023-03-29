@@ -1,5 +1,5 @@
 javascript:
-/* usage: visit a person's page at online-ofbs.de and click this bookmarklet */
+/* usage: visit a person's page at online-ofbs.de, optionally select text you want to have in the citation and click this bookmarklet */
 var author = "";
 for (var i=0; aNode = document.getElementsByTagName("a")[i]; i++) 
 {    
