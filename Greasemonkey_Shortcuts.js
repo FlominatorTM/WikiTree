@@ -8,6 +8,7 @@
 
 /*
 Features:
+- adding "and" in syntax example containing wiki links to the parents
 - keyboard shortcuts for edit (E) and preview (P), see browser manual for details (in Firefox is ALT + SHIFT + shortcut)
 - showing private profile after saving instead of leaving edit mask open
 - automatically select "no middle name" if field is empty when editing a profile
@@ -17,6 +18,17 @@ Features:
 - do not open links on result page of "Add FamilySearch ID" in new window
 - remove right column in edit mode and make input field bigger instead
 */
+
+
+//add "and" in parents linking example
+var allExamples = document.getElementsByClassName("EXAMPLE");
+
+if(allExamples[2].innerHTML != null && allExamples[2].innerHTML.search(/\]\] \[\[/)>-1)
+{
+	allExamples[2].innerText = allExamples[2].innerHTML.replace("]] [[", "]] and [[");
+}
+
+
 
 //show link to add FamilySearch ID if not present
 for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
