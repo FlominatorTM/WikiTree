@@ -24,7 +24,7 @@ if (permaLink != null)
 	var select_id = document.getElementsByClassName("page-select")[0];
 	var imageName = select_id.options[select_id.selectedIndex].text;
 
-	citation += "> picture [" + permaLink + " " + imageName +"], #";
+	citation += " > picture [" + permaLink + " " + imageName +"], #";
 
 	alert(citation);
 }
