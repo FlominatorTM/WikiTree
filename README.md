@@ -73,3 +73,6 @@ category monitoring as implemented at https://www.wikitree.com/index.php?title=S
 tries to find a connection between two given IDs in one family book at http://www.online-ofb.de
 ### ProjectMembers.py
 lists members of the Germany Project and their activity status
+
+### ThonTeamMates.py
+opens the Thon register post pages that contain users wanting to join Germany Genies in the default browser
