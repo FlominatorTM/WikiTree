@@ -85,7 +85,7 @@ def check_edit_history(theUser):
             break
 
 def did_user_perform_relevant_edit(oneDay):
-    words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen"]
+    words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
     editsPerDay = oneDay.split("<span class='HISTORY-ITEM'>")
     for oneEdit in editsPerDay[1:]:
         linksInEdit = oneEdit.split("<a href=\"")
@@ -96,15 +96,15 @@ def did_user_perform_relevant_edit(oneDay):
             # print(linksInEdit)
             endOfLink = linksInEdit[3].find("\"")
             subjectLink = linksInEdit[3][0:endOfLink]
-            print (subjectLink)
             if "http" in subjectLink and not "Special" in subjectLink:
+                print (subjectLink)
                 if does_profile_contain(subjectLink, words) is True:
                     print("relevant edit found")
                     
                     return True
                 else:
                     print("no project relevant edit")
-        print("-------------------")
+                print("-------------------")
     return False
 
 
@@ -146,7 +146,16 @@ for member in members:
     print(member)
 
 f = open("members.htm", "w")
-f.write("<html><head></head><body><table>")
+f.write('<html><head></head><body><table border="1">')
+f.write("<tr>")
+f.write("<th>ID</th>")
+f.write("<th>Name</th>")
+f.write("<th>Last edit</th>")
+f.write("<th>Check in?</th>")
+f.write("<th>Any edit?</th>")
+f.write("<th>Project edit?</th>")
+f.write("<th>Badge</th>")
+f.write("</tr>")
 for member in sorted(members, key=lambda d: d['lastEdit']):
     f.write("<tr>")
     f.write("<td>")
@@ -175,6 +184,9 @@ for member in sorted(members, key=lambda d: d['lastEdit']):
         f.write("yes")
     else:
         f.write("no")
+    f.write("</td>")
+    f.write("<td>")
+    f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
     f.write("</td>")
     f.write("</tr>")
 f.write("</table></body>")
