@@ -129,6 +129,60 @@ def get_checkin_requested(theUser, checkInSubstring):
     userPage = f.text
     theUser["check-in-requested"] = checkInSubstring in userPage
 
+def write_report(members):
+    f = open("members.htm", "w")
+    f.write('<html><head></head><body><table border="1">')
+    f.write("<tr>")
+    f.write("<th>ID</th>")
+    f.write("<th>Name</th>")
+    f.write("<th>Last edit</th>")
+    f.write("<th>Check in?</th>")
+    f.write("<th>Any edit?</th>")
+    f.write("<th>Project edit?</th>")
+    f.write("<th>Badge</th>")
+    f.write("</tr>")
+    for member in sorted(members, key=lambda d: d['lastEdit']):
+        f.write("<tr>")
+        f.write("<td>")
+        f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
+        f.write("</td>")
+        f.write("<td>")
+        f.write(member["name"])
+        f.write("</td>")
+        f.write("<td>")
+        f.write( member["lastEditFormatted"])
+        f.write("</td>")
+        f.write("<td>")
+        if member["check-in-requested"]:
+            f.write("yes")
+        else:
+            f.write("no")
+        f.write("</td>")
+        f.write("<td>")
+        if member["anyEdit"]:
+            f.write("yes")
+        else:
+            f.write("no")
+        f.write("</td>")    
+        f.write("<td>")
+        if member["editedProject"]:
+            f.write("yes")
+        else:
+            f.write("no")
+        f.write("</td>")
+        f.write("<td>")
+        f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
+        f.write("</td>")
+        f.write("</tr>")
+    f.write("</table></body>")
+    f.close()
+        
+
+parser = argparse.ArgumentParser(description='Creates a report of one project')
+parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for keyword')
+args = parser.parse_args()
+
+
 profiles_global = {}
 flo =  {}
 flo['id'] = "Straub-620"
@@ -138,57 +192,10 @@ members = []
 members.append(flo)
 
 #pgm
-members = get_member_users("germany")
+# members = get_member_users("germany")
 
 for member in members:
     check_edit_history(member)
     get_checkin_requested(member, "It’s Germany Project check-in time again")
     print(member)
 
-f = open("members.htm", "w")
-f.write('<html><head></head><body><table border="1">')
-f.write("<tr>")
-f.write("<th>ID</th>")
-f.write("<th>Name</th>")
-f.write("<th>Last edit</th>")
-f.write("<th>Check in?</th>")
-f.write("<th>Any edit?</th>")
-f.write("<th>Project edit?</th>")
-f.write("<th>Badge</th>")
-f.write("</tr>")
-for member in sorted(members, key=lambda d: d['lastEdit']):
-    f.write("<tr>")
-    f.write("<td>")
-    f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
-    f.write("</td>")
-    f.write("<td>")
-    f.write(member["name"])
-    f.write("</td>")
-    f.write("<td>")
-    f.write( member["lastEditFormatted"])
-    f.write("</td>")
-    f.write("<td>")
-    if member["check-in-requested"]:
-        f.write("yes")
-    else:
-        f.write("no")
-    f.write("</td>")
-    f.write("<td>")
-    if member["anyEdit"]:
-        f.write("yes")
-    else:
-        f.write("no")
-    f.write("</td>")    
-    f.write("<td>")
-    if member["editedProject"]:
-        f.write("yes")
-    else:
-        f.write("no")
-    f.write("</td>")
-    f.write("<td>")
-    f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
-    f.write("</td>")
-    f.write("</tr>")
-f.write("</table></body>")
-f.close()
-    
