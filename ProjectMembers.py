@@ -11,6 +11,7 @@ def get_args():
     parser.add_argument('--last', action='store_true', help='Gets last edit')
     parser.add_argument('--any', action='store_true', help='Checks for edits in last months')
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
+    parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     return parser.parse_args()
 
 
@@ -138,13 +139,39 @@ def does_profile_contain(link, words):
         return False
         
 
-def get_checkin_requested(theUser, checkInSubstring):
+def get_checkin_requested(theUser, checkInToken):
     if args.checkin is False:
         return
+    print(theUser["id"])
     link = 'https://www.wikitree.com/wiki/' + theUser["id"]
     f = requests.get(link)
     userPage = f.text
-    theUser["check-in-requested"] = checkInSubstring in userPage
+    indexCheckInToken = userPage.find(checkInToken)
+    
+    # print(str(indexCheckInToken))
+    theUser["check-in-requested"] = indexCheckInToken > -1
+    theUser["check-in-replied"] = False
+    
+    if theUser["check-in-requested"]:
+        indexOfReplyButtons = userPage.index("comment-info small", indexCheckInToken)
+        
+        indexOfNextDiv = userPage.index("<div", indexOfReplyButtons)
+        indexEndOfThatDiv = userPage.index(">", indexOfNextDiv)
+
+        #<div id="comment_7317201" class="comment comment-depth-1 comment-reply    " data-comment-id="7317201" data-reply-to="7316984" data-depth="1">
+
+        if "comment-reply" in userPage[indexOfNextDiv:indexEndOfThatDiv]:
+            theUser["check-in-replied"] = True
+            replyToken = '<div class="comment-body">'
+            indexOfActualReply = userPage.index(replyToken, indexEndOfThatDiv) 
+            indexOfActualReply += len(replyToken)
+            indexEndOfActualReply = userPage.index("</div>", indexOfActualReply)
+            theUser["check-in-reply"] = userPage[indexOfActualReply:indexEndOfActualReply].strip()
+            theUser["check-in-negative"] = is_reply_negative(theUser["check-in-reply"])
+
+def is_reply_negative(reply):
+    replyLower = reply.lower()
+    return "no " in replyLower or "don't" in replyLower or "drop out" in replyLower
 
 def write_report(members):
     global args
@@ -159,6 +186,9 @@ def write_report(members):
         
     if args.checkin is True:
         f.write("<th>Check in?</th>")
+    
+    if args.reply is True:
+        f.write("<th>Reply check-in</th>")
     
     if args.any is True:
         f.write("<th>Any edit?</th>")
@@ -189,6 +219,19 @@ def write_report(members):
                 f.write("no")
             f.write("</td>")
 
+        if args.reply is True:
+            f.write("<td>")
+            if member["check-in-replied"]:
+                if member["check-in-negative"]:
+                    f.write("<b>")
+                f.write(member["check-in-reply"])
+                if member["check-in-negative"]:
+                    f.write("</b>")            
+            else:
+                f.write("&nbsp");
+            f.write("</td>")
+
+
         if args.any is True:
             f.write("<td>")
             if member["anyEdit"]:
@@ -218,17 +261,18 @@ args = get_args()
 profiles_global = {}
 flo =  {}
 flo['id'] = "Straub-620"
+flo['id'] = "Greenwood-3667"
 flo['name'] = "Flo"
 
 members = []
 members.append(flo)
 
 #pgm
-# members = get_member_users("germany")
+members = get_member_users("germany")
 
 for member in members:
     check_edit_history(member)
-    get_checkin_requested(member, "It’s Germany Project check-in time again")
+    get_checkin_requested(member, "annual check-in time 2023. If you still ")
     print(member)
 
 write_report(members)
