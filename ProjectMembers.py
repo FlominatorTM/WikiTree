@@ -13,6 +13,7 @@ def get_args():
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
+    parser.add_argument('--join', action='store_true', help='Adds link to remove badge')
     parser.add_argument('--users', help='link to text file with user names')
     return parser.parse_args()
 
@@ -153,14 +154,20 @@ def does_profile_contain(link, words):
         
 
 def get_checkin_requested(theUser, checkInToken):
-    if args.checkin is False:
-        return
-    print(theUser["id"])
     link = 'https://www.wikitree.com/wiki/' + theUser["id"]
     f = requests.get(link)
     userPage = f.text
     indexCheckInToken = userPage.find(checkInToken)
     
+    if args.join:
+        midToken = '<span data-mid="'
+        indexMidStart = userPage.index(midToken) + len(midToken)
+        indexMidEnd = userPage.index('"', indexMidStart)
+        get_date_joined(theUser, userPage[indexMidStart:indexMidEnd] )
+    
+    if args.checkin is False and args.reply is False:
+        return
+        
     # print(str(indexCheckInToken))
     theUser["check-in-requested"] = indexCheckInToken > -1
     theUser["check-in-replied"] = False
@@ -192,6 +199,27 @@ def get_checkin_requested(theUser, checkInToken):
             replyTime = userPage[indexOfReplyTimeStart:indexOfReplyTimeEnd]
             theUser["check-in-reply-date"] = dateutil.parser.parse(replyTime)
 
+def get_date_joined(theUser, mId):
+    global badge
+    link = 'https://www.wikitree.com/index.php?title=Special:Badges&u=' + mId
+    f = requests.get(link)
+    badgePage = f.text
+    
+    # <li id="list_item_180">
+    # <a href="/index.php?title=Special:Badges&amp;b=germany"><img src="/images/badge/germany.gif.pagespeed.ce.9pUpJX44h-.gif" alt="Germany Project Member" width="125" height="70" border="0"></a> <br>
+    # <span class="large">Germany Project Member</span><br>
+    # Active participant in the <a href="http://www.wikitree.com/wiki/Project:Germany">Germany/German Roots Project</a>.<br>
+    # 29 Oct 2019
+    # <br>
+    # Awarded by <a href="/wiki/Haese-11" title="">Kylie Haese</a>
+    
+    indexLinkToBadge = badgePage.index("b=germany")
+    indexBelowDate = badgePage.index("Awarded by ", indexLinkToBadge)
+    indexBrAfterDate = badgePage.rindex("<", indexLinkToBadge, indexBelowDate) 
+    indexBrBeforeDate = badgePage.rindex('>', indexLinkToBadge, indexBrAfterDate) + len('>')
+    theUser["date-joined-formatted"] = badgePage[indexBrBeforeDate:indexBrAfterDate]
+    theUser["date-joined"] = dateutil.parser.parse(badgePage[indexBrBeforeDate:indexBrAfterDate]) 
+    
 def is_reply_negative(reply):
     replyLower = reply.lower()
     return "no " in replyLower or "don't" in replyLower or "drop out" in replyLower
@@ -204,6 +232,9 @@ def write_report(members):
     f.write("<th>ID</th>")
     f.write("<th>Name</th>")
     
+    if args.join:
+        f.write("<th>Date joined</th>")
+     
     if args.last:
         f.write("<th>Last edit</th>")
         
@@ -236,6 +267,11 @@ def write_report(members):
         f.write("<td>")
         f.write(member["name"])
         f.write("</td>")
+
+        if args.join:
+            f.write("<td>")
+            f.write( member["date-joined-formatted"])
+            f.write("</td>")
 
         if args.last:
             f.write("<td>")
@@ -290,11 +326,11 @@ def write_report(members):
 
 args = get_args()
 profiles_global = {}
-
+badge = "germany"
 members = []
 
 if not args.users:
-    members = get_member_users_project("germany")    
+    members = get_member_users_project(badge)    
 else:
     members= get_members_file(args.users)
 
