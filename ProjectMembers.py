@@ -5,6 +5,9 @@ import argparse
 from datetime import datetime 
 from dateutil.relativedelta import relativedelta 
 
+badge = "germany"
+words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
+
 def get_args():
     parser = argparse.ArgumentParser(description='Creates a report of one project')
     parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for keyword')
@@ -115,7 +118,7 @@ def check_edit_history(theUser):
             break
 
 def did_user_perform_relevant_edit(oneDay):
-    words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
+    global words
     editsPerDay = oneDay.split("<span class='HISTORY-ITEM'>")
     for oneEdit in editsPerDay[1:]:
         linksInEdit = oneEdit.split("<a href=\"")
@@ -326,7 +329,6 @@ def write_report(members):
 
 args = get_args()
 profiles_global = {}
-badge = "germany"
 members = []
 
 if not args.users:
