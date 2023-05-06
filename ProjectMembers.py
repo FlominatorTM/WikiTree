@@ -13,10 +13,23 @@ def get_args():
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
+    parser.add_argument('--users', help='link to text file with user names')
     return parser.parse_args()
 
+def get_members_file(filename):
+    members = []
+    with open(filename, encoding="utf-8") as f:
+        while True:
+            line = f.readline()
+            if not line:
+                break
+            theUser = {}
+            theUser["id"] = line;
+            theUser["name"] = " ";
+            members.append(theUser)
+    return members
 
-def get_member_users(project):
+def get_member_users_project(project):
 
     link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5000'
     f = requests.get(link)
@@ -261,19 +274,17 @@ def write_report(members):
         
 
 args = get_args()
-
-
 profiles_global = {}
-flo =  {}
-flo['id'] = "Straub-620"
-flo['id'] = "Greenwood-3667"
-flo['name'] = "Flo"
 
 members = []
-members.append(flo)
+
+if not args.users:
+    members = get_member_users_project("germany")    
+else:
+    members= get_members_file(args.users)
 
 #pgm
-members = get_member_users("germany")
+
 
 for member in members:
     check_edit_history(member)
