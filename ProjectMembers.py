@@ -300,10 +300,12 @@ else:
 
 #pgm
 
-
+numMembers = str(len(members))
+done = 0
 for member in members:
     check_edit_history(member)
     get_checkin_requested(member, "annual check-in time 2023. If you still ")
-    print(member, flush=True)
-
+    done +=1
+    print(str(done) +  "/" + numMembers + " " + str(member), flush=True)
+    
 write_report(members)
