@@ -91,9 +91,9 @@ def check_edit_history(theUser):
         print (editDateFormatted)
         if editDate > six_months_ago:
             theUser["anyEdit"] = True
-            if args.contribs is True:
+            if args.contribs:
                 relevant_edit = did_user_perform_relevant_edit(oneDay)
-                if relevant_edit is True:
+                if relevant_edit:
                     theUser["editedProject"] = True
                     break
             any_edit = True
@@ -115,7 +115,7 @@ def did_user_perform_relevant_edit(oneDay):
             subjectLink = linksInEdit[3][0:endOfLink]
             if "http" in subjectLink and not "Special" in subjectLink:
                 print (subjectLink)
-                if does_profile_contain(subjectLink, words) is True:
+                if does_profile_contain(subjectLink, words):
                     print("relevant edit found")
                     
                     return True
@@ -209,12 +209,12 @@ def write_report(members):
         f.write(member["name"])
         f.write("</td>")
 
-        if args.last is True:
+        if args.last:
             f.write("<td>")
             f.write( member["lastEditFormatted"])
             f.write("</td>")
             
-        if args.checkin is True:
+        if args.checkin:
             f.write("<td>")
             if member["check-in-requested"]:
                 f.write("yes")
@@ -222,7 +222,7 @@ def write_report(members):
                 f.write("no")
             f.write("</td>")
 
-        if args.reply is True:
+        if args.reply:
             f.write("<td>")
             if member["check-in-replied"]:
                 if member["check-in-negative"]:
@@ -235,7 +235,7 @@ def write_report(members):
             f.write("</td>")
 
 
-        if args.any is True:
+        if args.any:
             f.write("<td>")
             if member["anyEdit"]:
                 f.write("yes")
