@@ -45,7 +45,7 @@ def get_member_users_project(project):
             isFirstRound = False
             continue
 
-        print ("-----------------")
+        #print ("-----------------")
         # print(member)
         theUser = {}
         betweenIdAndName = '" target="_blank">'
@@ -57,14 +57,13 @@ def get_member_users_project(project):
             theUser["id"] = member[0:indexIdEnds];
             theUser["name"] = member[indexNameBeginns:indexNameEnds];
             
-            
-            
             members.append(theUser)
             # print(theUser)
             
             # if len(members) > 2:
                 # break
-        print(str(len(members)))
+    
+    print(str(len(members)) + " members found", flush=True)
     return members
 
 def check_edit_history(theUser):
@@ -289,6 +288,6 @@ else:
 for member in members:
     check_edit_history(member)
     get_checkin_requested(member, "annual check-in time 2023. If you still ")
-    print(member)
+    print(member, flush=True)
 
 write_report(members)
