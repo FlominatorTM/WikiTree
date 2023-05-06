@@ -20,7 +20,7 @@ def get_members_file(filename):
     members = []
     with open(filename, encoding="utf-8") as f:
         while True:
-            line = f.readline()
+            line = f.readline().strip()
             if not line:
                 break
             theUser = {}
