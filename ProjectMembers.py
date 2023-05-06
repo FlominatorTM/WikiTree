@@ -12,6 +12,7 @@ def get_args():
     parser.add_argument('--any', action='store_true', help='Checks for edits in last months')
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
+    parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
     return parser.parse_args()
 
 
@@ -195,7 +196,9 @@ def write_report(members):
     
     if args.contribs is True:
         f.write("<th>Project edit?</th>")
-    f.write("<th>Badge</th>")
+        
+    if args.unbadge:
+        f.write("<th>Badge</th>")
     f.write("</tr>")
     for member in sorted(members, key=lambda d: d['lastEdit']):
         f.write("<tr>")
@@ -240,16 +243,18 @@ def write_report(members):
                 f.write("no")
             f.write("</td>")    
         
-        if args.contribs is True:
+        if args.contribs:
             f.write("<td>")
             if member["editedProject"]:
                 f.write("yes")
             else:
                 f.write("no")
             f.write("</td>")
-        f.write("<td>")
-        f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
-        f.write("</td>")
+            
+        if args.unbadge:
+            f.write("<td>")
+            f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
+            f.write("</td>")
         f.write("</tr>")
     f.write("</table></body>")
     f.close()
