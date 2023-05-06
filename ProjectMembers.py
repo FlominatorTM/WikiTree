@@ -163,7 +163,7 @@ def get_checkin_requested(theUser, checkInToken):
     indexCheckInToken = userPage.find(checkInToken)
     
     if args.join:
-        midToken = '<span data-mid="'
+        midToken = 'data-mid="'
         indexMidStart = userPage.index(midToken) + len(midToken)
         indexMidEnd = userPage.index('"', indexMidStart)
         get_date_joined(theUser, userPage[indexMidStart:indexMidEnd] )
@@ -344,6 +344,6 @@ for member in members:
     check_edit_history(member)
     get_checkin_requested(member, "annual check-in time 2023. If you still ")
     done +=1
-    print(str(done) +  "/" + numMembers + " " + str(member), flush=True)
+    print(str(done) +  "/" + numMembers + " " + str(member) + "\n", flush=True)
     
 write_report(members)
