@@ -164,6 +164,7 @@ def get_checkin_requested(theUser, checkInToken):
     # print(str(indexCheckInToken))
     theUser["check-in-requested"] = indexCheckInToken > -1
     theUser["check-in-replied"] = False
+    theUser["check-in-reply-date"] = datetime(2122, 12, 19, 0, 0)
     
     if theUser["check-in-requested"]:
         indexOfReplyButtons = userPage.index("comment-info small", indexCheckInToken)
@@ -181,6 +182,15 @@ def get_checkin_requested(theUser, checkInToken):
             indexEndOfActualReply = userPage.index("</div>", indexOfActualReply)
             theUser["check-in-reply"] = userPage[indexOfActualReply:indexEndOfActualReply].strip()
             theUser["check-in-negative"] = is_reply_negative(theUser["check-in-reply"])
+            
+            #<time class="timeago" datetime="2023-05-05T20:43:44Z" title="May 05, 2023">10 hours ago</time>
+            replyTimeToken = 'datetime="'
+            
+            indexOfReplyTimeStart = userPage.index(replyTimeToken, indexOfActualReply)
+            indexOfReplyTimeStart += len(replyTimeToken)
+            indexOfReplyTimeEnd = indexOfReplyTimeStart + len("2023-05-05T20:43:44")
+            replyTime = userPage[indexOfReplyTimeStart:indexOfReplyTimeEnd]
+            theUser["check-in-reply-date"] = dateutil.parser.parse(replyTime)
 
 def is_reply_negative(reply):
     replyLower = reply.lower()
@@ -194,25 +204,31 @@ def write_report(members):
     f.write("<th>ID</th>")
     f.write("<th>Name</th>")
     
-    if args.last is True:
+    if args.last:
         f.write("<th>Last edit</th>")
         
-    if args.checkin is True:
+    if args.checkin:
         f.write("<th>Check in?</th>")
     
-    if args.reply is True:
+    if args.reply:
         f.write("<th>Reply check-in</th>")
     
-    if args.any is True:
+    if args.any:
         f.write("<th>Any edit?</th>")
     
-    if args.contribs is True:
+    if args.contribs:
         f.write("<th>Project edit?</th>")
         
     if args.unbadge:
         f.write("<th>Badge</th>")
     f.write("</tr>")
-    for member in sorted(members, key=lambda d: d['lastEdit']):
+    
+    if args.reply:
+        sortkey='check-in-reply-date'
+    else:
+        sortkey='lastEdit'
+    
+    for member in sorted(members, key=lambda d: d[sortkey]):
         f.write("<tr>")
         f.write("<td>")
         f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
