@@ -2,7 +2,7 @@
 tools for working with WikiTree
 
 ## Bookmarklets
-small pieces of code executed as browser bookmarks, see [ReadMe](WikiTree/Bookmarklets/README.md) for details
+small pieces of code executed as browser bookmarks, see [ReadMe](WikiTree/Bookmarklets/Readme.md) for details
 
 ## Greasemonkey scripts
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
