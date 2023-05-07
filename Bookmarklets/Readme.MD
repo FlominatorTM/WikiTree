@@ -1,5 +1,5 @@
 # Bookmarklets - making your WikiTreer life a little easier
-see [Wikipedia's article about bookmarklets](https://en.wikipedia.org/wiki/Bookmarklet), [Greg's instructions on how to install bookmarklets](https://youtu.be/50M-w_yXHzs) and [my video on how to install and use the category bookmarklets](https://www.youtube.com/watch?v=okOe7sHjuQs&t=51s)
+Bookmarklets ([Wikipedia](https://en.wikipedia.org/wiki/Bookmarklet)) are tiny pieces of JavaScript code stored as a bookmark on your browser and executed when clicking on the bookmark. For installation examples, see [Greg's instructions on how to install bookmarklets](https://youtu.be/50M-w_yXHzs) and [a part my video on how to install and use the category bookmarklets](https://youtu.be/okOe7sHjuQs?t=147)
 
 ## [AllEditLinks.js](AllEditLinks.js)
 makes all links to wiki pages (e.g. in a contributions list) point directly to "edit profile"
