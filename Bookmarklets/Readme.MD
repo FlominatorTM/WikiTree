@@ -1,3 +1,4 @@
+# Bookmarklets - making your WikiTreer live a little easier
 see [Wikipedia's article about bookmarklets](https://en.wikipedia.org/wiki/Bookmarklet), [Greg's instructions on how to install bookmarklets](https://youtu.be/50M-w_yXHzs) and [my video on how to install and use the category bookmarklets](https://www.youtube.com/watch?v=okOe7sHjuQs&t=51s)
 
 ## AllEditLinks
