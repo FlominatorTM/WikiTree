@@ -2,8 +2,7 @@
 tools for working with WikiTree
 
 ## Bookmarklets
-see [Wikipedia's article about bookmarklets](https://en.wikipedia.org/wiki/Bookmarklet), [Greg's instructions on how to install bookmarklets](https://youtu.be/50M-w_yXHzs) and [my video on how to install and use the category bookmarklets](https://www.youtube.com/watch?v=okOe7sHjuQs&t=51s)
-see [ReadMe](Bookmarklets/README.md) for details
+small pieces of code executed as browser bookmarks, see [ReadMe](WikiTree/Bookmarklets/README.md) for details
 
 ## Greasemonkey scripts
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
