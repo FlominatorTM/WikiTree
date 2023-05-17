@@ -35,6 +35,7 @@ function removeCrap(date, place)
 	.replace("Großherzogtum ", "")
 	.replace("Republik ", "")
 	.replace("Königreich ", "");
+	.replace("Oberamt ", "");
 	
 	placeBetter = placeBetter.replace(", Germany", ", Deutschland");
 	year_str = date.substr(date.length-4);
