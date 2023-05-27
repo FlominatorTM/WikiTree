@@ -16,6 +16,8 @@ adds microfilm and (if available) image number to the citation template (only wo
 removes prefixes from location fields coming from FamilySearch
 
 ## Misc
+### g2g2rss.php
+creates an RSS feed of answers to one particular G2G question/post
 ### inventory.php
 category monitoring as implemented at https://www.wikitree.com/index.php?title=Space:Germany_Needs_Birth_Record_Category_Content
 ### OFBCrawler.py
