@@ -10,7 +10,7 @@
 	
 	if(!isset($post_url))
 	{
-		die ('usage ?post=[url to g2g post]&max=[num of posts to watch, default=10]');
+		die ('usage ?post=[url to g2g post]&max=[num of posts to watch, default=10]&needles[string that are mandatory for entry to show up, separated by | character]');
 	}
 	if(substr($post_url, 0, 24) != "https://www.wikitree.com")
 	{
@@ -47,10 +47,31 @@
     <link><?php echo $post_url; ?></link>
 <?php	
 	$num_in_array = count($replies);
+	
+	$needles = [];
+	if(isset($_REQUEST['needles']))
+	{
+		$needles = explode('|', $_REQUEST['needles']);
+		var_dump($needles);
+	}
+	
 	for($i=$num_in_array-1;$i>0;$i--)
 	{
+		$needle_found = false;
+		foreach($needles as $needle)
+		{
+			if(stristr($replies[$i], $needle))
+			{
+				$needle_found = true;
+				break;
+			}
+		}
+		
+		if(isset($_REQUEST['needles']) && !$needle_found)
+		{
+			continue;
+		}
 
-		// echo htmlspecialchars($replies[$i]);
 		$user =  extract_from_to($replies[$i], 'qa-user-link">', "</A>");
 		$title = "Answer by $user";
 		$anchor = extract_from_to($replies[$i], '#', "\"");
