@@ -28,11 +28,7 @@
 	$offset_last_ten = $num_answers - $max;
 	$offset = max(0, $offset_last_ten);
 	$url = "$post_url?start=$offset";
-	
-	$replies_page = file_get_contents($url);
-	$reply_separator = '<div class="qa-a-item-content qa-post-content">';
-	
-	$replies = explode($reply_separator, $replies_page);
+
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$url_here = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 ?>
@@ -43,19 +39,34 @@
     <description>Answers from the G2G post</description>
     <language>en</language>
     <pubDate><?php echo(date("r")); ?></pubDate>
-    <title><?php echo extract_from_to($replies[0], '<title>', "</title>"); ?></title>
+    <title><?php echo extract_from_to($question_page, '<title>', "</title>"); ?></title>
     <link><?php echo $post_url; ?></link>
 <?php	
-	$num_in_array = count($replies);
-	
 	$needles = [];
 	if(isset($_REQUEST['needles']))
 	{
 		$needles = explode('|', $_REQUEST['needles']);
 	}
 	
+	$replies_page = file_get_contents($url);
+	$reply_separator = '<div class="qa-a-item-content qa-post-content">';
+	
+	$replies = explode($reply_separator, $replies_page);
+	$num_in_array = count($replies);
+	
+	$posted = 0;
+	
 	for($i=$num_in_array-1;$i>0;$i--)
 	{
+		if(process_reply($replies, $i))
+		{
+			$posted++;
+		}
+	}
+	
+	function process_reply($replies, $i)
+	{
+		global $needles;
 		$needle_found = false;
 		foreach($needles as $needle)
 		{
@@ -68,7 +79,7 @@
 		
 		if(isset($_REQUEST['needles']) && !$needle_found)
 		{
-			continue;
+			return false;
 		}
 
 		$user =  extract_from_to($replies[$i], 'qa-user-link">', "</A>");
@@ -91,6 +102,7 @@
 		echo "    	<description><![CDATA[".$text."]]></description>\n";
 		echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
 		echo "    </item>\n";
+		return true;
 	}
 	
 	function extract_from_to($haystack, $prefix, $suffix)
