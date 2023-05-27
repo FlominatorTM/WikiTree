@@ -22,12 +22,15 @@
 		header("Content-Type: application/rss+xml");
 		echo('<?xml version="1.0" encoding="UTF-8"?>'); 
 	}
+	
+	$needles = [];
+	if(isset($_REQUEST['needles']))
+	{
+		$needles = explode('|', $_REQUEST['needles']);
+	}
  
 	$question_page = file_get_contents($post_url);
 	$num_answers = extract_from_to($question_page, '<span itemprop="answerCount">', '<');
-	$offset_last_ten = $num_answers - $max;
-	$offset = max(0, $offset_last_ten);
-	$url = "$post_url?start=$offset";
 
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$url_here = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -42,29 +45,33 @@
     <title><?php echo extract_from_to($question_page, '<title>', "</title>"); ?></title>
     <link><?php echo $post_url; ?></link>
 <?php	
-	$needles = [];
-	if(isset($_REQUEST['needles']))
-	{
-		$needles = explode('|', $_REQUEST['needles']);
-	}
 	
-	$replies_page = file_get_contents($url);
-	$reply_separator = '<div class="qa-a-item-content qa-post-content">';
-	
-	$replies = explode($reply_separator, $replies_page);
-	$num_in_array = count($replies);
-	
+	$offset = max(0, ($num_answers - $max));
+	$at_beginning = false;
 	$posted = 0;
-	
-	for($i=$num_in_array-1;$i>0;$i--)
+	do
 	{
-		if(process_reply($replies, $i))
+		$url = "$post_url?start=$offset";
+
+		$replies_page = file_get_contents($url);
+		$reply_separator = '<div class="qa-a-item-content qa-post-content">';
+		
+		$replies = explode($reply_separator, $replies_page);
+		$num_in_array = count($replies);
+		
+		for($i=$num_in_array-1;$i>0;$i--)
 		{
-			$posted++;
+			if(process_reply($replies, $i, $url, $needles))
+			{
+				$posted++;
+			}
 		}
-	}
+		$at_beginning = $offset == 0;
+		$offset = max(0, $offset - 20);
+	}while($posted < $max && !$at_beginning);
 	
-	function process_reply($replies, $i)
+	
+	function process_reply($replies, $i, $url, $needles)
 	{
 		global $needles;
 		$needle_found = false;
