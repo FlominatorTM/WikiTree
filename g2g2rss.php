@@ -29,6 +29,8 @@
 		$needles = explode('|', $_REQUEST['needles']);
 	}
  
+	$extract_link = isset($_REQUEST['extract_link']);
+	
 	$question_page = file_get_contents($post_url);
 	$num_answers = extract_from_to($question_page, '<span itemprop="answerCount">', '<');
 
@@ -73,7 +75,7 @@
 	
 	function process_reply($replies, $i, $url, $needles)
 	{
-		global $needles;
+		global $needles, $extract_link;
 		$needle_found = false;
 		foreach($needles as $needle)
 		{
@@ -95,6 +97,15 @@
 		$text = extract_from_to($replies[$i], '<div itemprop="text">', "</div>");
 		$link = $url . '#' . $anchor;
 		$description = $text;
+		$guid = $link;
+		if($extract_link)
+		{
+			$index_of_link = strpos($text, "<a href=");
+			
+			$title = substr($text, 0, $index_of_link);
+			$link = "http" . extract_from_to($text, "http", "\"");
+			$description = "";
+		}
 		//Mon, 22 May 2023 14:35:21 +0000
 
 		$date_raw = extract_from_to($replies[$i], 'datetime="', "\"");
@@ -105,7 +116,7 @@
 		echo "    <item>\n";
 		echo "    	<title>$title</title>\n";
 		echo "    	<link>$link</link>\n";
-		echo "    	<guid>$link</guid>\n";
+		echo "    	<guid>$guid</guid>\n";
 		echo "    	<description><![CDATA[".$text."]]></description>\n";
 		echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
 		echo "    </item>\n";
