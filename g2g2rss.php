@@ -52,7 +52,6 @@
 	if(isset($_REQUEST['needles']))
 	{
 		$needles = explode('|', $_REQUEST['needles']);
-		var_dump($needles);
 	}
 	
 	for($i=$num_in_array-1;$i>0;$i--)
