@@ -29,13 +29,13 @@
 		$needles = explode('|', $_REQUEST['needles']);
 	}
  
-	$extract_link = isset($_REQUEST['extract_link']);
+	$extract_link = isset($_REQUEST['extract_link']) ;
 	
 	$question_page = file_get_contents($post_url);
 	$num_answers = extract_from_to($question_page, '<span itemprop="answerCount">', '<');
 
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-	$url_here = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	$url_here = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] ;
 ?>
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -101,8 +101,7 @@
 		if($extract_link)
 		{
 			$index_of_link = strpos($text, "<a href=");
-			
-			$title = substr($text, 0, $index_of_link);
+			$title = extract_from_to($text, ">", "<");
 			$link = "http" . extract_from_to($text, "http", "\"");
 			$description = "";
 		}
