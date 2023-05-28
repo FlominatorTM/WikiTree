@@ -36,7 +36,7 @@ function removeCrap(date, place)
 	.replace("Republik ", "")
 	.replace("Königreich ", "")
 	.replace("Oberamt ", "")
-	.replace("Vereinigte Staaten", "United States")
+	.replace("Vereinigte Staaten von Amerika", "United States")
 	;
 	
 	placeBetter = placeBetter.replace(", Germany", ", Deutschland");
