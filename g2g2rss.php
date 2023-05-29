@@ -100,23 +100,28 @@
 		$guid = $link;
 		if($extract_link)
 		{
-			$index_of_link = strpos($text, "<a href=");
-			$title = extract_from_to($text, ">", "<");
-			$link = "http" . extract_from_to($text, "http", "\"");
-			$description = "";
+			$stripped_text = trim(strip_tags($text));
+			$index_of_link = strpos($stripped_text, "http");
+			if($index_of_link > 0)
+			{
+				$title = substr($stripped_text, 0, $index_of_link);
+				$link = substr($stripped_text, $index_of_link);
+			}
+			
 		}
 		//Mon, 22 May 2023 14:35:21 +0000
 
 		$date_raw = extract_from_to($replies[$i], 'datetime="', "\"");
 		$date = date_parse($date_raw);
 		
+		//will return local time, while the posted time is UTC!
 		$timestamp = mktime($date['hour'], $date['minute'], $date['second'], $date['month'], $date['day'], $date['year']);
 	
 		echo "    <item>\n";
 		echo "    	<title>$title</title>\n";
 		echo "    	<link>$link</link>\n";
 		echo "    	<guid>$guid</guid>\n";
-		echo "    	<description><![CDATA[".$text."]]></description>\n";
+		echo "    	<description><![CDATA[".$description."]]></description>\n";
 		echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
 		echo "    </item>\n";
 		return true;
