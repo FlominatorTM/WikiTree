@@ -104,8 +104,8 @@
 			$index_of_link = strpos($stripped_text, "http");
 			if($index_of_link > 0)
 			{
-				$title = substr($stripped_text, 0, $index_of_link);
-				$link = substr($stripped_text, $index_of_link);
+				$title = trim(substr($stripped_text, 0, $index_of_link));
+				$link = trim(substr($stripped_text, $index_of_link));
 			}
 			
 		}
@@ -118,7 +118,7 @@
 		$timestamp = mktime($date['hour'], $date['minute'], $date['second'], $date['month'], $date['day'], $date['year']);
 	
 		echo "    <item>\n";
-		echo "    	<title>$title</title>\n";
+		echo "    	<title>".html_entity_decode($title)."</title>\n";
 		echo "    	<link>$link</link>\n";
 		echo "    	<guid>$guid</guid>\n";
 		echo "    	<description><![CDATA[".$description."]]></description>\n";
