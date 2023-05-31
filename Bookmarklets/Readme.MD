@@ -13,7 +13,7 @@ generates formatted source citations from church books at http://archives.bas-rh
 ## [Antenati.js](Antenati.js)
 calls [Antenati Citation Builder](https://apps.wikitree.com/apps/clarke11007/antenati.php) when being on a record like https://www.antenati.san.beniculturali.it/ark:/12657/an_ua267608/wEKr932
 
-## [BLB_Newspapers.js](Badische Landesbibliothek, Digitale Sammlungen)
+## [Badische Landesbibliothek, Digitale Sammlungen](BLB_Newspapers.js)
 generates formatted source citations from newspapers and magazines at https://digital.blb-karlsruhe.de/
 
 ## [Compgen Grabstein-Projekt](Compgen_Gravestones.js)
