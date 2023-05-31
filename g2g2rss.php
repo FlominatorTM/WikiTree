@@ -35,7 +35,7 @@
 	$num_answers = extract_from_to($question_page, '<span itemprop="answerCount">', '<');
 
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-	$url_here = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] ;
+	$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
 ?>
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
