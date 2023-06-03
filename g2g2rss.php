@@ -93,7 +93,8 @@
 
 		$user =  extract_from_to($replies[$i], 'qa-user-link">', "</A>");
 		$title = "Answer by $user";
-		$anchor = extract_from_to($replies[$i], '#', "\"");
+		$index_behind_answer(strpos($replies[$i], 'qa-a-item-meta'));
+		$anchor = extract_from_to(substr($replies[$i], $index_behind_answer), '#', "\"");
 		$text = extract_from_to($replies[$i], '<div itemprop="text">', "</div>");
 		$link = $url . '#' . $anchor;
 		$description = $text;
