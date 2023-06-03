@@ -34,6 +34,9 @@ generates formatted source citations from church book duplicates at Landesarchiv
 ## [Matricula.js](Matricula.js)
 generates formatted source citations from church books at Matricula (e.g. from https://data.matricula-online.eu/de/deutschland/paderborn/DE_EBAP_10114/KB001-01-T/?pg=139 )
 
+## [PortaFontium.js](PortaFontium.js)
+generates formatted source citations from books at Porta fontium (e.g. from https://www.portafontium.eu/iipimage/30073845/pistov-standesamt-03_0050-o )
+
 ## [Riksarkivet.js](Riksarkivet.js)
 generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.riksarkivet.se/bildvisning/C0013667_00133 )
 
