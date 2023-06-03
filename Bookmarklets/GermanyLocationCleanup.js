@@ -21,7 +21,6 @@ if(birthDate != null)
 }
 else
 {
-
 	marriageLocation.value = removeCrap(marriageDate.value, marriageLocation.value);
 }
 
@@ -86,7 +85,10 @@ function removeCrap(date, place)
 			.replace("Deutschland", "")
 			;
 		}
-		/* Deutsches Reich is accurate from 1871 until 1945*/
+		else if(year <1945)
+		{
+			/* Deutsches Reich is accurate from 1871 until 1945*/
+		}
 		else if(year == 1945)
 		{
 			alert("Deutsches Reich only until April? 1945")
