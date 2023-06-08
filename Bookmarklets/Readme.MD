@@ -37,6 +37,9 @@ generates formatted source citations from church books at Matricula (e.g. from h
 ## [PortaFontium.js](PortaFontium.js)
 generates formatted source citations from books at Porta fontium (e.g. from https://www.portafontium.eu/iipimage/30073845/pistov-standesamt-03_0050-o )
 
+## [Profile2G2G.js](Profile2G2G.js)
+copies link to the profile to clipboard having the persons name displayed, that can be pasted in G2G directly
+
 ## [Riksarkivet.js](Riksarkivet.js)
 generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.riksarkivet.se/bildvisning/C0013667_00133 )
 
