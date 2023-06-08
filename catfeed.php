@@ -11,14 +11,14 @@ if(!isset($_REQUEST['debug']))
 $limit = 10; //currently does nothing
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
-	
+$current_file_time = filemtime(current_file($cat));
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
   <atom:link href="<?php echo $url_here; ?>" rel="self" type="application/rss+xml" />
     <description></description>
     <language>en</language>
-    <pubDate><?php echo(date("r")); ?></pubDate>
+    <pubDate><?php echo(date("r", $current_file_time)); ?></pubDate>
     <title>Changes to Category:<?php echo $cat; ?></title>
     <link><?php echo "https://www.wikitree.com/wiki/Category:" . str_replace(' ', '_', $cat) ?></link>
 <?php	
@@ -27,16 +27,14 @@ if(!check_has_any_data($cat))
 {
 	get_current_content($cat);
 }
-else
+else if(has_new_data_available($cat))
 {
-	if(has_new_data_available($cat))
-	{
 		// echo "new data";
 		$prev_filling = get_previous_content($cat);
 		get_current_content($cat);
 		compare_and_dump_contents($cat, $prev_filling);
-	}
 }
+
 build_feed($cat, $limit);
 
 function escape_cat($cat)
