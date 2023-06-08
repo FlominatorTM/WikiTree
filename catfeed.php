@@ -1,13 +1,12 @@
 <?php 
-
+$cat = str_replace('Category:', '', $_REQUEST['cat']);
+// $cat = "Hesse, Needs Birth Record";
 if(!isset($_REQUEST['debug']))
 {
 	header("Content-Type: application/rss+xml");
+	header('Content-Disposition: inline;Filename=' . urlencode($cat).".xml");
 	echo('<?xml version="1.0" encoding="UTF-8"?>'); 
 }
-
-$cat = str_replace('Category:', '', $_REQUEST['cat']);
-// $cat = "Hesse, Needs Birth Record";
 
 $limit = 10; //currently does nothing
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
