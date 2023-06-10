@@ -49,6 +49,9 @@ generates scores normalized points based on the official score sheet for [Source
 ## [TrustedListEmail.js](TrustedListEmail.js)
 collects all email adresses from one page (e.g. the Trusted List of a profile) and puts them into a new email
 
+## [Vojvodina.js](Vojvodina.js)
+generates formatted source citations from Archives of Vojvodina in Novi Sad (e.g. https://maticneknjige.org.rs/mk/maticne-knjige-jasa-tomic-1884-rimokatolici-vencani/ )
+
 ## [WieWasWie.js](WieWasWie.js)
 opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www.wiewaswie.nl/nl/detail/29373347 )
 
