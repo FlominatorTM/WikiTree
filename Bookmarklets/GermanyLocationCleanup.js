@@ -87,6 +87,9 @@ function removeCrap(date, place)
 		}
 		else if(year <1945)
 		{
+			placeBetter = placeBetter
+			.replace("Deutschland", "Deutsches Reich")
+			;
 			/* Deutsches Reich is accurate from 1871 until 1945*/
 		}
 		else if(year == 1945)
