@@ -11,17 +11,6 @@ if(!isset($_REQUEST['debug']))
 $limit = 10; //currently does nothing
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
-$current_file_time = filemtime(current_file($cat));
-?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-  <atom:link href="<?php echo $url_here; ?>" rel="self" type="application/rss+xml" />
-    <description></description>
-    <language>en</language>
-    <pubDate><?php echo(date("r", $current_file_time)); ?></pubDate>
-    <title>Changes to Category:<?php echo $cat; ?></title>
-    <link><?php echo "https://www.wikitree.com/wiki/Category:" . str_replace(' ', '_', $cat) ?></link>
-<?php	
 
 if(!check_has_any_data($cat))
 {
@@ -29,11 +18,25 @@ if(!check_has_any_data($cat))
 }
 else if(has_new_data_available($cat))
 {
-		// echo "new data";
-		$prev_filling = get_previous_content($cat);
-		get_current_content($cat);
-		compare_and_dump_contents($cat, $prev_filling);
+	// echo "new data";
+	$file_time_before = filemtime(current_file($cat));
+	$prev_filling = get_previous_content($cat);
+	get_current_content($cat);
+	compare_and_dump_contents($cat, $prev_filling, $file_time_before);
 }
+
+
+?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+  <atom:link href="<?php echo $url_here; ?>" rel="self" type="application/rss+xml" />
+    <description></description>
+    <language>en</language>
+    <pubDate><?php echo(date("r", filemtime(current_file($cat)))) ?></pubDate>
+    <title>Changes to Category:<?php echo $cat; ?></title>
+    <link><?php echo "https://www.wikitree.com/wiki/Category:" . str_replace(' ', '_', $cat) ?></link>
+<?php	
+
 
 build_feed($cat, $limit);
 
@@ -126,9 +129,10 @@ function get_previous_content($cat)
 	return file_get_contents(current_file($cat));
 }
 
-function compare_and_dump_contents($cat, $old)
+function compare_and_dump_contents($cat, $old, $file_time_before)
 {
-	$new = file_get_contents(current_file($cat));
+	$current_file = current_file($cat);
+	$new = file_get_contents($current_file);
 	
 	$new_rows = explode("\n", $new);
 	$old_rows = explode("\n", $old);
@@ -141,6 +145,10 @@ function compare_and_dump_contents($cat, $old)
 	{
 		file_put_contents($dir . $list_date . "+.csv", implode("\n", $additions));
 		file_put_contents($dir . $list_date . "-.csv", implode("\n", $removals));
+	}
+	else
+	{
+		touch($current_file, $file_time_before);
 	}
 }
 
