@@ -111,7 +111,7 @@ function get_current_content($cat)
 function get_wiki_tree_plus_date()
 {
 	global $server;
-	$page = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_Inventory.json?Format=JSON";
+	$page = "https://plus.wikitree.com/function/WTWebProfileSearch/Flo_CatFeed.json?Format=JSON";
 	$json = json_decode(file_get_contents($page));
 	return $json->debug->categoriesDate;
 }
