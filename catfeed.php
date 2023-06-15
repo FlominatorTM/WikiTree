@@ -74,7 +74,7 @@ function check_has_any_data($cat)
 
 function get_current_content($cat)
 {
-	$url = "https://wikitree.sdms.si/function/WTWebProfileSearch/Flo_catfeed.csv?Query=subcat9=\"". urlencode($cat)."\"&MaxProfiles=1500&Format=CSV";
+	$url = "https://plus.wikitree.com/function/WTWebProfileSearch/Flo_CatFeed.csv?Query=subcat9=\"". urlencode($cat)."\"&MaxProfiles=1500&Format=CSV";
 	// echo $url."<br>";
 	$csv_page = file_get_contents($url);
 	$current_file = current_file($cat);
