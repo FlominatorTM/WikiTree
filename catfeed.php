@@ -1,12 +1,16 @@
 <?php 
 $cat = str_replace('Category:', '', $_REQUEST['cat']);
 // $cat = "Hesse, Needs Birth Record";
-if(!isset($_REQUEST['debug']))
+
+$is_debug = isset($_REQUEST['debug']);
+
+if(!$is_debug)
 {
 	header("Content-Type: application/rss+xml");
 	header('Content-Disposition: inline;Filename=' . urlencode($cat).".xml");
 	echo('<?xml version="1.0" encoding="UTF-8"?>'); 
 }
+print_debug("debugging enabled");
 
 $limit = 10; //currently does nothing
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
@@ -74,10 +78,20 @@ function check_has_any_data($cat)
 
 function get_current_content($cat)
 {
+	print_debug("entering get_current_content");
 	$url = "https://plus.wikitree.com/function/WTWebProfileSearch/Flo_CatFeed.csv?Query=subcat9=\"". urlencode($cat)."\"&MaxProfiles=1500&Format=CSV";
 	// echo $url."<br>";
 	$csv_page = file_get_contents($url);
 	$current_file = current_file($cat);
+	
+	$arbitrary_byte_number = 100;
+	if(strlen($csv_page)< $arbitrary_byte_number)
+	{
+		print_debug("csv_page is shorter than " + $arbitrary_byte_number + " bytes");
+		return;
+	}
+	
+	print_debug("length csv_page=" . strlen($csv_page));
 	
 	$lines = [];
 	$csv_lines = explode("\n", $csv_page);
@@ -103,7 +117,6 @@ function get_current_content($cat)
 	chmod($current_file, 0777);
 	$date_file = date_file($cat);
 	
-	
 	file_put_contents($date_file, get_wiki_tree_plus_date());
 	chmod($date_file, 0777);
 }
@@ -117,10 +130,25 @@ function get_wiki_tree_plus_date()
 
 function has_new_data_available($cat)
 {
+	print_debug("entering has_new_data_available($cat)");
 	$plus_cat_date = get_wiki_tree_plus_date();
 	$list_date = file_get_contents(date_file($cat));
+	
+
+	print_debug("plus_cat_date=$plus_cat_date");
+	print_debug("list_date=$list_date");
+	
+		
+	if ($plus_cat_date == "" || $list_date == "")
+	{
+		print_debug("returning because of empty date");
+		return false;
+	}
 	//list_date has to be older, so difference can mean only "new data"
-	return $plus_cat_date != $list_date;
+	$lists_differ = $plus_cat_date != $list_date;
+	print_debug("lists_differ=$lists_differ");
+		
+	return  $lists_differ;
 }
 
 function get_previous_content($cat)
@@ -132,6 +160,9 @@ function compare_and_dump_contents($cat, $old, $file_time_before)
 {
 	$current_file = current_file($cat);
 	$new = file_get_contents($current_file);
+	
+	print_debug("length current_file content=" . strlen($new));
+	print_debug("previous file content=" . strlen($old));
 	
 	$new_rows = explode("\n", $new);
 	$old_rows = explode("\n", $old);
@@ -189,9 +220,9 @@ function build_feed($cat, $limit)
 	}
 	else
 	{
-		for($i=3;$i<count($files);$i=$i+2)
+		for($i=0;$i<count($files);$i++)
 		{
-			if(!stristr($files[$i], '.txt')) //diff files are .csv
+			if(stristr($files[$i], '-.csv'))
 			{
 				$path = $dir . $files[$i];
 				$current_file_time = filemtime($path);
@@ -201,18 +232,20 @@ function build_feed($cat, $limit)
 				echo "    	<guid>https://www.wikitree.com/wiki/Category:" . urlencode(str_replace(' ', '_', $cat)) . '#' . "$current_file_time</guid>\n";
 				echo "    	<description><![CDATA[";
 				$removals = file_get_contents($path);
-				$additions = file_get_contents( $dir . $files[$i+1]);
+				$add_file = str_replace('-.csv', '+.csv', $path);
+				$additions = file_get_contents($add_file);
 				
 				echo "Additions:\n";
-				print_profile_lines(explode('\n', $additions));
+				// print_debug("additions:" . $additions);
+				print_profile_lines(explode("\n", $additions));
 				
 				echo "Removals:\n";
-				print_profile_lines(explode('\n', $removals));
+				// print_debug("removals:" . $removals);
+				print_profile_lines(explode("\n", $removals));
 				echo "		]]></description>\n";
 				echo "    	<pubDate>" . date("r", $current_file_time) . "</pubDate>\n";
 				echo "    </item>\n";
 			}
-			
 		}
 	}
 }
@@ -222,13 +255,23 @@ function print_profile_lines($rows)
 	echo "<ul>";
 	foreach($rows as $row)
 	{
+		// print_debug("row: $row");
 		if(strlen($row)>1)
 		{
-			$cols = explode(";", $row);
+			$cols = explode(';', $row);
 			echo "<li>$cols[3]: https://www.wikitree.com/wiki/$cols[1]</li>";
 		}
 	}
 	echo "</ul>";
+}
+
+function print_debug($line)
+{
+	global $is_debug;
+	if($is_debug)
+	{
+		echo $line . "<br>";
+	}
 }
 
 ?></channel>
