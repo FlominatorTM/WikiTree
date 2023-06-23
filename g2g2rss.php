@@ -43,7 +43,6 @@
   <atom:link href="<?php echo $url_here; ?>" rel="self" type="application/rss+xml" />
     <description>Answers from the G2G post</description>
     <language>en</language>
-    <pubDate><?php echo(date("r")); ?></pubDate>
     <title><?php echo extract_from_to($question_page, '<title>', "</title>"); ?></title>
     <link><?php echo $post_url; ?></link>
 <?php	
@@ -63,7 +62,7 @@
 		
 		for($i=$num_in_array-1;$i>0;$i--)
 		{
-			if(process_reply($replies, $i, $url, $needles))
+			if(process_reply($replies, $i, $url, $needles, ($posted == 0)))
 			{
 				$posted++;
 			}
@@ -73,7 +72,7 @@
 	}while($posted < $max && !$first_answer_reached);
 	
 	
-	function process_reply($replies, $i, $url, $needles)
+	function process_reply($replies, $i, $url, $needles, $feed_is_empty)
 	{
 		global $needles, $extract_link;
 		$needle_found = false;
@@ -117,7 +116,12 @@
 		
 		//will return local time, while the posted time is UTC!
 		$timestamp = mktime($date['hour'], $date['minute'], $date['second'], $date['month'], $date['day'], $date['year']);
-	
+		
+		if($feed_is_empty)
+		{
+			echo "    <pubDate>" . date("r", $timestamp) . "</pubDate>\n";
+		}
+		
 		echo "    <item>\n";
 		echo "    	<title>".html_entity_decode($title)."</title>\n";
 		echo "    	<link>$link</link>\n";
