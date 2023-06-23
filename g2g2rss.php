@@ -49,7 +49,7 @@
 <?php	
 	
 	$offset = max(0, ($num_answers - $max));
-	$at_beginning = false;
+	$first_answer_reached = false;
 	$posted = 0;
 	do
 	{
@@ -68,9 +68,9 @@
 				$posted++;
 			}
 		}
-		$at_beginning = $offset == 0;
+		$first_answer_reached = $offset == 0;
 		$offset = max(0, $offset - 20);
-	}while($posted < $max && !$at_beginning);
+	}while($posted < $max && !$first_answer_reached);
 	
 	
 	function process_reply($replies, $i, $url, $needles)
