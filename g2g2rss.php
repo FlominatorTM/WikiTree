@@ -74,7 +74,7 @@
 	
 	function process_reply($replies, $i, $url, $needles, $feed_is_empty)
 	{
-		global $needles, $extract_link;
+		global $needles, $extract_link, $post_url;
 		$needle_found = false;
 		foreach($needles as $needle)
 		{
@@ -93,9 +93,10 @@
 		$user =  extract_from_to($replies[$i], 'qa-user-link">', "</A>");
 		$title = "Answer by $user";
 		$index_behind_answer = strpos($replies[$i], 'qa-a-item-meta');
-		$anchor = extract_from_to(substr($replies[$i], $index_behind_answer), '#', "\"");
+		$anchor = extract_from_to(substr($replies[$i], $index_behind_answer), '#a', "\"");
 		$text = extract_from_to($replies[$i], '<div itemprop="text">', "</div>");
-		$link = $url . '#' . $anchor;
+		
+		$link = $post_url . '?show=' . $anchor . '#' . $anchor;
 		$description = $text;
 		$guid = $link;
 		if($extract_link)
