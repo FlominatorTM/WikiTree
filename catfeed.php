@@ -1,8 +1,7 @@
 <?php 
-$cat = str_replace('Category:', '', $_REQUEST['cat']);
-// $cat = "Hesse, Needs Birth Record";
-
 $is_debug = isset($_REQUEST['debug']);
+$cat = str_replace('Category:', '', $_REQUEST['cat']);
+
 
 if(!$is_debug)
 {
@@ -16,17 +15,24 @@ $limit = 10; //currently does nothing
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
 
-if(!check_has_any_data($cat))
+$depth = 9;
+if (isset($_REQUEST['depth']) && $_REQUEST['depth'] != "")
 {
-	get_current_content($cat);
+	$depth = 0 + $_REQUEST['depth'];
 }
-else if(has_new_data_available($cat))
+
+
+if(!check_has_any_data($cat, $depth))
+{
+	get_current_content($cat, $depth);
+}
+else if(has_new_data_available($cat, $depth))
 {
 	// echo "new data";
-	$file_time_before = filemtime(current_file($cat));
-	$prev_filling = get_previous_content($cat);
-	get_current_content($cat);
-	compare_and_dump_contents($cat, $prev_filling, $file_time_before);
+	$file_time_before = filemtime(current_file($cat, $depth));
+	$prev_filling = get_previous_content($cat, $depth);
+	get_current_content($cat, $depth);
+	compare_and_dump_contents($cat, $depth, $prev_filling, $file_time_before);
 }
 
 
@@ -36,23 +42,28 @@ else if(has_new_data_available($cat))
   <atom:link href="<?php echo $url_here; ?>" rel="self" type="application/rss+xml" />
     <description></description>
     <language>en</language>
-    <pubDate><?php echo(date("r", filemtime(current_file($cat)))) ?></pubDate>
+    <pubDate><?php echo(date("r", filemtime(current_file($cat, $depth)))) ?></pubDate>
     <title>Changes to Category:<?php echo $cat; ?></title>
     <link><?php echo "https://www.wikitree.com/wiki/Category:" . str_replace(' ', '_', $cat) ?></link>
 <?php	
 
 
-build_feed($cat, $limit);
+build_feed($cat, $depth, $limit);
 
 function escape_cat($cat)
 {
 	return str_replace(' ', '_', urldecode($cat));
 }
 
-function cat_dir($cat)
+function cat_dir($cat, $depth)
 {
-	
 	$dir = "/sftp/straub620/www/catdata/" . escape_cat($cat);
+	
+	print_debug("depth=$depth");
+	if($depth != 9 && $depth != "9")
+	{
+		$dir = $dir . '_' . $depth;
+	}
 	
 	if(!is_dir($dir))
 	{
@@ -61,28 +72,28 @@ function cat_dir($cat)
 	return  $dir."/";
 }
 
-function current_file($cat)
+function current_file($cat, $depth)
 {
-	return cat_dir($cat) . "/current.txt";
+	return cat_dir($cat, $depth) . "current.txt";
 }
 
-function date_file($cat)
+function date_file($cat, $depth)
 {
-	return cat_dir($cat) . "/date.txt";
+	return cat_dir($cat, $depth) . "date.txt";
 }
 
-function check_has_any_data($cat)
+function check_has_any_data($cat, $depth)
 {
-	return is_file(current_file($cat));
+	return is_file(current_file($cat, $depth));
 }
 
-function get_current_content($cat)
+function get_current_content($cat, $depth)
 {
 	print_debug("entering get_current_content");
-	$url = "https://plus.wikitree.com/function/WTWebProfileSearch/Flo_CatFeed.csv?Query=subcat9=\"". urlencode($cat)."\"&MaxProfiles=1500&Format=CSV";
+	$url = "https://plus.wikitree.com/function/WTWebProfileSearch/Flo_CatFeed.csv?Query=subcat$depth=\"". urlencode($cat)."\"&MaxProfiles=15000&Format=CSV";
 	// echo $url."<br>";
 	$csv_page = file_get_contents($url);
-	$current_file = current_file($cat);
+	$current_file = current_file($cat, $depth);
 	
 	$arbitrary_byte_number = 100;
 	if(strlen($csv_page)< $arbitrary_byte_number)
@@ -115,7 +126,7 @@ function get_current_content($cat)
 	
 	file_put_contents($current_file, implode("\n", $lines));
 	chmod($current_file, 0777);
-	$date_file = date_file($cat);
+	$date_file = date_file($cat, $depth);
 	
 	file_put_contents($date_file, get_wiki_tree_plus_date());
 	chmod($date_file, 0777);
@@ -128,11 +139,11 @@ function get_wiki_tree_plus_date()
 	return $json->categoriesDate;
 }
 
-function has_new_data_available($cat)
+function has_new_data_available($cat, $depth)
 {
-	print_debug("entering has_new_data_available($cat)");
+	print_debug("entering has_new_data_available($cat, $depth)");
 	$plus_cat_date = get_wiki_tree_plus_date();
-	$list_date = file_get_contents(date_file($cat));
+	$list_date = file_get_contents(date_file($cat, $depth));
 	
 
 	print_debug("plus_cat_date=$plus_cat_date");
@@ -151,14 +162,14 @@ function has_new_data_available($cat)
 	return  $lists_differ;
 }
 
-function get_previous_content($cat)
+function get_previous_content($cat, $depth)
 {
-	return file_get_contents(current_file($cat));
+	return file_get_contents(current_file($cat, $depth));
 }
 
-function compare_and_dump_contents($cat, $old, $file_time_before)
+function compare_and_dump_contents($cat, $depth, $old, $file_time_before)
 {
-	$current_file = current_file($cat);
+	$current_file = current_file($cat, $depth);
 	$new = file_get_contents($current_file);
 	
 	print_debug("length current_file content=" . strlen($new));
@@ -200,16 +211,16 @@ function get_missing_rows($old, $new_rows)
 	return $additions;
 }
 
-function build_feed($cat, $limit)
+function build_feed($cat, $depth, $limit)
 {
 	// echo "building";
-	$dir = cat_dir($cat);
+	$dir = cat_dir($cat, $depth);
 	
 	$files = scandir($dir, SCANDIR_SORT_ASCENDING);
 	
 	if(count($files)==4) //only . .. date.txt and current.txt
 	{
-		$current_file_time = filemtime(current_file($cat));
+		$current_file_time = filemtime(current_file($cat, $depth));
 		echo "    <item>\n";
 		echo "    	<title>Tracking of content started</title>\n";
 		// echo "    	<link>$link</link>\n";
