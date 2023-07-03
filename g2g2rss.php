@@ -108,6 +108,11 @@
 				$title = trim(substr($stripped_text, 0, $index_of_link));
 				$link = trim(substr($stripped_text, $index_of_link));
 			}
+			else
+			{
+				$title = $stripped_text;
+				$link = "";
+			}
 			
 		}
 		//Mon, 22 May 2023 14:35:21 +0000
