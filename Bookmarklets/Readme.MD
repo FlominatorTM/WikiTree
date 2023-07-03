@@ -16,6 +16,9 @@ calls [Antenati Citation Builder](https://apps.wikitree.com/apps/clarke11007/ant
 ## [Badische Landesbibliothek, Digitale Sammlungen](BLB_Newspapers.js)
 generates formatted source citations from newspapers and magazines at https://digital.blb-karlsruhe.de/
 
+## [CCCC.js](CCCC.js)
+calls [Canadian Census Citation Creator](https://apps.wikitree.com/apps/clarke11007/CCCC.php) when being on a record like https://recherche-collection-search.bac-lac.gc.ca/eng/home/record?app=census&IdNumber=68778713
+
 ## [Compgen Grabstein-Projekt](Compgen_Gravestones.js)
 generates formatted source citations from gravestone entries like https://grabsteine.genealogy.net/tomb.php?cem=5385&tomb=481 (supports manual text selection)
 
