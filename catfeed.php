@@ -179,9 +179,9 @@ function compare_and_dump_contents($cat, $depth, $old, $file_time_before)
 	$old_rows = explode("\n", $old);
 	$additions = get_missing_rows($old, $new_rows);
 	$removals = get_missing_rows($new, $old_rows);
-	$list_date = file_get_contents(date_file($cat));
+	$list_date = file_get_contents(date_file($cat, $depth));
 	
-	$dir = cat_dir($cat);
+	$dir = cat_dir($cat, $depth);
 	if(count($additions) > 0 || count($removals) > 0)
 	{
 		file_put_contents($dir . $list_date . "+.csv", implode("\n", $additions));
