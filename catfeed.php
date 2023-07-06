@@ -1,7 +1,7 @@
 <?php 
 $is_debug = isset($_REQUEST['debug']);
 $cat = str_replace('Category:', '', $_REQUEST['cat']);
-
+$show_only = $_REQUEST['show_only'];
 
 if(!$is_debug)
 {
@@ -43,12 +43,30 @@ else if(has_new_data_available($cat, $depth))
     <description></description>
     <language>en</language>
     <pubDate><?php echo(date("r", filemtime(current_file($cat, $depth)))) ?></pubDate>
-    <title>Changes to Category:<?php echo $cat; ?></title>
+    <title><? 
+	switch($show_only)
+	{
+		case "add":
+		{
+			echo "Additions to";
+			break;
+		}
+		case "rem":
+		{
+			echo "Removals from";
+			break;
+		}
+		default: 
+		{
+			echo "Changes in";
+			break;
+		}
+	}?> Category:<?php echo $cat; ?></title>
     <link><?php echo "https://www.wikitree.com/wiki/Category:" . str_replace(' ', '_', $cat) ?></link>
 <?php	
 
 
-build_feed($cat, $depth, $limit);
+build_feed($cat, $depth, $limit, $show_only);
 
 function escape_cat($cat)
 {
@@ -211,7 +229,7 @@ function get_missing_rows($old, $new_rows)
 	return $additions;
 }
 
-function build_feed($cat, $depth, $limit)
+function build_feed($cat, $depth, $limit, $show_only)
 {
 	// echo "building";
 	$dir = cat_dir($cat, $depth);
@@ -246,13 +264,24 @@ function build_feed($cat, $depth, $limit)
 				$add_file = str_replace('-.csv', '+.csv', $path);
 				$additions = file_get_contents($add_file);
 				
-				echo "Additions:\n";
-				// print_debug("additions:" . $additions);
-				print_profile_lines(explode("\n", $additions));
-				
-				echo "Removals:\n";
-				// print_debug("removals:" . $removals);
-				print_profile_lines(explode("\n", $removals));
+				if($show_only != "rem")
+				{
+					if($show_only != "add")
+					{
+						echo "Additions:\n";
+					}
+					// print_debug("additions:" . $additions);
+					print_profile_lines(explode("\n", $additions));
+				}
+				if($show_only != "add")
+				{
+					if($show_only != "rem")
+					{
+						echo "Removals:\n";
+					}
+					// print_debug("removals:" . $removals);
+					print_profile_lines(explode("\n", $removals));
+				}
 				echo "		]]></description>\n";
 				echo "    	<pubDate>" . date("r", $current_file_time) . "</pubDate>\n";
 				echo "    </item>\n";
