@@ -256,7 +256,25 @@ function build_feed($cat, $depth, $limit, $show_only)
 				$path = $dir . $files[$i];
 				$current_file_time = filemtime($path);
 				echo "    <item>\n";
-				echo "    	<title>Category changes</title>\n";
+				switch($show_only)
+				{
+					case "add":
+					{
+						echo "    	<title>Category additions</title>\n";
+						break;
+					}
+					case "rem":
+					{
+						echo "    	<title>Category removals</title>\n";
+						break;
+					}
+					default: 
+					{
+						echo "    	<title>Category changes</title>\n";
+						break;
+					}
+				}
+				
 				// echo "    	<link>$link</link>\n";
 				echo "    	<guid>https://www.wikitree.com/wiki/Category:" . urlencode(str_replace(' ', '_', $cat)) . '#' . "$current_file_time</guid>\n";
 				echo "    	<description><![CDATA[";
