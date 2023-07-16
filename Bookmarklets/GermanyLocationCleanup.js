@@ -19,7 +19,7 @@ if(birthDate != null)
 	birthLocation.value = removeCrap(birthDate.value, birthLocation.value);
 	deathLocation.value = removeCrap(deathDate.value, deathLocation.value);
 }
-else
+if(marriageDate != null)
 {
 	marriageLocation.value = removeCrap(marriageDate.value, marriageLocation.value);
 }
