@@ -116,6 +116,11 @@ function removeCrap(date, place)
 			.replace("Deutscher Bund", "Deutschland")
 			;
 		}
+		
+		if (year < 1868 && placeBetter.indexOf("Hessen-Nassau") > -1)
+		{
+			alert("no Hessen-Nassau before 1868 => Electorate of Hesse or Duchy Nassau");
+		}
 	}
 	return placeBetter;
 }
