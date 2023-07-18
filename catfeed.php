@@ -255,32 +255,59 @@ function build_feed($cat, $depth, $limit, $show_only)
 			{
 				$path = $dir . $files[$i];
 				$current_file_time = filemtime($path);
-				echo "    <item>\n";
+				$removals = file_get_contents($path);
+				$add_file = str_replace('-.csv', '+.csv', $path);
+				$additions = file_get_contents($add_file);
+				
+				
 				switch($show_only)
 				{
 					case "add":
 					{
-						echo "    	<title>Category additions</title>\n";
-						break;
+						print_debug('strlen($additions)=' . strlen($additions));
+						if(strlen($additions)>1)
+						{
+							echo "    <item>\n";
+							echo "    	<title>Category additions</title>\n";
+							break;							
+						}
+						else
+						{
+							continue 2;
+						}
 					}
 					case "rem":
 					{
-						echo "    	<title>Category removals</title>\n";
-						break;
+						if(strlen($removals)>1)
+						{
+							echo "    <item>\n";
+							echo "    	<title>Category removals</title>\n";
+							break;							
+						}
+						else
+						{
+							continue 2;
+						}
 					}
 					default: 
 					{
-						echo "    	<title>Category changes</title>\n";
-						break;
+						if(strlen($removals)>1 || strlen($additions)>1)
+						{
+							echo "    <item>\n";
+							echo "    	<title>Category changes</title>\n";
+							break;
+						}
+						else
+						{
+							continue 2;
+						}
 					}
 				}
 				
 				// echo "    	<link>$link</link>\n";
 				echo "    	<guid>https://www.wikitree.com/wiki/Category:" . urlencode(str_replace(' ', '_', $cat)) . '#' . "$current_file_time</guid>\n";
 				echo "    	<description><![CDATA[";
-				$removals = file_get_contents($path);
-				$add_file = str_replace('-.csv', '+.csv', $path);
-				$additions = file_get_contents($add_file);
+
 				
 				if($show_only != "rem")
 				{
