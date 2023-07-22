@@ -64,6 +64,10 @@ opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www
 ## [WikidataLocationCategories.js](WikidataLocationCategories.js)
 generates template code for creating a category when being on place entry in Wikidata
 
+## [WikipediaBanatLocationCategories.js](WikipediaBanatLocationCategories.js)
+helps creating Banat (and Batschka) location categories in German, Serbian, Hungarian and Romanian. When you are on the Wikipedia article of a village (either in language de, en, ro, hu or hr), select one language version of the village name and click the bookmarklet, it will ask, which language you selected. Then it will show the category code for that language, which you can copy. Afterwards it will open the category for you to insert the copied code.
+
+
 ## [WikipediaDeLocationCategories.js](WikipediaDeLocationCategories.js)
 generates template code for creating a category when being on place article in German Wikipedia
 
@@ -72,6 +76,7 @@ opens a new German Wikipedia tab by using the text selected in the current tab
 
 ## [WikipediaItLocationCategories.js](WikipediaItLocationCategories.js)
 generates template code for creating a category when being on place article in Italian Wikipedia
+
 
 ## [WikiTreeCountDescendants.js](WikiTreeCountDescendants.js)
 displays the number of descendants (per generation and in total) when being on "Descendant List" like https://www.wikitree.com/genealogy/Molesworth-Descendants-131
