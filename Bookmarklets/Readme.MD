@@ -25,6 +25,9 @@ generates formatted source citations from gravestone entries like https://grabst
 ## [Compgen Online-OFBs](Compgen_OFBs.js)
 generates formatted source citations from people entries like https://www.online-ofb.de/famreport.php?ofb=buehlertal&ID=I7793&nachname=STRAUB  (experimentally supports manual text selection)
 
+## [DFG-Viewer.js](DFG-Viewer.js)
+generates formatted source citation for Hessian civil records in LAGIS like https://dfg-viewer.de/show?id=9&tx_dlf%5Bid%5D=https%3A%2F%2Fdigitalisate-he.arcinsys.de%2Fhstam%2F903%2F9121.xml&tx_dlf%5Bpage%5D=164
+
 ## [FindAGrave.js](FindAGrave.js)
 generates combines the citation prepared by FindAGrave with [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) for the  memorial currently displayed in browser (inpired by [this post](https://www.wikitree.com/g2g/569133/citation-help-findagrave-now-provides-citation-suggestion) by Allison Mackler)
 
