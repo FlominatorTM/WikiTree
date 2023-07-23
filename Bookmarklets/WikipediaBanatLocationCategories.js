@@ -75,10 +75,8 @@ var catParent = "";
 var indexSerbia = document.body.innerHTML.indexOf(serbiaInPageLang);
 var indexRomania = document.body.innerHTML.indexOf(romaniaInPageLang);
 
-var retries = 0;
 
-
-if(indexSerbia > -1 && indexSerbia < indexRomania)
+if(indexSerbia > -1 && ( indexRomania == -1 || indexSerbia < indexRomania))
 {
 	country = nameSerbia;
 	catParent = country;
@@ -89,7 +87,7 @@ if(indexSerbia > -1 && indexSerbia < indexRomania)
 	akaTemplate = "{{Aka|" + articleName + ", " + "Srbija" + "|" + lang + "}}";
 }
 
-else if(indexRomania > -1 && indexRomania < indexSerbia)
+else if(indexRomania > -1 && (indexSerbia == -1 || indexRomania < indexSerbia))
 {
 	country = nameRomania;
 	catParent = country;
