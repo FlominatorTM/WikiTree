@@ -249,7 +249,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 	}
 	else
 	{
-		for($i=0;$i<count($files);$i++)
+		for($i=count($files)-1;$i>=0;$i--)
 		{
 			if(stristr($files[$i], '-.csv'))
 			{
@@ -337,17 +337,17 @@ function build_feed($cat, $depth, $limit, $show_only)
 
 function print_profile_lines($rows)
 {
-	echo "<ul>";
+	echo "<ol>";
 	foreach($rows as $row)
 	{
 		// print_debug("row: $row");
 		if(strlen($row)>1)
 		{
 			$cols = explode(';', $row);
-			echo "<li>$cols[3]: https://www.wikitree.com/wiki/$cols[1]</li>";
+			echo '<li><a href="https://www.wikitree.com/wiki/' . $cols[1] .'">' . $cols[3] . '</a>: https://www.wikitree.com/wiki/' . $cols[1] . '</li>';
 		}
 	}
-	echo "</ul>";
+	echo "</ol>";
 }
 
 function print_debug($line)
