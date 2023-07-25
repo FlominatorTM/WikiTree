@@ -8,7 +8,7 @@ var statePosition = -1;
 
 for (var i=0; i < states.length ; i++)  
 {
-	var indexOfCurrentState = window.document.body.innerHTML.indexOf(states[i]);
+	var indexOfCurrentState = window.document.body.innerHTML.indexOf(" " + states[i]); /* mainly for rheinhessisch and stuff */
 	if(indexOfCurrentState > -1 && indexOfCurrentState < closestValue )
 	{
 		statePosition = i;
@@ -74,4 +74,8 @@ else
 {
 	alert(output);
 }
+
+var article = document.getElementsByClassName('mw-page-title-main')[0].innerText;
+
+var new_window = window.open("https://www.wikitree.com/index.php?title=Category:" + article  + ", " + theState+ "&action=edit");
 void(0);
