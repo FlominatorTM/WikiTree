@@ -268,7 +268,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 						if(strlen($additions)>1)
 						{
 							echo "    <item>\n";
-							echo "    	<title>Category additions</title>\n";
+							echo "    	<title>Additions to $cat</title>\n";
 							break;							
 						}
 						else
@@ -281,7 +281,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 						if(strlen($removals)>1)
 						{
 							echo "    <item>\n";
-							echo "    	<title>Category removals</title>\n";
+							echo "    	<title>Removals from $cat</title>\n";
 							break;							
 						}
 						else
@@ -294,7 +294,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 						if(strlen($removals)>1 || strlen($additions)>1)
 						{
 							echo "    <item>\n";
-							echo "    	<title>Category changes</title>\n";
+							echo "    	<title>Changes to $cat</title>\n";
 							break;
 						}
 						else
