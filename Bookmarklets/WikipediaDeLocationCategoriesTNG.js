@@ -8,7 +8,7 @@ var statePosition = -1;
 
 for (var i=0; i < states.length ; i++)  
 {
-	var indexOfCurrentState = window.document.body.innerHTML.indexOf(states[i]);
+	var indexOfCurrentState = window.document.body.innerHTML.indexOf(" " + states[i]); /* mainly for rheinhessisch and stuff */
 	if(indexOfCurrentState > -1 && indexOfCurrentState < closestValue )
 	{
 		statePosition = i;
@@ -18,6 +18,7 @@ for (var i=0; i < states.length ; i++)
 
 theState = states[statePosition];
 theCounty = "";
+hasVerbandsgemeinde = window.document.body.innerHTML.indexOf("Verbandsgemeinde") > -1;
 for (var i=0; aTag = document.getElementsByTagName("a")[i]; i++)
 {
 	if(aTag.innerText.toLowerCase().indexOf("kreis") >- 1 && aTag.innerText != "Landkreis")
@@ -27,11 +28,21 @@ for (var i=0; aTag = document.getElementsByTagName("a")[i]; i++)
 		{
 			theCounty = theCounty + " (Kreis)";
 		}
-		break;
+        if(!hasVerbandsgemeinde)
+        {
+            /* might come later */
+            break;
+        }
 	}
+    else if(aTag.innerText.startsWith("Verbandsgemeinde")&& aTag.innerText != "Verbandsgemeinde")
+    {
+        theCounty = aTag.innerText;
+        break;
+    }
+
 }
 
-
+theCounty = theCounty.trim();
 var parentPlace = window.getSelection()+ "";
 
 if(parentPlace != "")
@@ -74,4 +85,7 @@ else
 {
 	alert(output);
 }
+
+var article = document.getElementsByClassName('mw-page-title-main')[0].innerText;
+var new_window = window.open("https://www.wikitree.com/index.php?title=Category:" + article  + ", " + theState+ "&action=edit");
 void(0);
