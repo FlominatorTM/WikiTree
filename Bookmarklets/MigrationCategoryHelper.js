@@ -8,7 +8,7 @@ var countryFrom = "";
 var entityFrom = "";
 var countryTo = "";
 var entityTo = "";
-var countries = ['Holy Roman Empire', 'German Empire', 'German Confederation', 'Germany', 'United States', 'Australia', 'England', ];
+var countries = ['Holy Roman Empire', 'German Empire', 'German Confederation', 'Germany', 'United States', 'Australia', 'England'];
 
 var entities = 
 {
@@ -22,7 +22,9 @@ var entities =
 	
 	"England": ["Bedfordshire", "Berkshire", "Buckinghamshire", "Cambridgeshire", "Cheshire", "Cornwall", "Cumberland", "Derbyshire", "Devon", "Dorset", "County Durham", "Essex", "Gloucestershire", "Hampshire", "Herefordshire", "Hertfordshire", "Huntingdonshire", "Kent", "Lancashire", "Leicestershire", "Lincolnshire", "Middlesex", "Norfolk", "Northamptonshire", "Northumberland", "Nottinghamshire", "Oxfordshire", "Rutland", "Shropshire", "Somerset", "Staffordshire", "Suffolk", "Surrey", "Sussex", "Warwickshire", "Westmorland", "Wiltshire", "Worcestershire", "Yorkshire"],
 	
-	"Austria-Hungary": ["Kingdom of Bohemia", "Kingdom of Galicia and Lodomeria", "Kingdom of Hungary"]
+	"Austria-Hungary": ["Kingdom of Bohemia", "Kingdom of Galicia and Lodomeria", "Kingdom of Hungary"],
+	
+	"Canada": ["Ontario", "Quebec", "Nova Scotia", "New Brunswick", "Manitoba", "British Columbia", "Prince Edward Island", "Saskatchewan", "Alberta", "Newfoundland and Labrador"] 
 };
 if(cat.indexOf("Migrants") > -1)
 {
