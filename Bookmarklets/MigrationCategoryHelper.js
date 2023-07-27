@@ -26,36 +26,36 @@ var entities =
 };
 if(cat.indexOf("Migrants") > -1)
 {
-    indexTo = cat.indexOf(" to ");
-    fromPart = cat.substring(0, indexTo);
-    toPart = cat.substring(indexTo);
-    countryTo = getRightFromWord("to ", toPart);
-    entityTo = getRightFromWord("to ", toPart);
-    countryFrom = getRightFromWord("from ", fromPart);
-    entityFrom = getRightFromWord("from ", fromPart);
+	indexTo = cat.indexOf(" to ");
+	fromPart = cat.substring(0, indexTo);
+	toPart = cat.substring(indexTo);
+	countryTo = getRightFromWord("to ", toPart);
+	entityTo = getRightFromWord("to ", toPart);
+	countryFrom = getRightFromWord("from ", fromPart);
+	entityFrom = getRightFromWord("from ", fromPart);
 
 }
 else if(cat.indexOf("Emigrants") > -1)
 {
-    countryFrom = getLeftFromComma(cat);
-    entityFrom = getLeftFromComma(cat);
+	countryFrom = getLeftFromComma(cat);
+	entityFrom = getLeftFromComma(cat);
 
-    if(cat.indexOf(" to ") > -1)
-    {
-        countryTo = getRightFromWord("to ", cat);
-        entityTo = getRightFromWord("to ", cat);
-    }
+	if(cat.indexOf(" to ") > -1)
+	{
+		countryTo = getRightFromWord("to ", cat);
+		entityTo = getRightFromWord("to ", cat);
+	}
 }
 
 else if (cat.indexOf("Immigrants") > -1)
 {
-    countryTo = getLeftFromComma(cat);
-    entityTo = getLeftFromComma(cat);
-    if(cat.indexOf(" from ") > -1)
-    {
-        countryFrom = getRightFromWord("from ", cat);
-        entityFrom = getRightFromWord("from ", cat);
-    }
+	countryTo = getLeftFromComma(cat);
+	entityTo = getLeftFromComma(cat);
+	if(cat.indexOf(" from ") > -1)
+	{
+		countryFrom = getRightFromWord("from ", cat);
+		entityFrom = getRightFromWord("from ", cat);
+	}
 }
 
 countryTo = GetKnownCountry(entityTo);
@@ -77,14 +77,14 @@ void(0);
 
 function getLeftFromComma(cat)
 {
-    var indexComma = cat.indexOf(",");
-    return cat.substring(0, indexComma);
+	var indexComma = cat.indexOf(",");
+	return cat.substring(0, indexComma);
 }
 
 function getRightFromWord(word, cat)
 {
-    var indexWord = cat.indexOf(word) + word.length;
-    return cat.substring(indexWord);
+	var indexWord = cat.indexOf(word) + word.length;
+	return cat.substring(indexWord);
 }
 
 function GetBlankEntityIfIsCountry(entity)
