@@ -40,6 +40,9 @@ generates formatted source citations from church book duplicates at Landesarchiv
 ## [Matricula.js](Matricula.js)
 generates formatted source citations from church books at Matricula (e.g. from https://data.matricula-online.eu/de/deutschland/paderborn/DE_EBAP_10114/KB001-01-T/?pg=139 )
 
+## [MigrationCategoryHelper.js](MigrationCategoryHelper.js)
+creates and inserts template code for a migration category while being on that one's edit category page (e.g. [this one](https://www.wikitree.com/index.php?title=Category:Some%20Place%2C_Immigrants&action=edit) or [this one](https://www.wikitree.com/index.php?title=Category:Migrants_from_Some_Place_to_Some_Other_Place&action=edit)). There is no way of guessing if the category is about a country or an entity, so both parameters are filled. Make sure you delete the inappropriate one.
+
 ## [PortaFontium.js](PortaFontium.js)
 generates formatted source citations from books at Porta fontium (e.g. from https://www.portafontium.eu/iipimage/30073845/pistov-standesamt-03_0050-o )
 
@@ -70,9 +73,11 @@ generates template code for creating a category when being on place entry in Wik
 ## [WikipediaBanatLocationCategories.js](WikipediaBanatLocationCategories.js)
 helps creating Banat (and Batschka) location categories in German, Serbian, Hungarian and Romanian. When you are on the Wikipedia article of a village (either in language de, en, ro, hu or hr), select one language version of the village name and click the bookmarklet, it will ask, which language you selected. Then it will show the category code for that language, which you can copy. Afterwards it will open the category for you to insert the copied code.
 
-
 ## [WikipediaDeLocationCategories.js](WikipediaDeLocationCategories.js)
 generates template code for creating a category when being on place article in German Wikipedia
+
+## [WikipediaDeLocationCategoriesTNG.js](WikipediaDeLocationCategoriesTNG.js)
+generates template code for present-day Germany categories while being on the place article in German Wikipedia, also tries to guess state and district. For parts of a city or villages incorporated into other onces, select the name of the place it is incorporated into (e.g. select the words "Frankfurt am Main", while being on the article about [https://de.wikipedia.org/wiki/Frankfurt-Nieder-Eschbach Frankfurt-Nieder-Eschbach]). A popup is shown, from which you can copy the template code. If you close the popup, the category edit page opens in a new tab. Now paste the source code. Please make sure, you apply the preview feature and common sense, before actually saving and creating the category.
 
 ## [WikipediaDeFromSelectedText.js](WikipediaDeFromSelectedText.js)
 opens a new German Wikipedia tab by using the text selected in the current tab
