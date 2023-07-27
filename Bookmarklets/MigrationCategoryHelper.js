@@ -80,13 +80,13 @@ void(0);
 function getLeftFromComma(cat)
 {
 	var indexComma = cat.indexOf(",");
-	return cat.substring(0, indexComma);
+	return cat.substring(0, indexComma).trim();
 }
 
 function getRightFromWord(word, cat)
 {
 	var indexWord = cat.indexOf(word) + word.length;
-	return cat.substring(indexWord);
+	return cat.substring(indexWord).trim();
 }
 
 function GetBlankEntityIfIsCountry(entity)
@@ -104,7 +104,6 @@ function GetKnownCountry(entity)
 		if(states.includes(entity))
 		{
 			entity = country;
-			
 		}
 	});
 	return entity;
