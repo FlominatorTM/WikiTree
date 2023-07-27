@@ -8,7 +8,22 @@ var countryFrom = "";
 var entityFrom = "";
 var countryTo = "";
 var entityTo = "";
+var countries = ['Holy Roman Empire', 'German Empire', 'German Confederation', 'Germany', 'United States', 'Australia', 'England', ];
 
+var entities = 
+{
+	/*"Holy Roman Empire": [],*/
+	
+	"German Confederation/Empire": ["Prussia", "Kingdom of Hanover", "Württemberg", "Kingdom of Bavaria", "Grand Duchy of Baden", "Grand Duchy of Hesse"],
+	
+	"United States": ["Alabama", "Alaska", "Arizona", "Arkansas", "Kalifornien", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+	
+	"Australia": ["Western Australia", "South Australia", "Queensland", "New South Wales", "Victoria", "Tasmania"],
+	
+	"England": ["Bedfordshire", "Berkshire", "Buckinghamshire", "Cambridgeshire", "Cheshire", "Cornwall", "Cumberland", "Derbyshire", "Devon", "Dorset", "County Durham", "Essex", "Gloucestershire", "Hampshire", "Herefordshire", "Hertfordshire", "Huntingdonshire", "Kent", "Lancashire", "Leicestershire", "Lincolnshire", "Middlesex", "Norfolk", "Northamptonshire", "Northumberland", "Nottinghamshire", "Oxfordshire", "Rutland", "Shropshire", "Somerset", "Staffordshire", "Suffolk", "Surrey", "Sussex", "Warwickshire", "Westmorland", "Wiltshire", "Worcestershire", "Yorkshire"],
+	
+	"Austria-Hungary": ["Kingdom of Bohemia", "Kingdom of Galicia and Lodomeria", "Kingdom of Hungary"]
+};
 if(cat.indexOf("Migrants") > -1)
 {
     indexTo = cat.indexOf(" to ");
@@ -43,6 +58,12 @@ else if (cat.indexOf("Immigrants") > -1)
     }
 }
 
+countryTo = GetKnownCountry(entityTo);
+entityTo = GetBlankEntityIfIsCountry(entityTo);
+
+countryFrom = GetKnownCountry(entityFrom);
+entityFrom = GetBlankEntityIfIsCountry(entityFrom);
+
 document.getElementById('wpTextbox1').value= "{{CategoryInfoBox Migration\n
 |fromCountry="+ countryFrom + "\n
 |fromEntity="+ entityFrom + "\n
@@ -64,4 +85,25 @@ function getRightFromWord(word, cat)
 {
     var indexWord = cat.indexOf(word) + word.length;
     return cat.substring(indexWord);
+}
+
+function GetBlankEntityIfIsCountry(entity)
+{
+	if(countries.includes(entity))
+	{
+		return "";
+	}
+	return entity;
+}
+
+function GetKnownCountry(entity)
+{
+	Object.entries(entities).forEach(([country, states]) => {
+		if(states.includes(entity))
+		{
+			entity = country;
+			
+		}
+	});
+	return entity;
 }
