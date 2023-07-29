@@ -28,7 +28,7 @@ generates formatted source citations from people entries like https://www.online
 ## [DFG-Viewer.js](DFG-Viewer.js)
 generates formatted source citation for Hessian civil records in LAGIS like https://dfg-viewer.de/show?id=9&tx_dlf%5Bid%5D=https%3A%2F%2Fdigitalisate-he.arcinsys.de%2Fhstam%2F903%2F9121.xml&tx_dlf%5Bpage%5D=164
 
-##[EastPrussiaPoland.js](EastPrussiaPoland.js)
+## [EastPrussiaPoland.js](EastPrussiaPoland.js)
 marks all links containing counties in East Prussia that do not completely belong to present-day Poland as italic and adds small caps, in case they are shared with Poland.
 
 ## [FindAGrave.js](FindAGrave.js)
