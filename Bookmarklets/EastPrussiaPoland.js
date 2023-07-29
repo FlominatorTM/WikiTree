@@ -1,6 +1,6 @@
 javascript:
 
-var fullOtherCountries = ["Gumbinnen", "Insterburg ", "Königsberg", "Labiau", "Niederung", "Pillkallen", "Schloßberg", "Samland", "Ebenrode", "Wehlau", "Memel", "Pogegen", "Ragnit", "Tilsit"];
+var fullOtherCountries = ["Gumbinnen", "Insterburg", "Königsberg", "Labiau", "Pillkallen", "Ragnit", "Samland", "Stallupönen", "Tilsit", "Wehlau", "Heydekrug", "Memel"];
 
 var partiallyPoland = ["Bartenstein", "Goldap", "Heiligenbeil", "Eylau", "Heydekrug", "Gerdauen", "Darkehmen", "Friedland"];
 
