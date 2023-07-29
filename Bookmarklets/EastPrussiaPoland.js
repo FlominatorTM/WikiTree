@@ -1,8 +1,8 @@
 javascript:
 
-var fullOtherCountries = ["Darkehmen ", "Gerdauen", "Gumbinnen", "Insterburg ", "Königsberg", "Labiau", "Niederung", "Pillkallen", "Schloßberg", "Samland", "Ebenrode", "Wehlau", "Memel", "Pogegen", "Ragnit", "Tilsit"];
+var fullOtherCountries = ["Gumbinnen", "Insterburg ", "Königsberg", "Labiau", "Niederung", "Pillkallen", "Schloßberg", "Samland", "Ebenrode", "Wehlau", "Memel", "Pogegen", "Ragnit", "Tilsit"];
 
-var partiallyPoland = ["Bartenstein", "Goldap", "Heiligenbeil", "Eylau", "Heydekrug"];
+var partiallyPoland = ["Bartenstein", "Goldap", "Heiligenbeil", "Eylau", "Heydekrug", "Gerdauen", "Darkehmen", "Friedland"];
 
 for (var i=0; aNode = document.getElementsByTagName("a")[i]; i++)
 {
