@@ -12,7 +12,8 @@ if(!$is_debug)
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
 
-$feeds = get_feed_urls(urldecode($_REQUEST['config']));
+$config = urldecode($_REQUEST['config']);
+$feeds = get_feed_urls($config);
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -26,7 +27,7 @@ $feeds = get_feed_urls(urldecode($_REQUEST['config']));
 		?>]]></description>
     <language>en</language>
     <pubDate><?php echo(date("r")) ?></pubDate>
-    <title>Merged feed</title>
+    <title>Merged feed <?php echo strip_tags($config);  ?></title>
     <!-- <link></link> -->
 <?php
 $posts = array();
