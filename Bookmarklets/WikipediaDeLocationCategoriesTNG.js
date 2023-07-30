@@ -86,6 +86,8 @@ else
 	alert(output);
 }
 
+ navigator.clipboard.writeText(output);
+
 var article = document.getElementsByClassName('mw-page-title-main')[0].innerText;
 var new_window = window.open("https://www.wikitree.com/index.php?title=Category:" + article  + ", " + theState+ "&action=edit");
 void(0);

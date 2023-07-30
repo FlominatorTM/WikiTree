@@ -74,20 +74,19 @@ opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www
 generates template code for creating a category when being on place entry in Wikidata
 
 ## [WikipediaBanatLocationCategories.js](WikipediaBanatLocationCategories.js)
-helps creating Banat (and Batschka) location categories in German, Serbian, Hungarian and Romanian. When you are on the Wikipedia article of a village (either in language de, en, ro, hu or hr), select one language version of the village name and click the bookmarklet, it will ask, which language you selected. Then it will show the category code for that language, which you can copy. Afterwards it will open the category for you to insert the copied code.
+helps creating Banat (and Batschka) location categories in German, Serbian, Hungarian and Romanian. When you are on the Wikipedia article of a village (either in language de, en, ro, hu or hr), select one language version of the village name and click the bookmarklet, it will ask, which language you selected. Then it will show the category code for that language, which will be copied into your clipboard automatically. Afterwards it will open the category for you to insert the copied code.
 
 ## [WikipediaDeLocationCategories.js](WikipediaDeLocationCategories.js)
 generates template code for creating a category when being on place article in German Wikipedia
 
 ## [WikipediaDeLocationCategoriesTNG.js](WikipediaDeLocationCategoriesTNG.js)
-generates template code for present-day Germany categories while being on the place article in German Wikipedia, also tries to guess state and district. For parts of a city or villages incorporated into other onces, select the name of the place it is incorporated into (e.g. select the words "Frankfurt am Main", while being on the article about [https://de.wikipedia.org/wiki/Frankfurt-Nieder-Eschbach Frankfurt-Nieder-Eschbach]). A popup is shown, from which you can copy the template code. If you close the popup, the category edit page opens in a new tab. Now paste the source code. Please make sure, you apply the preview feature and common sense, before actually saving and creating the category.
+generates template code for present-day Germany categories while being on the place article in German Wikipedia, also tries to guess state and district. For parts of a city or villages incorporated into other onces, select the name of the place it is incorporated into (e.g. select the words "Frankfurt am Main", while being on the article about [https://de.wikipedia.org/wiki/Frankfurt-Nieder-Eschbach Frankfurt-Nieder-Eschbach]). A popup is shown, from which you can copy the template code. If you forget it, don't bother, as it is also copied to the clipboard automatically. If you close the popup, the category edit page opens in a new tab. Now paste the source code. Please make sure, you apply the preview feature and common sense, before actually saving and creating the category.
 
 ## [WikipediaDeFromSelectedText.js](WikipediaDeFromSelectedText.js)
 opens a new German Wikipedia tab by using the text selected in the current tab
 
 ## [WikipediaItLocationCategories.js](WikipediaItLocationCategories.js)
 generates template code for creating a category when being on place article in Italian Wikipedia
-
 
 ## [WikiTreeCountDescendants.js](WikiTreeCountDescendants.js)
 displays the number of descendants (per generation and in total) when being on "Descendant List" like https://www.wikitree.com/genealogy/Molesworth-Descendants-131
