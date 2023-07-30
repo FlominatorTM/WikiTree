@@ -150,5 +150,12 @@ else
 	alert(output);
 }
 
+ navigator.clipboard.writeText(output);
+
 var newWin = window.open("https://www.wikitree.com/index.php?title=Category:" + catName +"&action=edit", "");
+if(lang == "hu")
+{
+	var temes = window.open("http://www.hungarianvillagefinder.com/HVFIndex2/50_TEMES.html");
+	var torontal = window.open("http://www.hungarianvillagefinder.com/HVFIndex2/53_TORONTAL.html");
+}
 void(0);
