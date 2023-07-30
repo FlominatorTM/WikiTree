@@ -242,7 +242,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 	{
 		$current_file_time = filemtime(current_file($cat, $depth));
 		echo "    <item>\n";
-		echo "    	<title>Tracking of content started</title>\n";
+		echo "    	<title>Tracking of content started for $cat</title>\n";
 		// echo "    	<link>$link</link>\n";
 		echo "    	<guid>https://www.wikitree.com/wiki/Category:" . urlencode(str_replace(' ', '_', $cat)) . '#' . "$current_file_time</guid>\n";
 		echo "    	<description>No changes so far, please be patient for a few days</description>\n";
