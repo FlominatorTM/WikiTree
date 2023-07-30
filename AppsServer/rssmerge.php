@@ -12,22 +12,18 @@ if(!$is_debug)
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
 
-$feeds = array("https://apps.wikitree.com/apps/straub620/catfeed.php?cat=German%20Confederation&depth=2&show_only=add",
-"https://apps.wikitree.com/apps/straub620/catfeed.php?cat=Holy%20Roman%20Empire&depth=2&show_only=add",
-"https://apps.wikitree.com/apps/straub620/catfeed.php?cat=German%20Empire&depth=2&show_only=add"
-
-/*
-todo: 
-- show feeds in description
-- get feeds from md5 file
-- reduce number of posts in catfeed
-*/
-);
+$feeds = get_feed_urls(urldecode($_REQUEST['config']));
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
   <atom:link href="<?php echo $url_here; ?>" rel="self" type="application/rss+xml" />
-    <description></description>
+    <description><![CDATA[These feeds have been merged:<?php 
+		foreach($feeds as $feed)
+		{
+			// echo "<a href=\"$feed\">$feed</a><br>";
+			echo html_entity_decode($feed) . " \n";
+		}
+		?>]]></description>
     <language>en</language>
     <pubDate><?php echo(date("r")) ?></pubDate>
     <title>Merged feed</title>
@@ -80,6 +76,19 @@ foreach($posts as $post)
 	echo $post->asXml();
 }
 
+function get_feed_urls($label)
+{
+	$filename = getcwd() . "/merge_config/" . $label . ".txt";
+	if(file_exists($filename))
+	{
+		$content = trim(str_replace("\r\n", "\n", file_get_contents($filename)));
+		return explode("\n", $content);
+	}
+	else
+	{
+		return array();
+	}
+}
 function print_debug($line)
 {
 	global $is_debug;
