@@ -13,7 +13,7 @@ if(!$is_debug)
 }
 print_debug("debugging enabled");
 
-$limit = 10; //currently does nothing
+$limit = 5; //currently does nothing
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
 
@@ -251,6 +251,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 	}
 	else
 	{
+		$num_posts = 0;
 		for($i=count($files)-1;$i>=0;$i--)
 		{
 			if(stristr($files[$i], '-.csv'))
@@ -305,6 +306,13 @@ function build_feed($cat, $depth, $limit, $show_only)
 						}
 					}
 				}
+				
+				$num_posts++;
+				if($num_posts > $limit)
+				{
+					break;
+				}
+				
 				
 				// echo "    	<link>$link</link>\n";
 				echo "    	<guid>https://www.wikitree.com/wiki/Category:" . urlencode(str_replace(' ', '_', $cat)) . '#' . "$current_file_time</guid>\n";
