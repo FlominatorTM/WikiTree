@@ -3,6 +3,8 @@ $is_debug = isset($_REQUEST['debug']);
 $cat = str_replace('Category:', '', $_REQUEST['cat']);
 $show_only = $_REQUEST['show_only'];
 
+$use_discord_link_style = isset($_REQUEST['discord']);
+
 if(!$is_debug)
 {
 	header("Content-Type: application/rss+xml");
@@ -337,6 +339,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 
 function print_profile_lines($rows)
 {
+	global $use_discord_link_style;
 	echo "<ol>";
 	foreach($rows as $row)
 	{
@@ -344,7 +347,14 @@ function print_profile_lines($rows)
 		if(strlen($row)>1)
 		{
 			$cols = explode(';', $row);
-			echo '<li><a href="https://www.wikitree.com/wiki/' . $cols[1] .'">' . $cols[3] . '</a>: https://www.wikitree.com/wiki/' . $cols[1] . '</li>';
+			if($use_discord_link_style)
+			{
+				echo '<li>' . $cols[3] . ': <https://www.wikitree.com/wiki/' . $cols[1] . '></li>';
+			}
+			else
+			{
+				echo '<li><a href="https://www.wikitree.com/wiki/' . $cols[1] .'">' . $cols[3] . '</a>: https://www.wikitree.com/wiki/' . $cols[1] . '</li>';
+			}
 		}
 	}
 	echo "</ol>";

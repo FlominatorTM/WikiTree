@@ -31,7 +31,7 @@
  
 	$extract_link = isset($_REQUEST['extract_link']) ;
 	
-	$question_page = file_get_contents($post_url);
+	$question_page = file_get_contents($post_url ."?appId=Straub620_g2g2rss");
 	$num_answers = extract_from_to($question_page, '<span itemprop="answerCount">', '<');
 
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
@@ -132,7 +132,8 @@
 		echo "    	<title>".html_entity_decode($title)."</title>\n";
 		echo "    	<link>$link</link>\n";
 		echo "    	<guid>$guid</guid>\n";
-		echo "    	<description><![CDATA[".$description."]]></description>\n";
+		// echo "    	<description><![CDATA[".$description."]]></description>\n";
+		echo "    	<description>" . htmlspecialchars($description)."</description>\n";
 		echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
 		echo "    </item>\n";
 		return true;
