@@ -1,6 +1,9 @@
 # WikiTree
 tools for working with WikiTree
 
+## AppServer
+tools that run on the [AppsServer](https://www.wikitree.com/wiki/Help:WikiTree_Apps_Server), see [ReadMe](AppsServer/Readme.MD)
+
 ## Bookmarklets
 small pieces of code executed as browser bookmarks, see [ReadMe](Bookmarklets/Readme.MD) for details
 
@@ -8,12 +11,6 @@ small pieces of code executed as browser bookmarks, see [ReadMe](Bookmarklets/Re
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
 ### Shortcuts
 modifies WikiTree's user interface, see https://github.com/FlominatorTM/WikiTree/blob/master/Greasemonkey_Shortcuts.js for details on features
-
-### FamilySearch
-adds microfilm and (if available) image number to the citation template (only works for manual copy and paste, not for the copy link provided by FamilySearch) 
-
-### LocationCleanup
-removes prefixes from location fields coming from FamilySearch
 
 ## Misc
 ### g2g2rss.php
