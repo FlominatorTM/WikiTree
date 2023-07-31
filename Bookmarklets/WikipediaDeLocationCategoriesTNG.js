@@ -8,7 +8,7 @@ var statePosition = -1;
 
 for (var i=0; i < states.length ; i++)  
 {
-	var indexOfCurrentState = window.document.body.innerHTML.indexOf(" " + states[i]); /* mainly for rheinhessisch and stuff */
+	var indexOfCurrentState = window.document.body.innerHTML.indexOf(states[i]);
 	if(indexOfCurrentState > -1 && indexOfCurrentState < closestValue )
 	{
 		statePosition = i;
