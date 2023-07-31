@@ -6,9 +6,14 @@ var states = ["Baden-Württemberg", "Bayern", "Berlin", "Brandenburg", "Bremen",
 var closestValue = Number.MAX_VALUE;
 var statePosition = -1;
 
+var startIntro = window.document.body.innerHTML.indexOf("<b>");
+var endIntro = window.document.body.innerHTML.indexOf("mw-toc-heading");
+var intro = window.document.body.innerHTML.substring(startIntro, endIntro);
+
 for (var i=0; i < states.length ; i++)  
 {
-	var indexOfCurrentState = window.document.body.innerHTML.indexOf(states[i]);
+	var indexOfCurrentState = intro.indexOf(states[i]);
+
 	if(indexOfCurrentState > -1 && indexOfCurrentState < closestValue )
 	{
 		statePosition = i;
@@ -16,39 +21,44 @@ for (var i=0; i < states.length ; i++)
 	}
 }
 
+
 theState = states[statePosition];
 theCounty = "";
-hasVerbandsgemeinde = window.document.body.innerHTML.indexOf("Verbandsgemeinde") > -1;
-for (var i=0; aTag = document.getElementsByTagName("a")[i]; i++)
-{
-	if(aTag.innerText.toLowerCase().indexOf("kreis") >- 1 && aTag.innerText != "Landkreis")
-	{
-		theCounty = aTag.innerText.replace("Landkreis", "");
-		if(theCounty.toLowerCase().indexOf("kreis") == -1)
-		{
-			theCounty = theCounty + " (Kreis)";
-		}
-        if(!hasVerbandsgemeinde)
-        {
-            /* might come later */
-            break;
-        }
-	}
-    else if(aTag.innerText.startsWith("Verbandsgemeinde")&& aTag.innerText != "Verbandsgemeinde")
-    {
-        theCounty = aTag.innerText;
-        break;
-    }
 
-}
-
-theCounty = theCounty.trim();
+var hasVerbandsgemeinde = intro.indexOf("Verbandsgemeinde") > -1;
 var parentPlace = window.getSelection()+ "";
 
 if(parentPlace != "")
 {
 	theCounty = parentPlace;
 }
+else
+{
+	for (var i=0; aTag = document.getElementsByTagName("a")[i]; i++)
+	{
+		if(aTag.innerText.toLowerCase().indexOf("kreis") >- 1 && aTag.innerText != "Landkreis")
+		{
+			theCounty = aTag.innerText.replace("Landkreis", "");
+			if(theCounty.toLowerCase().indexOf("kreis") == -1)
+			{
+				theCounty = theCounty + " (Kreis)";
+			}
+			if(!hasVerbandsgemeinde)
+			{
+				/* might come later */
+				break;
+			}
+		}
+		else if(aTag.innerText.startsWith("Verbandsgemeinde")&& aTag.innerText != "Verbandsgemeinde")
+		{
+			var indexSpace = aTag.innerText.indexOf(" ") + " ".length;
+			theCounty = aTag.innerText.substring(indexSpace) + " (Verbandsgemeinde)";
+			break;
+		}
+
+	}
+}
+theCounty = theCounty.trim();
 
 var lat = "";
 var lon = "";
