@@ -28,7 +28,7 @@ var entities =
 	
 	"Canada": ["Ontario", "Quebec", "Nova Scotia", "New Brunswick", "Manitoba", "British Columbia", "Prince Edward Island", "Saskatchewan", "Alberta", "Newfoundland and Labrador"],
 
-	"the Netherlands": ["Groningen", "Friesland", "Drenthe", "Overijssel", "Gelderland", "Utrecht", "Nordholland", "Südholland", "Zeeland", "Nordbrabant", "Limburg", "Flevoland"]
+	"the Netherlands": ["Drenthe", "Flevoland", "Friesland", "Gelderland", "Groningen", "Limburg", "North Brabant", "North Holland", "Overijssel", "South Holland", "Utrecht", "Zeeland"]
     
 };
 if(cat.indexOf("Migrants") > -1)
