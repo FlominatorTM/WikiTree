@@ -11,12 +11,8 @@ small pieces of code executed as browser bookmarks, see [ReadMe](Bookmarklets/Re
 see https://addons.mozilla.org/de/firefox/addon/greasemonkey/
 ### Shortcuts
 modifies WikiTree's user interface, see https://github.com/FlominatorTM/WikiTree/blob/master/Greasemonkey_Shortcuts.js for details on features
-
 ## Misc
-### g2g2rss.php
-creates an RSS feed of answers to one particular G2G question/post
-### inventory.php
-category monitoring as implemented at https://www.wikitree.com/index.php?title=Space:Germany_Needs_Birth_Record_Category_Content
+
 ### OFBCrawler.py
 tries to find a connection between two given IDs in one family book at http://www.online-ofb.de
 ### ProjectMembers.py
