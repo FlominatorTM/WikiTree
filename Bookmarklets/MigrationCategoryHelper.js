@@ -8,12 +8,14 @@ var countryFrom = "";
 var entityFrom = "";
 var countryTo = "";
 var entityTo = "";
-var countries = ['Holy Roman Empire', 'German Empire', 'German Confederation', 'Germany', 'United States', 'Australia', 'England'];
 
 var entities = 
 {
-	/*"Holy Roman Empire": [],*/
-	
+	"Holy Roman Empire": [],
+	"German Empire": [], /* see below */
+	"German Confederation": [], /* see below */
+	"Germany": ["Baden-Württemberg", "Bavaria", "Berlin", "Brandenburg", "Bremen", "Hamburg", "Hesse", "Mecklenburg-Vorpommern", "Lower Saxony", "North Rhine-Westphalia", "Rhineland-Palatinate", "Saarland", "Saxony", "Saxony-Anhalt", "Schleswig-Holstein", "Thuringia"],
+
 	"German Confederation/Empire": ["Prussia", "Kingdom of Hanover", "Württemberg", "Kingdom of Bavaria", "Grand Duchy of Baden", "Grand Duchy of Hesse"],
 	
 	"United States": ["Alabama", "Alaska", "Arizona", "Arkansas", "Kalifornien", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
@@ -24,7 +26,10 @@ var entities =
 	
 	"Austria-Hungary": ["Kingdom of Bohemia", "Kingdom of Galicia and Lodomeria", "Kingdom of Hungary"],
 	
-	"Canada": ["Ontario", "Quebec", "Nova Scotia", "New Brunswick", "Manitoba", "British Columbia", "Prince Edward Island", "Saskatchewan", "Alberta", "Newfoundland and Labrador"] 
+	"Canada": ["Ontario", "Quebec", "Nova Scotia", "New Brunswick", "Manitoba", "British Columbia", "Prince Edward Island", "Saskatchewan", "Alberta", "Newfoundland and Labrador"],
+
+	"the Netherlands": ["Groningen", "Friesland", "Drenthe", "Overijssel", "Gelderland", "Utrecht", "Nordholland", "Südholland", "Zeeland", "Nordbrabant", "Limburg", "Flevoland"]
+    
 };
 if(cat.indexOf("Migrants") > -1)
 {
@@ -91,10 +96,12 @@ function getRightFromWord(word, cat)
 
 function GetBlankEntityIfIsCountry(entity)
 {
-	if(countries.includes(entity))
-	{
-		return "";
-	}
+	Object.entries(entities).forEach(([country, states]) => {
+		if(country == entity)
+		{
+			entity = "";
+		}
+	});
 	return entity;
 }
 
