@@ -65,7 +65,7 @@ if(num_image_input != null && num_image_input != "" && num_image_input != "000")
 
 var urlDate = " : accessed " + dateFormatted + ")";
 
-var citation = "Archives of Vojvodina in Novi Sad, " + place  + confession + " " + type + year_and_image + " (" + url + urlDate;
+var citation = "[[Space:Archives_of_Vojvodina|Archives of Vojvodina]], " + place  + confession + " " + type + year_and_image + " (" + url + urlDate;
 
 prompt("",citation);
 void(0);
