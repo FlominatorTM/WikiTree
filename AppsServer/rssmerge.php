@@ -27,7 +27,7 @@ $feeds = get_feed_urls($config);
 		?>]]></description>
     <language>en</language>
     <pubDate><?php echo(date("r")) ?></pubDate>
-    <title>Merged feed <?php echo strip_tags($config);  ?></title>
+    <title><?php echo strip_tags($config);  ?> (merged feed)</title>
     <!-- <link></link> -->
 <?php
 $posts = array();
