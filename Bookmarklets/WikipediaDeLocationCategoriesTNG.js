@@ -36,9 +36,13 @@ else
 {
 	for (var i=0; aTag = document.getElementsByTagName("a")[i]; i++)
 	{
-		if(aTag.innerText.toLowerCase().indexOf("kreis") >- 1 && aTag.innerText != "Landkreis")
+		if(aTag.innerText.toLowerCase().indexOf("kreis") >- 1 && aTag.innerText != "Landkreis" && aTag.innerText != "Kreis")
 		{
 			theCounty = aTag.innerText.replace("Landkreis", "");
+            if(theCounty.indexOf("Kreis")==0)
+            {
+                theCounty = theCounty.replace("Kreis", "");
+            }
 			if(theCounty.toLowerCase().indexOf("kreis") == -1)
 			{
 				theCounty = theCounty + " (Kreis)";
