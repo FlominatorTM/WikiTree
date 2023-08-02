@@ -150,10 +150,22 @@ for (var i=0; i < allAnkerNodes.length ; i++)
 if(lang != null && lang != "")
 {
     var output = akaTemplate + "\n" + "{{CategoryInfoBox Location\n|parent=" + catParent + "\n|parent1=" + parent1  + "\n|project=\n|team=\n|" + coor + "\n"+ wikidata + "\n}}";
-    if(prompt("", output) != null)
+    var catPage = "https://www.wikitree.com/index.php?title=Category:" + catName +"&action=edit";
+    if (navigator.userAgent.includes("Chrome"))
     {
-        navigator.clipboard.writeText(output);
-        newWin = window.open("https://www.wikitree.com/index.php?title=Category:" + catName +"&action=edit", "");
+        prompt("", output); 
+        if(prompt("", output) != null)
+        {
+            navigator.clipboard.writeText(output);
+            newWin = window.open(catPage, "");
+        }
+    }
+    else
+    {
+        if(confirm(output))
+        {
+            newWin = window.open(catPage, "");
+        }
     }
 }
 void(0);
