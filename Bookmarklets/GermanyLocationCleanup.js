@@ -41,6 +41,7 @@ function removeCrap(date, place)
 	;
 	
 	placeBetter = placeBetter.replace(", Germany", ", Deutschland");
+	placeBetter = placeBetter.replace(", German Empire", ", Deutsches Reich");
 	year_str = date.substr(date.length-4);
 	if(year_str != null && year_str.length ==4)
 	{
