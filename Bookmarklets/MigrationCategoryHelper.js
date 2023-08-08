@@ -12,11 +12,12 @@ var entityTo = "";
 var entities = 
 {
 	"Holy Roman Empire": [],
-	"German Empire": [], /* see below */
-	"German Confederation": [], /* see below */
+		
 	"Germany": ["Baden-Württemberg", "Bavaria", "Berlin", "Brandenburg", "Bremen", "Hamburg", "Hesse", "Mecklenburg-Vorpommern", "Lower Saxony", "North Rhine-Westphalia", "Rhineland-Palatinate", "Saarland", "Saxony", "Saxony-Anhalt", "Schleswig-Holstein", "Thuringia"],
-
-	"German Confederation/Empire": ["Prussia", "Kingdom of Hanover", "Württemberg", "Kingdom of Bavaria", "Grand Duchy of Baden", "Grand Duchy of Hesse"],
+	"German Confederation": ["Austrian Empire", "Archduchy of Austria", "Upper Austria", "Lower Austria", "Kingdom of Bohemia", "Margraviate of Moravia", "Grand Duchy of Salzburg", "Duchy of Carinthia", "Duchy of Carniola", "Duchy of Upper and Lower Silesia", "Duchy of Styria", "Littoral", "County of Tyrol", "Vorarlberg", "Kingdom of Hanover", "Electorate of Hesse", "Grand Duchy of Luxemburg", "Duchy of Holstein", "Duchy of Limburg", "Duchy of Nassau", "Duchy of Saxe-Coburg-Saalfeld", "Duchy of Saxe-Gotha-Altenburg", "Duchy of Saxe-Hildburghausen", "Duchy of Anhalt-Bernburg", "Duchy of Anhalt-Dessau", "Duchy of Anhalt-Dessau-Köthen", "Duchy of Anhalt-Köthen", "Principality of Hohenzollern-Hechingen", "Principality of Hohenzollern-Sigmaringen", "Principality of Liechtenstein", "Principality of Lippe", "Landgraviate of Hesse-Homburg", "Free City of Frankfurt upon Main"], 
+	/* tbd: Alsace Lorraine*/
+	"German Empire": ["Grand Duchy of Saxony", "Duchy of Anhalt", "Principality of Lippe-Detmold"],
+	"German Confederation/Empire (delete one)": ["Prussia", "Kingdom of Bavaria", "Kingdom of Saxony", "Kingdom of Württemberg", "Grand Duchy of Baden", "Grand Duchy of Hesse", "Grand Duchy of Mecklenburg-Schwerin", "Grand Duchy of Mecklenburg-Strelitz", "Grand Duchy of Oldenburg", "Grand Duchy of Saxe-Weimar-Eisenach", "Duchy of Brunswick", "Duchy of Saxe-Coburg and Gotha", "Duchy of Saxe-Altenburg", "Duchy of Saxe-Lauenburg", "Duchy of Saxe-Meiningen", "Duchy of Anhalt", "Principality of Reuss Junior Line", "Principality of Reuss Senior Line", "Principality of Schaumburg-Lippe", "Principality of Schwarzburg-Rudolstadt", "Principality of Schwarzburg-Sondershausen", "Principality of Waldeck and Pyrmont", "Free Hanseatic City of Bremen", "Free and Hanseatic City of Hamburg", "Free and Hanseatic City of Lübeck"],
 	
 	"United States": ["Alabama", "Alaska", "Arizona", "Arkansas", "Kalifornien", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
 	
