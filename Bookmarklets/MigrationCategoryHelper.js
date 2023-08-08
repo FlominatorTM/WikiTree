@@ -29,7 +29,9 @@ var entities =
 	
 	"Canada": ["Ontario", "Quebec", "Nova Scotia", "New Brunswick", "Manitoba", "British Columbia", "Prince Edward Island", "Saskatchewan", "Alberta", "Newfoundland and Labrador"],
 
-	"the Netherlands": ["Drenthe", "Flevoland", "Friesland", "Gelderland", "Groningen", "Limburg", "North Brabant", "North Holland", "Overijssel", "South Holland", "Utrecht", "Zeeland"]
+	"the Netherlands": ["Drenthe", "Flevoland", "Friesland", "Gelderland", "Groningen", "Limburg", "North Brabant", "North Holland", "Overijssel", "South Holland", "Utrecht", "Zeeland"],
+
+	"Ireland": ["County Dublin", "County Wicklow", "County Wexford", "County Carlow", "County Kildare", "County Meath", "County Louth", "County Monaghan", "County Cavan", "County Longford", "County Westmeath", "County Offaly", "King’s County  ", "County Laois", "Queen’s County ", "County Leix", "County Kilkenny", "County Waterford", "County Cork", "County Kerry", "County Limerick", "County Tipperary", "County Clare", "County Galway", "County Mayo", "County Roscommon", "County Sligo", "County Leitrim", "County Donegal", "County Fermanagh", "County Tyrone", "County Derry", "County Antrim", "County Down", "County Armagh"],
     
 };
 if(cat.indexOf("Migrants") > -1)
