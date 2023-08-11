@@ -53,6 +53,9 @@ opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www
 
 ## Creating categories
 
+### [FindAGraveCat.js][FindAGraveCat.js]
+creates an edit window for a cemetery category while being on the cemetery on FindAGrave (e.g. [this one](https://www.findagrave.com/cemetery/2718887/friedhof-lenzkirch)], also opens a window with a Google query for the cemetery name on BillionGraves
+
 ### [MigrationCategoryHelper.js](MigrationCategoryHelper.js)
 creates and inserts template code for a migration category while being on that one's edit category page (e.g. [this one](https://www.wikitree.com/index.php?title=Category:Some%20Place%2C_Immigrants&action=edit) or [this one](https://www.wikitree.com/index.php?title=Category:Migrants_from_Some_Place_to_Some_Other_Place&action=edit)). There is no way of guessing if the category is about a country or an entity, so both parameters are filled. Make sure you delete the inappropriate one.
 
