@@ -53,7 +53,7 @@ opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www
 
 ## Creating categories
 
-###[CopyAndRenameCategory.js](CopyAndRenameCategory.js)
+### [CopyAndRenameCategory.js](CopyAndRenameCategory.js)
 creates a category preview based on a given name and the content of the category that one has open in edit mode while triggering this bookmarklet
 
 ### [FindAGraveCat.js](FindAGraveCat.js)
