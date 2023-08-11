@@ -53,6 +53,9 @@ opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www
 
 ## Creating categories
 
+###[CopyAndRenameCategory.js](CopyAndRenameCategory.js)
+creates a category preview based on a given name and the content of the category that one has open in edit mode while triggering this bookmarklet
+
 ### [FindAGraveCat.js](FindAGraveCat.js)
 Creates an edit window for a cemetery category while being on the cemetery on FindAGrave (e.g. [this one](https://www.findagrave.com/cemetery/2718887/friedhof-lenzkirch)], also opens a window with a Google query for the cemetery name on BillionGraves. This is currently pretty and only rudimentary and probably only works properly in the US. Please get in touch, if you want proper support for other countries.
 
