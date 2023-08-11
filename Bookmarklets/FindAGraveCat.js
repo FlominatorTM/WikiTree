@@ -1,38 +1,38 @@
+
 javascript:
-var _id = document.getElementsByClassName('copyme')[0].innerText;
-var _name = document.querySelector('[itemprop=name]').innerText;
-var _location = document.querySelector('[itemprop=addressLocality]').innerText;
-var _lat = document.querySelector('[title=Latitude\\:]').innerText;
-var _lon = document.querySelector('[title=Longitude\\:]').innerText;
+  var _id = document.getElementsByClassName('copyme')[0].innerText;
+  var _name = document.querySelector('[itemprop=name]').innerText;
+  
+  var _lat = document.querySelector('[title=Latitude\\:]').innerText;
+  var _lon = document.querySelector('[title=Longitude\\:]').innerText;
+  var _location = document.querySelector('[itemprop=addressLocality]').innerText;
+  var _locationParts = _location.split(", ");
+  var _county = _locationParts[_locationParts.length-1];
 
-var _address;
-try
-{
-    _address = document.querySelectorAll('[itemprop=address]')[1].innerHTML.replace("<br>", ", ").trim();
-}
-catch
-{
-    _address = document.querySelector('[itemprop=addressLocality]').innerText + ", " +
-    document.querySelector('[itemprop=addressRegion]').innerText +  ", " +
-    document.querySelector('[itemprop=addressCountry]').innerText;
-}
+  var _state =  document.querySelector('[itemprop=addressRegion]').innerText;
+  //var _country = document.querySelector('[itemprop=addressCountry]').innerText;
+  var _catName = _name + ", " + _locationParts[0] + ", " + _state;
+  var _address = "";
+  try {
+      _address = document.querySelectorAll('[itemprop=address]')[1].innerHTML.replace("<br>", ", ").trim();
+  }
+  catch {
+  }
 
-var _aka = "";
-try
-{
-    _aka = document.querySelector('[itemprop=alternateName]').innerText;
-}
-catch
-{}
+  var _aka = "";
+  try {
+      _aka = document.querySelector('[itemprop=alternateName]').innerText;
+  }
+  catch {
+    
+  }
 
-
-
-var output = "{{CategoryInfoBox Cemetery " +
+  var output = "{{CategoryInfoBox Cemetery " +
     "\n|name=" + _name +
     "\n|aka=" + _aka  +
     "\n|address=" + _address +
-    "\n|parent="+
-    "\n|location=" + _location +
+    "\n|parent=" + _county + ", " + _state +
+    "\n|location=" + _county + ", " + _state +
     "\n|spacepage= "+
     "\n|wikidataID="+
     "\n|findagraveID=" + _id +
@@ -42,10 +42,10 @@ var output = "{{CategoryInfoBox Cemetery " +
     "\n|coordinate="+ _lat + "," + _lon +
     "\n|startdate= "+
     "\n|enddate=\n}}";
-    EditCategoryDiff(output, _name);
-	
-    var billon = "https://www.google.com/search?q=" + encodeURIComponent("site:https://billiongraves.com " + _name + " " + _location);
-var win = window.open(billon);
+
+  var billon = "https://www.google.com/search?q=" + encodeURIComponent("site:https://billiongraves.com " + _name + " " + _location);
+  var win = window.open(billon);
+  EditCategoryDiff(output, _catName);
 void(0);
 
 function EditCategoryDiff(output, catName)
