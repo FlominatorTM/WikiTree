@@ -7,14 +7,14 @@ var closestValue = Number.MAX_VALUE;
 var statePosition = -1;
 
 var startIntro = window.document.body.innerHTML.indexOf("<b>");
-var endIntro = window.document.body.innerHTML.indexOf("mw-toc-heading");
+var endIntro = window.document.body.innerHTML.indexOf("mw-headline");
 var intro = window.document.body.innerHTML.substring(startIntro, endIntro);
 
 for (var i=0; i < states.length ; i++)  
 {
 	var indexOfCurrentState = intro.indexOf(states[i]);
 
-	if(indexOfCurrentState > -1 && indexOfCurrentState < closestValue )
+	if(indexOfCurrentState > -1 && indexOfCurrentState <= closestValue )/* catching Sachsen-Anhalt after Sachsen*/
 	{
 		statePosition = i;
 		closestValue = indexOfCurrentState;
@@ -25,7 +25,7 @@ for (var i=0; i < states.length ; i++)
 theState = states[statePosition];
 theCounty = "";
 
-var hasVerbandsgemeinde = intro.indexOf("Verbandsgemeinde") > -1;
+var hasVerbandsgemeinde = intro.indexOf("Verbandsgemeinde") > -1 && theState.indexOf("Sachsen") == -1;
 var parentPlace = window.getSelection()+ "";
 
 if(parentPlace != "")
