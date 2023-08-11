@@ -10,7 +10,7 @@ javascript:
   var _county = _locationParts[_locationParts.length-1];
 
   var _state =  document.querySelector('[itemprop=addressRegion]').innerText;
-  //var _country = document.querySelector('[itemprop=addressCountry]').innerText;
+  var _country = document.querySelector('[itemprop=addressCountry]').innerText;
   var _catName = _name + ", " + _locationParts[0] + ", " + _state;
   var _address = "";
   try {
