@@ -59,6 +59,9 @@ Creates an edit window for a cemetery category while being on the cemetery on Fi
 ### [MigrationCategoryHelper.js](MigrationCategoryHelper.js)
 creates and inserts template code for a migration category while being on that one's edit category page (e.g. [this one](https://www.wikitree.com/index.php?title=Category:Some%20Place%2C_Immigrants&action=edit) or [this one](https://www.wikitree.com/index.php?title=Category:Migrants_from_Some_Place_to_Some_Other_Place&action=edit)). There is no way of guessing if the category is about a country or an entity, so both parameters are filled. Make sure you delete the inappropriate one.
 
+### [OsmLocationCategories.js](OsmLocationCategories.js)
+generates templates code for creating a category from an Open Street Map search result that contains coordinates, e.g. https://www.openstreetmap.org/node/2319824131
+
 ### [WikidataLocationCategories.js](WikidataLocationCategories.js)
 generates template code for creating a category when being on place entry in Wikidata
 
