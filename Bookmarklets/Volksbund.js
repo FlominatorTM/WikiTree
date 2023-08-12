@@ -1,6 +1,6 @@
 javascript:
 /* copies data from volksbund.de in any language version */
-var citation = "Volksbund Kriegsgräberfürsorge, ";
+var citation = "[[Space:Volksbund_Deutsche_Kriegsgräberfürsorge|Volksbund Deutsche Kriegsgräberfürsorge]], ";
 citation += document.getElementsByClassName('title')[0].innerText + ", ";
 
 /* name */
