@@ -8,7 +8,7 @@ var durationAndKind = durationAndKindSpan.firstChild.nextSibling.nextSibling.nex
 var lastImage = hdv.options.imagesSet.length;
 var currentImage = hdv.osdViewer.currentPage()+1;
 
-citation += " > " + place + " > " + durationAndKind + " > [" + window.location.href.replace(location.search, '') +" picture " + currentImage + "/" + lastImage + "]";
+citation += " > " + place + " > " + durationAndKind + " > [" + window.location.href +" picture " + currentImage + "/" + lastImage + "]";
 alert(citation);
 
 void(0);
