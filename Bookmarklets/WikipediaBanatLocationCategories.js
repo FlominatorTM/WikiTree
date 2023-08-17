@@ -43,13 +43,11 @@ if (lang == "") {
 }
 
 var village = (window.getSelection() + "").trim();
-var parent1 = "";
 switch (lang) {
     case "hu":
         {
             var nameSerbia = "Szerbia";
             var nameRomania = "Románia";
-            var parent1 = getHungarianCounty(village);
             break;
         }
     case "de":
@@ -78,31 +76,45 @@ var country = "";
 var catParent = "";
 var indexSerbia = document.body.innerHTML.indexOf(serbiaInPageLang);
 var indexRomania = document.body.innerHTML.indexOf(romaniaInPageLang);
-
+var project = "";
 
 if (indexSerbia > -1 && (indexRomania == -1 || indexSerbia < indexRomania)) {
-    country = nameSerbia;
-    catParent = country;
-    if (lang == "sr") {
-        catParent = "Vojvodina";
+    if (lang != "kuk") {
+        country = nameSerbia;
+        catParent = country;
+        if (lang == "sr") {
+            catParent = "Vojvodina";
+        }
+    }
+    else {
+        country = "Magyarország";
+        project = "Hungary\n|enddate=1918";
+        catParent = getHungarianCounty(village);
+        lang = "hu"
     }
     akaTemplate = "{{Aka|" + articleName + ", " + "Srbija" + "|" + lang + "}}";
 }
 
 else if (indexRomania > -1 && (indexSerbia == -1 || indexRomania < indexSerbia)) {
-    country = nameRomania;
-    catParent = country;
-    if (lang == "ro") {
-        catParent = getRomanianCounty(village);
+    if (lang != "kuk") {
+        country = nameRomania;
+        catParent = country;
+        if (lang == "ro") {
+            catParent = getRomanianCounty(village);
+        }
+    }
+    else {
+        country = "Magyarország";
+        project = "Hungary\n|enddate=1918";
+        catParent = getHungarianCounty(village);
+        lang = "hu"
     }
     akaTemplate = "{{Aka|" + articleName + ", " + "România" + "|" + lang + "}}";
 }
 
 else {
-    alert("didn't find the German country names for Serbia and Romania, trying English");
+    alert("didn't find the country names for Serbia and Romania");
 }
-
-
 
 var catName = village.trim() + ", " + country;
 
@@ -140,7 +152,7 @@ for (var i = 0; i < allAnkerNodes.length; i++) {
 }
 
 if (lang != null && lang != "") {
-    var output = akaTemplate + "\n" + "{{CategoryInfoBox Location\n|parent=" + catParent + "\n|parent1=" + parent1 + "\n|project=\n|team=\n|" + coor + "\n" + wikidata + "\n}}";
+    var output = akaTemplate + "\n" + "{{CategoryInfoBox Location\n|parent=" + catParent + "\n|project=" + project + "\n|team=\n|" + coor + "\n" + wikidata + "\n}}";
     var catPage = "https://www.wikitree.com/index.php?title=Category:" + catName + "&action=edit";
     if (navigator.userAgent.includes("Chrome")) {
         prompt("", output);
