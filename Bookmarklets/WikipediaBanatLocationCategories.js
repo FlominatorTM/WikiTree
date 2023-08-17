@@ -1,78 +1,75 @@
-javascript:  
+javascript:
 var pageLang = window.location.hostname.split('.')[0];
 var serbiaInPageLang = "";
 var romaniaInPageLang = "";
 
-switch(pageLang)
-{
+switch (pageLang) {
     case "de":
-    {
-        serbiaInPageLang = "Serbien";
-        romaniaInPageLang = "Rumänien";
-        break;
-    }
+        {
+            serbiaInPageLang = "Serbien";
+            romaniaInPageLang = "Rumänien";
+            break;
+        }
     case "hu":
-    {
-        serbiaInPageLang = "Szerbia";
-        romaniaInPageLang = "Románia";
-        break;
-    }    
+        {
+            serbiaInPageLang = "Szerbia";
+            romaniaInPageLang = "Románia";
+            break;
+        }
     case "en":
-    {
-        serbiaInPageLang = "Serbia";
-        romaniaInPageLang = "Romania";
-        break;
-    }
+        {
+            serbiaInPageLang = "Serbia";
+            romaniaInPageLang = "Romania";
+            break;
+        }
     case "ro":
-    {
-        serbiaInPageLang = "Serbia";
-        romaniaInPageLang = "România";
-        break;
-    }
+        {
+            serbiaInPageLang = "Serbia";
+            romaniaInPageLang = "România";
+            break;
+        }
     case "hr":
-    {
-        serbiaInPageLang = "Srbija";
-        romaniaInPageLang = "Rumunjska";
-        break;
-    }
+        {
+            serbiaInPageLang = "Srbija";
+            romaniaInPageLang = "Rumunjska";
+            break;
+        }
 }
 
 lang = prompt("Enter language", "");
 
-if(lang == "")
-{
+if (lang == "") {
     alert("please select the place's name in one language");
 }
 
-var village = (window.getSelection()+"").trim();
+var village = (window.getSelection() + "").trim();
 var parent1 = "";
-switch(lang)
-{
+switch (lang) {
     case "hu":
-    {
-        var nameSerbia = "Szerbia";
-        var nameRomania = "Románia";
-        var parent1 = getHungarianCounty(village);
-        break;
-    }
+        {
+            var nameSerbia = "Szerbia";
+            var nameRomania = "Románia";
+            var parent1 = getHungarianCounty(village);
+            break;
+        }
     case "de":
-    {
-        var nameSerbia = "Serbien";
-        var nameRomania = "Rumänien";
-        break;
-    }
+        {
+            var nameSerbia = "Serbien";
+            var nameRomania = "Rumänien";
+            break;
+        }
     case "ro":
-    {
-        var nameSerbia = "Serbia";
-        var nameRomania = "România";
-        break;
-    }
+        {
+            var nameSerbia = "Serbia";
+            var nameRomania = "România";
+            break;
+        }
     case "sr":
-    {
-        var nameSerbia = "Srbija";
-        var nameRomania = "Rumunjska";
-        break;
-    }
+        {
+            var nameSerbia = "Srbija";
+            var nameRomania = "Rumunjska";
+            break;
+        }
 }
 
 var articleName = document.getElementsByClassName("mw-page-title-main")[0].innerText;
@@ -83,30 +80,25 @@ var indexSerbia = document.body.innerHTML.indexOf(serbiaInPageLang);
 var indexRomania = document.body.innerHTML.indexOf(romaniaInPageLang);
 
 
-if(indexSerbia > -1 && ( indexRomania == -1 || indexSerbia < indexRomania))
-{
+if (indexSerbia > -1 && (indexRomania == -1 || indexSerbia < indexRomania)) {
     country = nameSerbia;
     catParent = country;
-    if(lang == "sr")
-    {
+    if (lang == "sr") {
         catParent = "Vojvodina";
     }
     akaTemplate = "{{Aka|" + articleName + ", " + "Srbija" + "|" + lang + "}}";
 }
 
-else if(indexRomania > -1 && (indexSerbia == -1 || indexRomania < indexSerbia))
-{
+else if (indexRomania > -1 && (indexSerbia == -1 || indexRomania < indexSerbia)) {
     country = nameRomania;
     catParent = country;
-    if(lang == "ro")
-    {
+    if (lang == "ro") {
         catParent = getRomanianCounty(village);
     }
     akaTemplate = "{{Aka|" + articleName + ", " + "România" + "|" + lang + "}}";
 }
 
-else
-{
+else {
     alert("didn't find the German country names for Serbia and Romania, trying English");
 }
 
@@ -116,75 +108,61 @@ var catName = village.trim() + ", " + country;
 
 var lat = "";
 var lon = "";
-var coor = "";  
-try
-{
-    lat = document.getElementsByClassName("latitude")[0].innerHTML + ""; 
-    lon = document.getElementsByClassName("longitude")[0].innerHTML + ""; 
-    coor = "coordinate=" + lat + "," + lon; 
-    if(coor.indexOf("°")>-1)
-    {
+var coor = "";
+try {
+    lat = document.getElementsByClassName("latitude")[0].innerHTML + "";
+    lon = document.getElementsByClassName("longitude")[0].innerHTML + "";
+    coor = "coordinate=" + lat + "," + lon;
+    if (coor.indexOf("°") > -1) {
         coor = "coordinate=" + document.getElementsByClassName("geo")[0].innerText.replace("; ", ",");
     }
 }
-catch(err)
-{
-    try
-    {
+catch (err) {
+    try {
         var maplink = document.getElementsByClassName('mw-kartographer-maplink')[0];
-        coor = "coordinate=" + maplink.getAttribute('data-lat') + "," + maplink.getAttribute('data-lon'); 
+        coor = "coordinate=" + maplink.getAttribute('data-lat') + "," + maplink.getAttribute('data-lon');
     }
-    catch(erro)
-    {
+    catch (erro) {
         alert("careful: no coordinates found");
     }
 }
 
-var wikidata = "|wikidataID=";  
-var allAnkerNodes = document.getElementsByTagName("a"); 
-for (var i=0; i < allAnkerNodes.length ; i++)  
-{
-    if ( href = allAnkerNodes[i].getAttribute("href")) 
-    { 
-        hrefParts = href.split("/"); 
-        if(hrefParts[4]=="Special:EntityPage") 
-        { 
-            wikidata = wikidata + hrefParts[5]; 
-            break; 
-        } 
-    } 
+var wikidata = "|wikidataID=";
+var allAnkerNodes = document.getElementsByTagName("a");
+for (var i = 0; i < allAnkerNodes.length; i++) {
+    if (href = allAnkerNodes[i].getAttribute("href")) {
+        hrefParts = href.split("/");
+        if (hrefParts[4] == "Special:EntityPage") {
+            wikidata = wikidata + hrefParts[5];
+            break;
+        }
+    }
 }
 
-if(lang != null && lang != "")
-{
-    var output = akaTemplate + "\n" + "{{CategoryInfoBox Location\n|parent=" + catParent + "\n|parent1=" + parent1  + "\n|project=\n|team=\n|" + coor + "\n"+ wikidata + "\n}}";
-    var catPage = "https://www.wikitree.com/index.php?title=Category:" + catName +"&action=edit";
-    if (navigator.userAgent.includes("Chrome"))
-    {
-        prompt("", output); 
-        if(prompt("", output) != null)
-        {
+if (lang != null && lang != "") {
+    var output = akaTemplate + "\n" + "{{CategoryInfoBox Location\n|parent=" + catParent + "\n|parent1=" + parent1 + "\n|project=\n|team=\n|" + coor + "\n" + wikidata + "\n}}";
+    var catPage = "https://www.wikitree.com/index.php?title=Category:" + catName + "&action=edit";
+    if (navigator.userAgent.includes("Chrome")) {
+        prompt("", output);
+        if (prompt("", output) != null) {
             navigator.clipboard.writeText(output);
             newWin = window.open(catPage, "");
         }
     }
-    else
-    {
-        if(confirm(output))
-        {
+    else {
+        if (confirm(output)) {
             newWin = window.open(catPage, "");
         }
     }
 }
-void(0);
+void (0);
 
-function getHungarianCounty(village)
-{
+function getHungarianCounty(village) {
     var countyForVillage = ".... vármegye";
     var villageTidy = village.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     /* https://stackoverflow.com/a/37511463/4609258 */
 
-    var hungarianCounties = 
+    var hungarianCounties =
     {
         /* via http://www.hungarianvillagefinder.com */
         "Bács-Bodrog vármegye": "Abthausen, Ada, Almas, Almasch, Alsokabol, Alsokovil, Alt Betsche, Alt Futak, Alt Keer, Alt Ker, Alt Palanka, Alt Schowe, Alt Sivac, Alt Stapar, Alt Verbas, Alt Werbass, Altbetsche, Alt-Betsche, Alt-Futak, Alt-Futok, Altfuttak, Alt-Keer, Alt-Ker, Alt-Palanka, Alt-Schowe, Alt-Sivac, Alt-Siwatz, Alt-Stapar, Alt-Verbas, Alt-Werbass, Altwiesen, Apathin, Apatin, Apatin, Baatsch, Bac, Backa Palanka, Backa Topola, Backi Breg, Backi Brestovac, Backi Gracac, Backi Jarak, Backi Monostor, Backi Petrovac, Backo Dobro Polje, Backo Gradiste, Backo Novo Selo, Backo Petrovo Selo, Bacs, Bacsalmas, Bacsbokod, Bacsborsod, Bacsfeketehegy, Bacsfoldvar, Bacsgyulafalva, Bacskeresztur, Bacskertes, Bacskossuthfalva, Bacsnovoszello, Bacsordas, Bacspetrovoszek, Bacsszentivan, Bacstovaros, Bacsujfalu, Bacsujlak, Baja, Baje, Bajmok, Bajnok, Bajsa, Baracska, Bathmonostor, Batmonostor, Batsch, Batsch Brestowatz, Batsch Monoschtor, Batsch Neudorf, Batsch Sentiwan, Batsch-Brestowatz, Batschki Jarak, Batsch-Sentiwan, Becej, Begec, Begecs, Bereg, Berg an der Donau, Besdan, Bezdam, Bezdan, Bikity, Birndorf, Bleyersdorf, Bodani, Bodjani, Bogojeva, Bogojevo, Bogyan, Boldogasszonyfalva, Boroc, Borota, Borschod, Borsod, Backi Breg, Breg, Brestowatz, Bresztovacz, Buchenau, Budisava, Bukin, Bulkes, Bulkesz, Bulkeszi, Cantavir, Celarevo, Conopla, Conoplja, Crvenka, Csantaver, Csatalja, Csavoly, Cseb, Cservenka, Csonopla, Csonoplya, Csurog, Curug, Dautova, Davod, Dernye, Deronje, Deronya, Despot Sankt Iwan, Despotovo, Despot-Sankt-Iwan, Despotszentivan, Deutsch Palanka, Deutsch-Palanka, Deutschwachenheim, Donji Kovilj, Dornau, Doroslovo, Doroszlo, Dunabokeny, Dunacseb, Dunagalos, Dunagardon, Durdev, Ebersdorf, Feketehegy, Feketic, Feketitsch, 	Felsokabol, Felsokovil, Felsoszentivan, Filipova, Filipowa, Filipsdor, Foldvar, Frankenstadt, Frauendorf, Futak, Futog, Gador, Gajdobra, Gakova, Gakovo, Gakowa, Gara, Gardinovci, Gardinovcze, Gaumarkt, Glozan, Glozsan, Gombos, Gornji Kovilj, Gospodinci, Gospodinze, Goszpodince, Gross Ker, Gross Stapar, Gross-Ker, Gross-Stapar, Gutacker, Gyurgyevo, Hanfhausen, Hegyes, Hercegszanto, Hodsag, Hodschach, Hodschag, Hügelhorst, Jankovacz, Jankowatz, Janoshalma, Jarek, Josefdorf, Josefsdorf, Kabol, Kac, Kanjiza, Karavukova, Karavukovo, Karawukowa, Katschmar, Katy, Katymar, Kerekegyhaz, Kereny, Keresztur, Kernei, Kernya, Kernyaja, Kindlingen, Kisac, Kishegyes, Kisker, Kisszallas, Kiszacs, Klein Keer, Klein Ker, Klein-Keer, Kleinwiesen, Kljajicevo, Kolluth, Kolpeny, Kolut, Koluth, Kortes, Kovilj, Kovilszentivan, Kowil Sankt Iwan, Kruschiwl, Kruscic, Krusevlje, Krusevlya, Kucora, Kucura, Kuczura, Kula, Kullod, Kulpin, Kumbai, Kunbaja, Kupusina, Kupuszina, Kutzura, Lalic, Lality, Legin, Liliomos, Lok, Lovcenac, Madaras, Madarasch, Maglic, Magyarkanizsa, Mali Idos, Mali Idjos, Maria Theresianope, Maria-Theresianope, Martonos, Matetelke, Matheovics, Melykut, Militics, Milititsch, Mladenovo, Mohol, Mol, Monostorszeg, Moschorin, Mosorin, Mozsor, Nadalj, Nadalja, Nadaly, Nagelsdorf, Nagybaracska, Nemesmilitics, Nemetpalanka, Neu Futak, Neu Futok, Neu Palanka, Neu Schowe, Neu Sivac, Neu Siwatz, Neu Verbas, Neu Werbass, Neudorf, Neudorf an der Donau, Neu-Futak, Neu-Futok, Neufuttak, Neu-Palanka, Neusatz, Neu-Schowe, Neu-Verbas, Neu-Werbass, Nova Gajdobra, Nova Palanka, Nove Sove, Novi Futog, Novi Sad, Novi Sivac, Novoszello, Obecse, Ober Sankt Iwan, Oberndorf, Ober-Sankt Iwan, Obrovac, Obrovacz, Obrowatz, Odzaci, Ofuttak, Okanizsa, Oker, Omoravicza, Opalanka, Orszallas, Osove, Oszivac, 	Oszivatz, Osztapar, Overbasz, Pacir, Pacser, Palanka, Palona, Parabutsch, Parabuty, Paraga, Parage, Paraput, Paripas, Parrag, Peterreve, Petroc, Petrovac, Petrovacz, Petrovoszello, Petrowatz, Pfalzweiler, Pinced, Piros, Pivnice, Pivnicza, Piwnitza, Plankenburg, Plavingen, Plavna, Plawing, Plawingen, Priglavitzaszentivan, Priglewitz, Prigrevica, Raczmilitics, Ratkovo, Ravno Selo, Regoce, Rem, Ridica, Ridjica, Riedau, Rigyicza, Rim, Ringdorf, Rotweil, Rumenka, Ruski Krstur, Sajkas, Sajkasgyorgye, Sajkaslak, Sajkasszentivan, Sandor, Sankt Thomas, Savino Selo, Sawaditz, Schanzdorf, Schatzdorf, Schomburg, Schonau, Schonhausen, Schwarzberg, Schwarzenberg, Sekitsch, Selenca, Senta, Silbas, Sivac, Sombor, Sonnhag, Sonnhofen, Sonta, Sove, Srbobran, Srpski Miletic, Stanischitz, Stanisic, Stapar, Stara Moravica, Stara Palanka, Stare Sove, Stari Futog, Stari Sivac, Stari Vrbas, Subotica, Svetozar Miletic, Szabadka, Szantova, Szeghegy, Szentfulop, Szent-Tamas, Szepliget, Szilbacs, Szilbas, Szilberek, Szond, Szonta, Sztanisich, Sztanisics, Sztapar, Tannenschutz, Tatahaza, Teichfeld, Telecka, Telecska, Teletschka, Temerin, Theisshugel, Theresienring, Thomasberg, Tiszafoldvar, Tiszaistvanfalva, Titel, Tittel, Tizsakalmanfalva, Topolya, Torschau, Torzsa, Tovarisevo, Tovarisova, Towarisch, Towarischewo, Tschatali, Tschawal, Tschawerl, Tscheb, Tscherwenka, Tschonopl, Tunderes, Turia, Turija, Turja, Ujfutak, Ujpalanka, Ujsove, Ujszivac, Ujszivatz, Ujverbasz, Ujvidek, Urszentivan, Vajska, Vajszka, Vaskut, Veprod, Veprovacz, Verbas, Verbasz, Vilova, Vilovo, Vrbas, Waiska, Waldau an der Donau, Waldneudorf, Waschkut, Wekerle, Wekerledorf, Wekerlefalva, Weprowatz, Wikitsch, Wolfingen, Wolfsburg, Zabalj, Zenta, Zmajevo, Zombor, Zsablya",
@@ -194,19 +172,17 @@ function getHungarianCounty(village)
         "Torontál vármegye": "Akacs, Albrechtsdorf, Albrechtsflor, Albrechtsflur, Alexanderhausen, Alexanderkirchen, Alibunar, Alisbrunn, Almas, Alsoaradi, Alsoellemer, Alsoittebe, Alt Beba, Alt Beschenowa, Alt Etschka, Alt Letz, Alt Tschanad, Alt-Beba, Alt-Beschenowa, Alt-Etschka, Alt-Letz, Alt-Tschanad, Andrejevac, Antalfalva, Apfeldorf, Aracs, Aradac, Aradi, Arkod, Aurelhaza, Aurelheim, Banat Topola, Banater Hof, Banater Neudorf, Banatkomlos, Banatska Dubica, Banatska Topola, Banatski Brestovac, Banatski Despotovac, Banatski Dusanovac, Banatski Dvor, Banatsko Arandelovo, Banatsko Novo Selo, Banatsko Veliko Selo, Banat-Topola, Banatujfalu, Banlak, Banloc, Banlok, Banstadt, Barachhaza, Baranda, Baranyos, Barice, Basahid, Basaid, Baschaid, Bassahid, Battyanhaza, Beba Veche, Begafo, Begaszentgyorgy, Begejci, Belo Blato, Beodra, Beregsau Mic, Berekszonemeti, Beresztoc, Betschkerek, Bikatsch, Biled, Billed, Billet, Billiet, Bobda, Bocar, Bocsar, Bogaros, Bogarosch, Boka, Bolgartelep, Borca, Borcsa, Botos, Botosch, Botschar, Bresztovacz, Bresztovacz, Bulgarische Kolonie, Bulgarus, Carpinis, Cebza, Cenad, Cenadu Vechi, Cenei, Centa, Cestereg, Charleville, Checea, Checea Croata, Checea Romana, Cheglevici, Cherestur, Coka, Colonia Bulgara, Comlosu Mare, Comlosu Mic, Crai Nou, Crepaja, Crna Bara, Cruceni, Csatad, Csavos, Csebza, Csebze, Csene, Csenej, Csenta, Cserepalja, Csernye, Csoka, Csosztelek, Czernabara, Czrepaja, Dala, Debeljaca, Debeljatscha, Debelyacsa, Deszk, Deutsch Elemer, Deutsch Etschk, Deutsch Modosch, Deutsch Sankt Nikolaus, Deutsch Sartscha, Deutsch Tschanad, Deutsch Zerne, Deutsch-Modosch, Deutsch-Sartscha, Deutsch-Tschanad, Dinias, Dinyas, Djala, Dobrica, Dobricza, Doc, Dolacz, Dolat, Dolatz, Dolova, Dolovo, Dolowo, Dragutinovo, Dudestii Vechi, Dugoszello, Ecka, Ecska, Egres, Egresch, Egyhazasker, Elemer, Elemir, Elisenhain, Elisenheim, Elisenheim, Erneszthaza, Ernohaza, Ernsthausen, Farkasd, Farkasdin, Farkazdin, Feketeo, Felsoaradi, Felsoelemer, Felsoittebe, Felsomuzslya, Feny, Ferdinandfalva, Ferenchalom, Ferencszallas, Fodorhausen, Fodorhaz, Fodorhaza, Foeni, Foeny, Franczfold, Franyova, Franzfeld, Gaad, Gad, Galagonyas, Garabos, Georgshausen, Gertianosch, Gier Kaptalan, Giera, Gilwas, Giulvaz, Glogan, Glogau, Glogon, Glogonj, Gottlob, Grabacz, Grabat, Grabatz, Granicerii, Gross Betschkerek, Gross Bikatsch, Gross Gaj, Gross Jetscha, Gross Kikinda, Gross Komlosch, Gross Sankt Niklas, Gross Sankt Nikolaus, Gross Sankt Peter, Gross Teremin, Gross Tschanad, Gross-Betschkerek, Gross-Bikatsch, Gross-Jetscha, Gross-Kikinda, Gross-Komlosch, Gross-Sankt-Niklas, Gross-Sankt-Nikolaus, Gross-Sankt-Peter, Gross-Teremin, Gross-Tschanad, Gyala, Gyer, Gyertyamos, Gyorgyhaza, Gyulves, Gyurgyevo, Haczfeld, Hajducica, Hajduschitza, Hajdusica, Hajfeld, Hatzfeld, Haufeld, Heideschutz, Hertelendyfalva, Hetin, Hetteny, Hettin, Heufeld, Hodegyhaza, Hodics, Hodits, Homolicz, Homolitz, Hopsenitz, Horvatboka, 	Horvatcsenej, Horvatkecsa, Horvatklari, Horvatneuzina, Hrvatska Neuzina, Idjos, Idos, Idvor, Iecea Mare, Iecea Mica, Igris, Igrisch, Ilancsa, Ilandza, Ilanzsa, Ilenfold, Ilonc, Iohanisfeld, Istvanfolde, Istvanvolgy, Ittvarnok, Ittvarnok Szollos, Ittvarnokszollos, Ittvarnok-Szollos, Ivand, Ivanda, Ivanovo, Iwanda, Iwanowo, Jabuka, Jankahid, Jankov Most, Janosfold, Janosfolde, Janosik, Jarkovac, Jarkowatz, Jasa Tomic, Jasowo, Jaszova, Jaszova Hodits, Jaszovahodits, Jaszova-Hodits, Jazovo, Jermenovci, Jimbolia, Johanisfeld, Jozseffalva, Jozsefova, Kacarevo, Kanak, Kanizsamonostor, Kaptalanfalva, Karatsonyifalva, Karatsonyiliget, Karlova, Karolyliget, Katalinfalva, Kathareindorf, Kathereinfeld, Keglevichhaza, Keglewitsch, Keglewitsch, Keglewitschhausen, Keresztes, Keresztur, Kevedobra, Keviszolos, Kikinda, Kis Sziget, Kisbeba, Kisbikacs, Kisjecsa, Kiskomlos, Kismargita, Kisnezseny, Kisorosz, Kisosz, Kissziget, Kis-Sziget, Kistarnok, Kisteremia, Kistorak, Kistoszeg, Kisvizesdia, Kiszombor, Klarafalva, Klari, Kleck, Klein Beregsau, Klein Jetscha, Klein Kikinda, Klein Niklas, Klein Niklos, Klein Orossin, Klein Teremin, Klein-Beregsau, Klein-Jetscha, Klein-Orossin, Klein-Teremin, Klek, Knicanin, Kocse, Komlosch, Konak, Konigsdorf, Konstanczia, Kovacica, Kowatschitza, Krajisnik, Krivabara, Kriwa Bara, Kroatisch Neusin, Kroatisch-Neusin, Krstur, Kubek, Kubekhaza, Kuman, Kumane, Kunszollos, Lajosfalva, Lazarevo, Lazarfold, Lenauheim, Lenauheim, Leopoldova, Livezile, Lokve, Lovrin, Lowrin, Lukacsfalva, Lukicevo, Lukino Selo, Lunga, Macedonia, Magyarcsernye, Magyarczernya, Magyarittebe, Magyarmajdany, Magyarpade, Magyarszentmarton, Magyarszentmihaly, Majdan, Maleniczfalva, Mali Torak, Margita, Margiticza, Mariafolde, Marienfeld, Marienfold, Mastort, Maszdorf, Masztort, Meda, Medja, Melence, Melenci, Melencze, Melenze, Mihajlovo, Modos, Mokrin, Mollidorf, Mollydorf, Molyfalva, Monostor, Muschla, Muzlja, Nagy Becskerek, Nagy Gaj, Nagy Gyorgyfalva, Nagy Margitta, Nagybecskerek, Nagy-Becskerek, Nagybikacs, Nagycsanad, Nagyerzsebetlak, Nagyfalu, Nagygaj, Nagy-Gaj, Nagygyorgyfalva, Nagy-Gyorgyfalva, Nagyjecsa, Nagykikinda, Nagykocse, Nagykomlos, Nagylajosfalva, Nagymargitta, Nagy-Margitta, Nagynezseny, Nagyosz, Nagyszentmiklos, Nagyszentpeter, Nagytarnok, Nagyteremia, Nagytorak, Nagytoszeg, Nakodorf, Nakofalva, Nakovo, Nemacka Crnja, Nemacka Sarca, Nemacki Elemir, Nemetcsanad, Nemetcsernye, Nemetczernya, Nemetecska, Nemetellemer, Nemeth, Nemetmodos, Nemetnagyszentmiklos, Nemetpardany, Nemetszarcsa, Nemetszentmiklos, Nemetszentpeter, Nerau, Nero, Neu Itebe, Neu Petsch, Neu Sankt Iwan, Neu Sankt Peter, Neu Zerne, Neuberg an der Bega, Neubetsche, Neudorf, Neuhatzfeld, Neu-Itebe, Neu-Petsch, Neu-Sankt-Iwan, Neu-Sankt-Peter, Neusiedel auf der Heide, Neusiedel auf der Heide, Neu-Zerne, Neuzina, Nezseny, Nikloos, Nova Crnja, Nova Sarca, Novi Becej, Novi Itebej, Novi Knezevac, Novi Kozarci, Novi Kozjak, Novi Padej, Novo Milosevo, Nyero, Obeb, Obeba, Obesenyo, Obessenyo, Obilicevo, Oecska, Offsenitza, Offszenicza, Ofsenita, Okeresztur, Olec, Omlod, Omoljica, Opava, Opovo, Oppova, Oppowa, Oregfalu, Orlod, Orlovat, Oroszlamos, Oscsanad, Ostern, Ostojicevo 	Oszentivan, Osztern, Otelec, Otelek, Ovca, Ovcsa, Ozora, Pade, Padej, Padina, Pancevo, Pancsova, Pantschowa, Papd, Pardan, Pardany, Partos, Peciu Nou, Periam, Perjamos, Perjamosch, Perlas, Perlasz, Perlez, Pesac, Pesak, Peszak, Petersheim, Petre, Petrovoszello, Plandiste, Pordeanu, Porgany, Pustinis, Pusztakeresztur, Rabe, Raczaradac, Raczkeresztur, Radojevo, Raitzisch Tschanad, Rauti, Ravni Topolovac, Revaujfalu, Rezsohaza, Rogendorf, Romanecska, Romankecsa, Romanszarcsa, Rothes Wirthshaus, Rudna, Rudolfsgnad, Rusko Selo, Ruskodorf, Rustendorf, Sajan, Sakula, Sakule, Samos, Sanad, Sandoregyhaza, Sandorfalva, Sandorhaza, Sandra, Sankt Georgen an,     der-Bega, Sankt Gerrgen, Sankt Hubert, Sankt Nikolaus an der,     Theiss, Sanmartinu Maghiar, Sanmartinu Sarbesc, Sannicolau Mare, Sannicolaul German, Sanpetru Mare, Sanpetru Nou, Sarafalva, Sarafol, Saravale, Sarlevil, Sartscha, Schadat, Schuple, Secanj, Sefkerin, Seleus, Serbisch Elemer, Serbisch Itebe, Serbisch Modosch, Serbisch Neusin, Serbisch Zerne, Serbisch-Elemer, Serbisch-Itebe, Serbisch-Modosch, Setschan, Setschanfeld, Seulthurn, Seultour, Sigmundfeld, Sigmundsdorf, Slovacki Aradac, Soca, Solthurn, Soltur, Srpska Crnja, Srpska Neuzina, Srpski Elemir, Srpski Itebej, Stara Ecka, Starcevo, Stari Lec, Startschowa, Stefanfold, Stefanifeld, Stefansfeld, Stephansdorf, Surjan, Sutjeska, Sveti Hubert, Szajan, Szajan Vilmater, Szajanvilmater, Szajan-Vilmater, Szakula, Szamos, Szanad, Szaravolla, Szarcsa, Szarcsatelek, Szecsan, Szecsenfalva, Szefkerin, Szekereny, Szent Hubert, Szent Janos, Szent Mihaly, Szentborbala, Szenthubert, Szent-Hubert, Szentjanos, Szent-Janos, Szentmihaly, Szent-Mihaly, Szerbaradac, Szerbboka, Szerbcsanad, Szerbcsenej, Szerbczernya, Szerbellemer, Szerbittebe, Szerbkecsa, Szerbkeresztur, Szerbklari, Szerbmodos, Szerbnagyszentmiklos, Szerbneuzina, Szerbpade, Szerbpardany, Szerbszentmarton, Szerbszentpeter, Szeultourn, Szevkerin, Szoka, Szollos, Szolosudvarnok, Szoreg, Szoregh, Sztarcsova, Tamasfalva, Tamaslaka, Taras, Tarcso, Tarras, Teremi, Teremia Mare, Teremia Mica, Tervar, Tiszahegyes, Tiszaszentmiklos, Tiszatarros, Toager, Toba, Togyer, Tolvad, Tolvadia, Tolwadia, Tomaschewatz, Tomasevac, Tomasevatz, Tomasovac, Tomnatic, Tomsdorf, Topolya, Torda, Torok Becse, Torokbecse, Torok-Becse, Torokkanizsa, Toroktopolya, Torontal Erzsebetlak, Torontal Petrovoszello, Torontalalmas, Torontaldinnyes, Torontalerzsebetlak, Torontal-Erzsebetlak, Torontalgyulvesz, Torontalkeresztes, Torontaloroszi, Torontalpetrovoszello, Torontal-Petrovoszello, Torontalszecsany, Torontalsziget, Torontaltorda, Torontaludvar, Torontalujfalu, Torontalvasarhely, Torzsudvarnok, Totaradac, Triebswetter, Trubswetter, Tschanad, Tschawosch, Tschene, Tschestelek, Tschestereg, Tschoka, Turkisch Betsche, Turkisch-Betsche, Uihei, Uivar, Ujhely, Ujozora, Ujpecs, Ujsandorfalva, Ujszentivan, Ujszentpeter, Ujvar, Ulmbach, Ungarisch Crnja, Ungarisch Ittebe, Ungarisch-Ittebe, Urmenyhaza, Usdin, Uzdin, Valcani, Valkany, Vegszentmihaly, Velika Greda, Veliki Gaj, Veliki Torak, Verbica, Vizejdia, Vizesd, Vladimirovac, Vojlovica, Voroscsarda, Vranjevo, Vrbica, Wiseschdia, Wojlowitz, Wojlowitza, Zichidorf, Zichydorf, Zichyfalva, Zitiste, Zrenjanin, Zrna Bara, Zsigmondfalva, Zsombolya",
     };
     Object.entries(hungarianCounties).forEach(([county, villages]) => {
-        if(villages.indexOf(villageTidy)>-1)
-        {
-            countyForVillage = county; 
+        if (villages.indexOf(villageTidy) > -1) {
+            countyForVillage = county;
         }
     });
     return countyForVillage;
 }
 
-function getRomanianCounty(village)
-{
+function getRomanianCounty(village) {
     var countyForVillage = "Județul ...";
 
-    var romanianCounties = 
+    var romanianCounties =
     {
         /* via https://ro.wikipedia.org/wiki/Categorie:Liste_de_localit%C4%83%C8%9Bi_din_Rom%C3%A2nia 
            duplicates removed via http://www.mynikko.com/tools/tool_duplicateremover.html */
@@ -216,9 +192,8 @@ function getRomanianCounty(village)
         "Județul Timiș": ", Lugoj, Măguri, Tapia, Timișoara, Buziaș, Bacova, Silagiu, Ciacova, Cebza, Macedonia, Obad, Petroman, Deta, Opatița, Făget, Begheiu Mic, Bichigi, Brănești, Bunea Mare, Bunea Mică, Bătești, Colonia Mică, Jupânești, Povârgina, Temerești, Gătaia, Butin, Percosova, Sculia, Șemlacu Mare, Șemlacu Mic, Jimbolia, Recaș, Bazoș, Herneacova, Izvin, Nadăș, Petrovaselo, Stanciova, Sânnicolau Mare, Comune, Balinț, Bodo, Fădimac, Târgoviște, Banloc, Ofsenița, Partoș, Soca, Bara, Dobrești, Lăpușnic, Rădmănești, Spata, Beba Veche, Cherestur, Pordeanu, Becicherecu Mic, Belinț, Babșa, Chizătău, Gruni, Bethausen, Cladova, Cliciova, Cutina, Leucușești, Nevrincea, Biled, Birda, Berecuța, Mânăstire, Sângeorge, Bogda, Altringen, Buzad, Charlottenburg, Comeat, Sintar, Boldur, Jabăr, Ohaba-Forgaci, Sinersig, Brestovăț, Coșarii, Hodoș, Lucareț, Teș, Bucovăț, Bazoșu Nou, Bârna, Botești, Botinești, Drinova, Jurești, Pogănești, Sărăzani, Cenad, Cenei, Bobda, Checea, Chevereșu Mare, Dragșina, Vucova, Comloșu Mare, Comloșu Mic, Lunga, Coșteiu, Hezeriș, Păru, Valea Lungă Română, Țipari, Criciova, Cireșu, Cireșu Mic, Jdioara, Curtea, Coșava, Homojdia, Cărpiniș, Iecea Mică, Darova, Sacoșu Mare, Denta, Breștea, Rovinița Mare, Rovinița Mică, Dudeștii Noi, Dudeștii Vechi, Cheglevici, Colonia Bulgară, Dumbrava, Răchita, Dumbrăvița, Fibiș, Foeni, Cruceni, Fârdea, Drăgșinești, Gladna Montană, Gladna Română, Hăuzești, Mâtnicu Mic, Zolt, Gavojdia, Jena, Lugojel, Sălbăgel, Ghilad, Gad, Ghiroda, Giarmata-Vii, Ghizela, Hisiaș, Paniova, Șanovița, Cerneteaz, Giera, Grăniceri, Toager, Giroc, Chișoda, Giulvăz, Crai Nou, Ivanda, Rudna, Gottlob, Vizejdia, Iecea Mare, Jamu Mare, Clopodia, Ferendia, Gherman, Lățunaș, Jebel, Lenauheim, Bulgăruș, Grabaț, Liebling, Cerna, Iosif, Livezile, Dolaț, Lovrin, Margina, Breazova, Bulza, Coșevița, Coșteiu de Sus, Groși, Nemeșești, Sintești, Zorani, Mașloc, Alioș, Remetea Mică, Moravița, Dejan, Gaiu Mic, Stamora Germană, Moșnița Nouă, Albina, Moșnița Veche, Rudicica, Urseni, Mănăștiur, Pădurani, Remetea-Luncă, Topla, Nițchidorf, Blajova, Duboz, Nădrag, Crivina, Ohaba Lungă, Dubești, Ierșnic, Ohaba Română, Orțișoara, Cornești, Călacea, Seceani, Otelec, Iohanisfeld, Parța, Peciu Nou, Diniaș, Sânmartinu Sârbesc, Periam, Pesac, Pietroasa, Crivina de Sus, Fărășești, Poieni, Pișchia, Bencecu de Jos, Bencecu de Sus, Murani, Sălciua Nouă, Pădureni, Racovița, Căpăt, Drăgoiești, Ficătar, Hitiaș, Sârbova, Remetea Mare, Ianova, Sacoșu Turcesc, Berini, Icloda, Otvești, Stamora Română, Uliuc, Unip, Saravale, Satchinez, Bărăteaz, Hodoni, Secaș, Checheș, Crivobara, Vizma, Sânandrei, Carani, Covaci, Sânmihaiu Român, Sânmihaiu German, Utvin, Sânpetru Mare, Igriș, Săcălaz, Beregsău Mare, Beregsău Mic, Teremia Mare, Nerău, Teremia Mică, Tomești, Baloșești, Colonia Fabricii, Luncanii de Jos, Luncanii de Sus, Românești, Tomnatic, Topolovățu Mare, Cralovăț, Ictar-Budinț, Iosifalău, Topolovățu Mic, Șuștra, Tormac, Cadăr, Șipet, Traian Vuia, Jupani, Sudriaș, Surducu Mic, Susani, Săceni, Uivar, Pustiniș, Răuți, Sânmartinu Maghiar, Valcani, Variaș, Gelu, Sânpetru Mic, Victor Vlad Delamarina, Herendești, Honorici, Petroasa Mare, Pini, Visag, Voiteg, Folea, Șag, Șandra, Uihei, Știuca, Dragomirești, Oloșag, Zgribești",
     };
     Object.entries(romanianCounties).forEach(([county, villages]) => {
-        if(villages.indexOf(village)>-1)
-        {
-            countyForVillage = county; 
+        if (villages.indexOf(village) > -1) {
+            countyForVillage = county;
         }
     });
     return countyForVillage;
