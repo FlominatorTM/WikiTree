@@ -68,24 +68,18 @@ var output = "{{CategoryInfoBox Cemetery " +
 "\n|startdate= "+
 "\n|enddate=\n}}";
 
+if (navigator.userAgent.includes("Chrome")) 
+{
+	prompt("", output); 
+}
+else
+{
+	alert(output);
+}
+
+var otherWin = window.open("https://www.wikitree.com/index.php?title=Category:" + _catName + "&action=edit");
+
+
 var billon = "https://www.google.com/search?q=" + encodeURIComponent("site:https://billiongraves.com " + _name + " " + _location);
 var win = window.open(billon);
-EditCategoryDiff(output, _catName);
-
-function EditCategoryDiff(output, catName)
-{
-  var dateTimeString = (new Date()).toISOString().replace(/[^0-9]/g, "").slice(0, -3) ;
-
-  var formBegin = '<form id="editform" name="editform" action="https://www.wikitree.com/index.php?title=Category:' + encodeURIComponent(catName) +'&action=submit" method="post" target="_blank">';
-  var textarea = '<textarea name="wpTextbox1">' + output + '</textarea>';
-  textarea +='<input type="hidden" name="wpEdittime" value="'+ dateTimeString +'">';
-  textarea +='<input type="submit" name="wpDiff" id="wpDiff" value="Show changes">';
-  var formEnd = '</form>';
-
-  var additionalHtml = formBegin + textarea + formEnd;
-  window.document.body.innerHTML =  document.body.innerHTML + additionalHtml;
-  window.document.getElementById('wpDiff').click();
-  
-  var editForm = document.getElementById('editform');
-  editForm.remove();
-}
+void(0);
