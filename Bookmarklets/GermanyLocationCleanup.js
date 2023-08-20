@@ -122,6 +122,19 @@ function removeCrap(date, place)
 		{
 			alert("no Hessen-Nassau before 1868 => Electorate of Hesse or Duchy Nassau");
 		}
+		
+		if(placeBetter.indexOf("Viertäler") > -1)
+		{
+			if(year > 1929)
+			{
+			placeBetter = placeBetter
+			.replace("Viertäler", "Titisee")
+			;}
+			else if(year == 1929)
+			{
+				alert("Viertäler became Titisee on 1 May 1929");
+			}
+		}
 	}
 	return placeBetter;
 }
