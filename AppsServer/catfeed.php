@@ -262,6 +262,10 @@ function build_feed($cat, $depth, $limit, $show_only)
 				$add_file = str_replace('-.csv', '+.csv', $path);
 				$additions = file_get_contents($add_file);
 				
+				if($num_posts >= $limit)
+				{
+					break;
+				}
 				
 				switch($show_only)
 				{
@@ -307,11 +311,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 					}
 				}
 				
-				$num_posts++;
-				if($num_posts > $limit)
-				{
-					break;
-				}
+	
 				
 				
 				// echo "    	<link>$link</link>\n";
@@ -340,6 +340,7 @@ function build_feed($cat, $depth, $limit, $show_only)
 				echo "		]]></description>\n";
 				echo "    	<pubDate>" . date("r", $current_file_time) . "</pubDate>\n";
 				echo "    </item>\n";
+				$num_posts++;
 			}
 		}
 	}
