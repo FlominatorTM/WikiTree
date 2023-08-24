@@ -473,12 +473,10 @@ function build_feed($cat, $depth, $limit, $show_only)
 					}
 				}
 				
-	
-	
-							
-				// echo "    	<link>$link</link>\n";
-				// echo "    	<guid>$protocol" . $_SERVER['HTTP_HOST'] .  $_SERVER['REQUEST_URI'] ."&display=" . str_replace("-.csv", "", $files[$i]) . "</guid>\n";
-				echo "    	<guid>$url_here" .  htmlspecialchars("&display=" . str_replace("-.csv", "", $files[$i]), ENT_XML1) . "</guid>\n";
+				$display_escaped = htmlspecialchars("&display=" . str_replace("-.csv", "", $files[$i]), ENT_XML1);
+				$link = $url_here . $display_escaped ;
+				echo "    	<guid>$link</guid>\n";
+				echo "    	<link>$link</link>\n";
 				echo "    	<description><![CDATA[";
 
 				
