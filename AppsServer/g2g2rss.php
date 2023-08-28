@@ -1,6 +1,7 @@
 <?php
 	//turns replies to a particual g2g post into an RSS feed
 	$max = $_REQUEST['max'] +1 -1;
+	$preview_redir = isset($_REQUEST['preview_redir']);
 	if(!isset($max) || $max==0)
 	{
 		$max=10;
@@ -35,7 +36,7 @@
 	$num_answers = extract_from_to($question_page, '<span itemprop="answerCount">', '<');
 
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-	$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
+	$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1);
 ?>
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -74,7 +75,7 @@
 	
 	function process_reply($replies, $i, $url, $needles, $feed_is_empty)
 	{
-		global $needles, $extract_link, $post_url;
+		global $needles, $extract_link, $post_url, $preview_redir, $protocol;
 		$needle_found = false;
 		foreach($needles as $needle)
 		{
@@ -113,7 +114,10 @@
 				$title = $stripped_text;
 				$link = "";
 			}
-			
+		}
+		else if($preview_redir)
+		{
+			$link = "https://apps.wikitree.com/apps/straub620/g2gpeek.php". htmlspecialchars("?post=$post_url&a=$anchor", ENT_XML1);
 		}
 		//Mon, 22 May 2023 14:35:21 +0000
 
