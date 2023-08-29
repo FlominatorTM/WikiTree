@@ -40,6 +40,13 @@ foreach($feeds as $feed)
 	foreach($items as $item)
 	{
 		$guid_already_there = false;
+		//cut off the topic part from G2G feeds in order to prevent duplicate posts after renaming
+		if(stristr($item->link, "https://www.wikitree.com/g2g/") && !stristr($item->link, "?"))
+		{
+			$parts = explode("/", $item->link);
+			$item->link = "https://www.wikitree.com/g2g/" . $parts[4];
+			$item->guid = "https://www.wikitree.com/g2g/" . $parts[4];
+		}
 		$this_post_guid = ((string) $item->guid);
 		foreach($posts as $post)
 		{
