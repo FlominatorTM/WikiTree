@@ -7,6 +7,13 @@ if (isset($_REQUEST['depth']) && $_REQUEST['depth'] != "")
 {
 	$depth = 0 + $_REQUEST['depth'];
 }
+
+$limit = 5;
+if (isset($_REQUEST['limit']) && $_REQUEST['limit'] != "")
+{
+	$limit = 0 + $_REQUEST['limit'];
+}
+
 $display = $_REQUEST['display'];
 
 if($display != "")
@@ -25,7 +32,6 @@ else
 	}
 	print_debug("debugging enabled");
 
-	$limit = 5; //currently does nothing
 	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 	$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); 
 
