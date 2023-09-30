@@ -25,7 +25,13 @@ for (var i=0; tdNode = nameTDs[i]; i++)
 	
 	var normalizedPoints = pointsForThisTeam / numberTeamMembers;
 	normalizedPoints = Math.round(normalizedPoints*100)/100;
+	
+	while(normalizedPoints in dict)
+	{
+		normalizedPoints += "0";
+	}
 	dict[normalizedPoints] = tdNode.innerText;
+	
 	points[i] = normalizedPoints ;
 }
 
