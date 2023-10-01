@@ -2,16 +2,22 @@ javascript:
 /* creates template for a category when being on entry of German Wikipedia article about the place */
 var lat = "";
 var lon = "";
+var coor = "";  
 try
 {
-	lat = document.getElementsByClassName("latitude")[0].innerHTML + ""; 
-	lon = document.getElementsByClassName("longitude")[0].innerHTML + ""; 
+  lat = document.getElementsByClassName("latitude")[0].innerHTML + ""; 
+  lon = document.getElementsByClassName("longitude")[0].innerHTML + ""; 
+  coor = "coordinate=" + lat + "," + lon; 
+  if(coor.indexOf("°")>-1)
+  {
+	  coor = "coordinate=" + document.getElementsByClassName("geo")[0].innerText.replace("; ", ",");
+  }
 }
+
 catch(err)
 {
-	alert("careful: no coordinates found");
+alert("careful: no coordinates found");
 }
-var coor = "coordinate=" + lat + "," + lon;  
 var wikidata = "|wikidataID=";  
 var allAnkerNodes = document.getElementsByTagName("a"); 
 for (var i=0; i < allAnkerNodes.length ; i++)  
