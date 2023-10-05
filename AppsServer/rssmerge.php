@@ -1,19 +1,18 @@
-<?php 
+<?php
 
 $is_debug = isset($_REQUEST['debug']);
 
-if(!$is_debug)
-{
-	header("Content-Type: application/rss+xml");
-	header('Content-Disposition: inline;Filename=' . urlencode($cat).".xml");
-	echo('<?xml version="1.0" encoding="UTF-8"?>'); 
-}
-
 $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1); ;
+$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1);;
 
 $config = urldecode($_REQUEST['config']);
 $feeds = get_feed_urls($config);
+
+if (!$is_debug) {
+	header("Content-Type: application/rss+xml");
+	header('Content-Disposition: inline;Filename=' . urlencode($config) . ".xml");
+	echo ('<?xml version="1.0" encoding="UTF-8"?>');
+}
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
