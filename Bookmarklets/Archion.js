@@ -1,10 +1,13 @@
 javascript:
  
 var citation = "Archion";
-var breadCrumbList = document.getElementsByClassName('dvbreadcrumb')[0];
+var breadCrumbList = document.getElementsByClassName('breadcrumb-item mb-0')[0];
 for (var i=1; valNode = breadCrumbList.getElementsByTagName("a")[i]; i++)
 {
-	citation += " > " + valNode.innerText;
+	if(valNode.className != "backlink")
+	{
+		citation += " > " + valNode.innerText;
+	}
 }
 
 var permaLinkDivs = document.getElementsByClassName("inner");
