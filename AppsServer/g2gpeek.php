@@ -44,7 +44,7 @@ for ($i = 0; $i < $len; $i++) {
         echo "<html>";
         echo " <head>";
         echo '<meta http-equiv="refresh" content="0; URL=' . str_replace("&appId=Straub620_g2gpeek", "", $url) . '">';
-        echo '  <meta property="og:description" content="' .  $aTags[$i]->nextSibling->textContent  . '">';
+        echo '  <meta property="og:description" content="' .  htmlentities($aTags[$i]->nextSibling->textContent)  . '">';
         echo '  <meta property="og:title" content="' . $what . ' by ' . $user .  '">';
         echo '  <title>' . $what . ' by ' . $user . ' </title>';
         echo " </head>";
