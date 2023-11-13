@@ -44,3 +44,31 @@ document.getElementById('wpTextbox1').value = textBefore.replace(/\|parent1=.*\n
 document.getElementById('wpSave').click();
 
 void(0);
+
+---------------------------------------
+javascript:
+/* – to - */
+var textBefore = document.getElementById('wpTextbox1').value;
+
+var textNew = textBefore.replace("–", "-");
+var editform = document.getElementById("editform");
+var oldAction = editform.action;
+
+document.getElementById('wpTextbox1').value = textNew;
+editform.action = oldAction.replace(encodeURIComponent("–"), "-");
+editform.target = "_blank";
+document.getElementById('wpDiff').click();
+
+editform.action = oldAction;
+editform.target = "";
+var title =  document.getElementsByTagName("h1")[0].innerText
+.replace("Category:", "").
+replace("–", "-").
+replace("/Use", "") ;
+alert(title);
+document.getElementById('wpTextbox1').value = "{{Rename Category|" + title + "}}\n changing – to - --~~~~";
+document.getElementById('wpSummary').value = "renaming – to -";
+
+document.getElementById('wpSave').click();
+
+void(0);
