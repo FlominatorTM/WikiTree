@@ -67,7 +67,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				$booksParts = explode('<p class="digitized-breadcrumb mb-4">', $archiveParts[$j]);
 
 				$guid = extract_from_to($booksParts[1], 'https://www.archion.de/de/viewer/churchRegister', '">');
-				$description = $archive . ' ';
+				$description = $archive . ': ';
 				for ($k = 1; $k < count($booksParts); $k++) {
 					$oneBookParts = explode('/', strip_tags('<p>' . $booksParts[$k]));
 					$aboveParish = trim($oneBookParts[0]);
@@ -75,10 +75,10 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 					if (!stristr($description, $aboveParish)) {
 						if ($k > 1) {
 							$description = $description . "\n";
-							$description = substr($description, 0, strlen($description) - strlen(', ')) . ' ';
+							$description = substr($description, 0, strlen($description) - 3) . '; ';
 						}
 						//todo: remove ,
-						$description = $description . $aboveParish . ': ';
+						$description = $description .  $aboveParish . ': ';
 					}
 					if (!stristr($description, $parish)) {
 						$description = $description . $parish . ', ';
