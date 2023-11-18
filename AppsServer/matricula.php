@@ -47,10 +47,10 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			$timestamp = strtotime("$day $month $year");
 
 			echo "    <item>\n";
-			echo "    	<title>" . html_entity_decode($title) . "</title>\n";
+			echo "    	<title>" . html_entity_decode($description) . "</title>\n";
 			echo "    	<link>$link</link>\n";
 			echo "    	<guid>$link</guid>\n";
-			echo "    	<description>" . htmlspecialchars($description) . "</description>\n";
+			echo "    	<description>" . htmlspecialchars($title) . "</description>\n";
 			echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
 			echo "    </item>\n";
 		}
