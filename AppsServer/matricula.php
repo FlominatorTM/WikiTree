@@ -24,7 +24,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		<?php
 
 		$parts = explode("<h3>", $page);
-		$host = "https://data.matricula-online.eu/";
+		$host = "https://data.matricula-online.eu";
 
 
 		for ($i = 1; $i < count($parts); $i++) {
@@ -36,8 +36,9 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				</div>*/
 			$link = $host . extract_from_to($parts[$i], '<a href="', '">');
 			$title =  extract_from_to($parts[$i], '">', '</a>');
+			$diocese = substr($title, 0, strpos($title, ':'));
 			$dateGerman = extract_from_to($parts[$i], '<small>', '</small>');
-			$description = trim(strip_tags(extract_from_to($parts[$i], '<p>', '</div>')));
+			$description = $diocese . ': ' . trim(strip_tags(extract_from_to($parts[$i], '<p>', '</div>')));
 
 			$date_parts = explode(" ", $dateGerman);
 			$day = $date_parts[0];
