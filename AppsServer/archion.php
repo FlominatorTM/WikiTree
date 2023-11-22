@@ -50,7 +50,6 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
                 <a href="/de/alle-archive/bayern/landeskirchliches-archiv-der-evangelisch-lutherischen-kirche-in-bayern/dekanat-fuerth">Dekanat Fürth</a> /
               */
 
-
 			$dateGerman = extract_from_to($parts[$i], '<h2>', '</h2>');
 			$date_parts = explode(" ", $dateGerman);
 			$day = $date_parts[0];
@@ -66,10 +65,12 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 				$booksParts = explode('<p class="digitized-breadcrumb mb-4">', $archiveParts[$j]);
 
-				$guid = extract_from_to($booksParts[1], 'https://www.archion.de/de/viewer/churchRegister', '">');
+				$guid = extract_from_to($booksParts[1], '?cHash=', '">');
+
 				$description = $archive . ': ';
 				for ($k = 1; $k < count($booksParts); $k++) {
 					$oneBookParts = explode('/', strip_tags('<p>' . $booksParts[$k]));
+
 					$aboveParish = trim($oneBookParts[0]);
 					$parish = trim($oneBookParts[1]);
 					if (!stristr($description, $aboveParish)) {
@@ -80,7 +81,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 						//todo: remove ,
 						$description = $description .  $aboveParish . ': ';
 					}
-					if (!stristr($description, $parish)) {
+					if (!stristr($description, $parish) && count($oneBookParts) > 2) {
 						$description = $description . $parish . ', ';
 					}
 				}
@@ -88,7 +89,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 				echo "    <item>\n";
 				echo "    	<title>" . html_entity_decode($description) . "</title>\n";
-				echo "    	<link>$news_url</link>\n";
+				echo "    	<link>$news_url#$guid</link>\n";
 				echo "    	<guid isPermaLink='false'>$guid</guid>\n";
 				echo "    	<description>" . htmlspecialchars($description) . "</description>\n";
 				echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
