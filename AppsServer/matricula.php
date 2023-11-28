@@ -36,7 +36,11 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				</div>*/
 			$link = $host . extract_from_to($parts[$i], '<a href="', '">');
 			$title =  extract_from_to($parts[$i], '">', '</a>');
-			$diocese = substr($title, 0, strpos($title, ':'));
+			$diocese = $title;
+			$indexColon = strpos($title, ':');
+			if ($indexColon > -1) {
+				$diocese = substr($title, 0, $indexColon);
+			}
 			$dateGerman = extract_from_to($parts[$i], '<small>', '</small>');
 			$description = $diocese . ': ' . trim(strip_tags(extract_from_to($parts[$i], '<p>', '</div>')));
 
