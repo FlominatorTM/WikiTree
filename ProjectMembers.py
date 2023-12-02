@@ -8,12 +8,13 @@ from dateutil.relativedelta import relativedelta
 badge = "germany"
 words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0'}
+months_any = 6
     
 def get_args():
     parser = argparse.ArgumentParser(description='Creates a report of one project')
     parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for keyword')
     parser.add_argument('--last', action='store_true', help='Gets last edit')
-    parser.add_argument('--any', action='store_true', help='Checks for edits in last months')
+    parser.add_argument('--any', action='store_true', help='Checks for project relevant edits in last ' + str(months_any) + ' months')
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
@@ -77,7 +78,7 @@ def get_member_users_project(project):
 def check_edit_history(theUser):
     global args
     global headers
-    
+    global months_any
     link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=500&who=" + theUser["id"];
     f = requests.get(link, headers=headers)
     contribPage = f.text
@@ -247,6 +248,7 @@ def is_reply_negative(reply):
 
 def write_report(members):
     global args
+    global months_any
     f = open("members.htm", "w")
     f.write('<html><head></head><body><table border="1">')
     f.write("<tr>")
@@ -266,7 +268,7 @@ def write_report(members):
         f.write("<th>Reply check-in</th>")
     
     if args.any:
-        f.write("<th>Any edit?</th>")
+        f.write("<th>any in last " + months_any + " months?</th>")
     
     if args.contribs:
         f.write("<th>Project edit?</th>")
