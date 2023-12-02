@@ -12,14 +12,14 @@ months_any = 6
     
 def get_args():
     parser = argparse.ArgumentParser(description='Creates a report of one project')
-    parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for keyword')
+    parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for project related keywords')
     parser.add_argument('--last', action='store_true', help='Gets last edit')
-    parser.add_argument('--any', action='store_true', help='Checks for project relevant edits in last ' + str(months_any) + ' months')
+    parser.add_argument('--any', action='store_true', help='Checks for edits in last ' + str(months_any) + ' months')
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
     parser.add_argument('--join', action='store_true', help='Adds join date')
-    parser.add_argument('--otherbadges', help='Checks if user also has these badges (comma separated list)')
+    parser.add_argument('--otherbadges', help='Checks if user also has these badges (pipe-eparated list)')
     parser.add_argument('--users', help='link to text file with user names')
     
     return parser.parse_args()
@@ -97,7 +97,6 @@ def check_edit_history(theUser):
     now = datetime.now()
     six_months_ago = now + relativedelta(months=- months_any)
     
-    any_edit = False
     dayNum = 0
     for oneDay in contribPageParts[1:] :
         # print(oneDay)
@@ -118,7 +117,7 @@ def check_edit_history(theUser):
             if args.last is False and args.contribs is False:
                 break
         
-        print (editDateFormatted)
+        #print (editDateFormatted)
         if editDate > six_months_ago:
             theUser["anyEdit"] = True
             if args.contribs:
@@ -126,9 +125,10 @@ def check_edit_history(theUser):
                 if relevant_edit:
                     theUser["editedProject"] = True
                     break
-            any_edit = True
+            else: 
+                break
         else:
-            print("edit too old, done")
+            #print("edit too old, done")
             break
 
 def did_user_perform_relevant_edit(oneDay):
@@ -176,14 +176,14 @@ def get_checkin_requested(theUser, checkInToken):
     link = 'https://www.wikitree.com/wiki/' + theUser["id"]
     f = requests.get(link, headers=headers)
     userPage = f.text
-    print (link)
-    if "This page does not exist." in userPage:
+    # print (link)
+    if "This page does not exist."  in userPage or "The page you were looking for was moved or deleted" in userPage:
         print(theUser["id"] + " doesn't exist")
-        theUser["lastEdit"] = 0
+        theUser["lastEdit"] = datetime(1970, 1, 1, 0, 0)
         theUser["lastEditFormatted"] = ""
         theUser["name"] = "[deleted]"
         if args.otherbadges is not None:
-            for other_badge in args.otherbadges.split(','):
+            for other_badge in args.otherbadges.split('|'):
                 theUser["other-badge-" + other_badge] = False;
 
         return
@@ -199,8 +199,9 @@ def get_checkin_requested(theUser, checkInToken):
         get_date_joined(theUser,  mId)
     
     if args.otherbadges is not None:
-        for other_badge in args.otherbadges.split(','):
-            theUser["other-badge-" + other_badge] = other_badge.strip() in get_badge_page(mId);
+        badgePage = get_badge_page(mId)
+        for other_badge in args.otherbadges.split('|'):
+            theUser["other-badge-" + other_badge] = other_badge.strip() in badgePage;
 
     if args.checkin is False and args.reply is False:
         return
@@ -240,7 +241,10 @@ def get_badge_page(mId):
     global headers
     link = 'https://www.wikitree.com/index.php?title=Special:Badges&u=' + mId
     f = requests.get(link, headers=headers)
-    return f.text
+
+    startBadges =  "<!-- list of badges for this user -->";
+    indexStartBadges = f.text.index(startBadges);
+    return f.text[indexStartBadges:]
 
 
 def get_date_joined(theUser, mId):
@@ -288,13 +292,13 @@ def write_report(members):
         f.write("<th>Reply check-in</th>")
     
     if args.any:
-        f.write("<th>any in last " + months_any + " months?</th>")
+        f.write("<th>any in last " + str(months_any) + " months?</th>")
     
     if args.contribs:
         f.write("<th>Project edit?</th>")
 
     if args.otherbadges is not None:
-        for other_badge in args.otherbadges.split(','):
+        for other_badge in args.otherbadges.split('|'):
             f.write("<th>Badge " + other_badge + "</th>")
 
     if args.unbadge:
@@ -363,7 +367,7 @@ def write_report(members):
             f.write("</td>")
             
         if args.otherbadges is not None:
-            for other_badge in args.otherbadges.split(','):
+            for other_badge in args.otherbadges.split('|'):
                 f.write("<td>")
                 if member["other-badge-" + other_badge]:
                     f.write("yes")
