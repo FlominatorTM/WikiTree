@@ -7,7 +7,8 @@ from dateutil.relativedelta import relativedelta
 
 badge = "germany"
 words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
-
+headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0'}
+    
 def get_args():
     parser = argparse.ArgumentParser(description='Creates a report of one project')
     parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for keyword')
@@ -16,8 +17,10 @@ def get_args():
     parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
-    parser.add_argument('--join', action='store_true', help='Adds link to remove badge')
+    parser.add_argument('--join', action='store_true', help='Adds join date')
+    parser.add_argument('--otherbadge', help='Checks if user also has this badge')
     parser.add_argument('--users', help='link to text file with user names')
+    
     return parser.parse_args()
 
 def get_members_file(filename):
@@ -35,8 +38,9 @@ def get_members_file(filename):
 
 def get_member_users_project(project):
 
+    global headers;
     link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5000'
-    f = requests.get(link)
+    f = requests.get(link, headers=headers)
     memberPageContent = f.text
 
     members = []
@@ -72,9 +76,10 @@ def get_member_users_project(project):
 
 def check_edit_history(theUser):
     global args
+    global headers
     
     link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=500&who=" + theUser["id"];
-    f = requests.get(link)
+    f = requests.get(link, headers=headers)
     contribPage = f.text
     
     beginnOfHistory = "<span class='HISTORY-DATE'>"
@@ -127,6 +132,7 @@ def did_user_perform_relevant_edit(oneDay):
         #third part usually contains the topic of the edit
         if len(linksInEdit) > 3:
             # print(linksInEdit)
+            # todo: check if is own page
             endOfLink = linksInEdit[3].find("\"")
             subjectLink = linksInEdit[3][0:endOfLink]
             if "http" in subjectLink and not "Special" in subjectLink:
@@ -142,11 +148,11 @@ def did_user_perform_relevant_edit(oneDay):
 
 
 def does_profile_contain(link, words):
-    
+    global headers
     if link in profiles_global:
         return profiles_global[link]
     else:
-        f = requests.get(link)
+        f = requests.get(link, headers=headers)
         profile_text = f.text
         profiles_global[link] = False
         for word in words:
@@ -157,20 +163,26 @@ def does_profile_contain(link, words):
         
 
 def get_checkin_requested(theUser, checkInToken):
+    global headers
     link = 'https://www.wikitree.com/wiki/' + theUser["id"]
-    f = requests.get(link)
+    f = requests.get(link, headers=headers)
     userPage = f.text
     indexCheckInToken = userPage.find(checkInToken)
     
+    midToken = 'data-mid="'
+    indexMidStart = userPage.index(midToken) + len(midToken)
+    indexMidEnd = userPage.index('"', indexMidStart)
+    mId = userPage[indexMidStart:indexMidEnd]
+
     if args.join:
-        midToken = 'data-mid="'
-        indexMidStart = userPage.index(midToken) + len(midToken)
-        indexMidEnd = userPage.index('"', indexMidStart)
-        get_date_joined(theUser, userPage[indexMidStart:indexMidEnd] )
+        get_date_joined(theUser,  mId)
     
+    if args.otherbadge is not None:
+        theUser["other-badge"] = args.otherbadge in get_badge_page(mId);
+
     if args.checkin is False and args.reply is False:
         return
-        
+    
     # print(str(indexCheckInToken))
     theUser["check-in-requested"] = indexCheckInToken > -1
     theUser["check-in-replied"] = False
@@ -202,11 +214,16 @@ def get_checkin_requested(theUser, checkInToken):
             replyTime = userPage[indexOfReplyTimeStart:indexOfReplyTimeEnd]
             theUser["check-in-reply-date"] = dateutil.parser.parse(replyTime)
 
+def get_badge_page(mId):
+    global headers
+    link = 'https://www.wikitree.com/index.php?title=Special:Badges&u=' + mId
+    f = requests.get(link, headers=headers)
+    return f.text
+
+
 def get_date_joined(theUser, mId):
     global badge
-    link = 'https://www.wikitree.com/index.php?title=Special:Badges&u=' + mId
-    f = requests.get(link)
-    badgePage = f.text
+    badgePage = get_badge_page(mId)
     
     # <li id="list_item_180">
     # <a href="/index.php?title=Special:Badges&amp;b=germany"><img src="/images/badge/germany.gif.pagespeed.ce.9pUpJX44h-.gif" alt="Germany Project Member" width="125" height="70" border="0"></a> <br>
@@ -216,7 +233,7 @@ def get_date_joined(theUser, mId):
     # <br>
     # Awarded by <a href="/wiki/Haese-11" title="">Kylie Haese</a>
     
-    indexLinkToBadge = badgePage.index("b=germany")
+    indexLinkToBadge = badgePage.index("b=" + badge)
     indexBelowDate = badgePage.index("Awarded by ", indexLinkToBadge)
     indexBrAfterDate = badgePage.rindex("<", indexLinkToBadge, indexBelowDate) 
     indexBrBeforeDate = badgePage.rindex('>', indexLinkToBadge, indexBrAfterDate) + len('>')
@@ -252,7 +269,10 @@ def write_report(members):
     
     if args.contribs:
         f.write("<th>Project edit?</th>")
-        
+
+    if args.otherbadge is not None:
+        f.write("<th>Badge " + args.otherbadge + "</th>")
+
     if args.unbadge:
         f.write("<th>Badge</th>")
     f.write("</tr>")
@@ -318,6 +338,14 @@ def write_report(members):
                 f.write("no")
             f.write("</td>")
             
+        if args.otherbadge is not None:
+            f.write("<td>")
+            if member["other-badge"]:
+                f.write("yes")
+            else:
+                f.write("no")
+            f.write("</td>")
+
         if args.unbadge:
             f.write("<td>")
             f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
