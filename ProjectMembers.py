@@ -18,7 +18,7 @@ def get_args():
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
     parser.add_argument('--join', action='store_true', help='Adds join date')
-    parser.add_argument('--otherbadge', help='Checks if user also has this badge')
+    parser.add_argument('--otherbadges', help='Checks if user also has this badge')
     parser.add_argument('--users', help='link to text file with user names')
     
     return parser.parse_args()
@@ -177,8 +177,9 @@ def get_checkin_requested(theUser, checkInToken):
     if args.join:
         get_date_joined(theUser,  mId)
     
-    if args.otherbadge is not None:
-        theUser["other-badge"] = args.otherbadge in get_badge_page(mId);
+    if args.otherbadges is not None:
+        for other_badge in args.otherbadges.split(','):
+            theUser["other-badge-" + other_badge] = other_badge in get_badge_page(mId);
 
     if args.checkin is False and args.reply is False:
         return
@@ -270,8 +271,9 @@ def write_report(members):
     if args.contribs:
         f.write("<th>Project edit?</th>")
 
-    if args.otherbadge is not None:
-        f.write("<th>Badge " + args.otherbadge + "</th>")
+    if args.otherbadges is not None:
+        for other_badge in args.otherbadges.split(','):
+            f.write("<th>Badge " + other_badge + "</th>")
 
     if args.unbadge:
         f.write("<th>Badge</th>")
@@ -338,13 +340,14 @@ def write_report(members):
                 f.write("no")
             f.write("</td>")
             
-        if args.otherbadge is not None:
-            f.write("<td>")
-            if member["other-badge"]:
-                f.write("yes")
-            else:
-                f.write("no")
-            f.write("</td>")
+        if args.otherbadges is not None:
+            for other_badge in args.otherbadges.split(','):
+                f.write("<td>")
+                if member["other-badge-" + other_badge]:
+                    f.write("yes")
+                else:
+                    f.write("no")
+                f.write("</td>")
 
         if args.unbadge:
             f.write("<td>")
