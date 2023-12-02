@@ -19,7 +19,7 @@ def get_args():
     parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
     parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
     parser.add_argument('--join', action='store_true', help='Adds join date')
-    parser.add_argument('--otherbadges', help='Checks if user also has this badge')
+    parser.add_argument('--otherbadges', help='Checks if user also has these badges (comma separated list)')
     parser.add_argument('--users', help='link to text file with user names')
     
     return parser.parse_args()
@@ -83,11 +83,19 @@ def check_edit_history(theUser):
     f = requests.get(link, headers=headers)
     contribPage = f.text
     
+    if "The page you were looking for was moved or deleted" in contribPage:
+        print(theUser["id"] + " doesn't exist")
+        return
+    if theUser["name"] == " ":
+        indexH1 = contribPage.find("h1") + len("<h1>")
+        indexQuote = contribPage.find("'", indexH1)
+        theUser["name"] = contribPage[indexH1:indexQuote]
+
     beginnOfHistory = "<span class='HISTORY-DATE'>"
     contribPageParts = contribPage.split(beginnOfHistory)
     
     now = datetime.now()
-    six_months_ago = now + relativedelta(months=-6)
+    six_months_ago = now + relativedelta(months=- months_any)
     
     any_edit = False
     dayNum = 0
@@ -168,6 +176,18 @@ def get_checkin_requested(theUser, checkInToken):
     link = 'https://www.wikitree.com/wiki/' + theUser["id"]
     f = requests.get(link, headers=headers)
     userPage = f.text
+    print (link)
+    if "This page does not exist." in userPage:
+        print(theUser["id"] + " doesn't exist")
+        theUser["lastEdit"] = 0
+        theUser["lastEditFormatted"] = ""
+        theUser["name"] = "[deleted]"
+        if args.otherbadges is not None:
+            for other_badge in args.otherbadges.split(','):
+                theUser["other-badge-" + other_badge] = False;
+
+        return
+
     indexCheckInToken = userPage.find(checkInToken)
     
     midToken = 'data-mid="'
@@ -180,7 +200,7 @@ def get_checkin_requested(theUser, checkInToken):
     
     if args.otherbadges is not None:
         for other_badge in args.otherbadges.split(','):
-            theUser["other-badge-" + other_badge] = other_badge in get_badge_page(mId);
+            theUser["other-badge-" + other_badge] = other_badge.strip() in get_badge_page(mId);
 
     if args.checkin is False and args.reply is False:
         return
