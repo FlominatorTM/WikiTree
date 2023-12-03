@@ -66,7 +66,7 @@ if (!$is_debug) {
 			if (count($yearParts) == 1) {
 				$year = substr($yearParts[0], 1, 4);
 				if (!stristr($item->title, $year)) {
-					$item->title .= " " .  $year;
+					$item->title .= " ($year)";
 				}
 			}
 
