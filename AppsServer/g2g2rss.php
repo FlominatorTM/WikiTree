@@ -1,8 +1,10 @@
 <?php
 //turns replies to a particual g2g post into an RSS feed
 $is_debug = isset($_REQUEST['debug']);
+$do_comments = isset($_REQUEST['comments']);
 $max = $_REQUEST['max'] + 1 - 1;
 $preview_redir = isset($_REQUEST['preview_redir']);
+$answer = $_REQUEST['answer'];
 if (!isset($max) || $max == 0) {
 	$max = 10;
 }
@@ -47,35 +49,51 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		$offset = max(0, ($num_answers - $max));
 		$first_answer_reached = false;
 		$posted = 0;
-		do {
-			
-			$url = "$post_url?start=$offset";
 
+		$reply_separator = '<div class="qa-a-item-content qa-post-content">';
+
+		if (!isset($answer)) {
+			do {
+
+				print_debug("in while");
+				$url = "$post_url?start=$offset";
+
+				$replies_page = file_get_contents($url);
+
+				$footer = "<h2>\nRelated questions";
+				$index_footer = strpos($replies_page, $footer);
+				$replies_page = substr($replies_page, 0, $index_footer);
+
+				$replies = explode($reply_separator, $replies_page);
+				$num_in_array = count($replies);
+				print_debug("num_in_array_" + $num_in_array);
+				for ($i = $num_in_array - 1; $i > 0; $i--) {
+					if (process_reply($replies, $i, $needles, ($posted == 0), true)) {
+						$posted++;
+					}
+				}
+				$first_answer_reached = $offset == 0;
+				$offset = max(0, $offset - 20);
+			} while ($posted < $max && !$first_answer_reached);
+		} else {
+			$url = "$post_url?show=$answer";
 			$replies_page = file_get_contents($url);
-
-			$footer = "<h2>\nRelated questions";
-			$index_footer = strpos($replies_page, $footer);
-			$replies_page = substr($replies_page, 0, $index_footer );
-			$reply_separator = '<div class="qa-a-item-content qa-post-content">';
-
 			$replies = explode($reply_separator, $replies_page);
 			$num_in_array = count($replies);
 
 			for ($i = $num_in_array - 1; $i > 0; $i--) {
-				if (process_reply($replies, $i, $url, $needles, ($posted == 0))) {
-					$posted++;
+				if (stristr($replies[$i], '<a name="' . $answer)) {
+					process_reply($replies, $i, array(), false, true);
 				}
 			}
-			$first_answer_reached = $offset == 0;
-			$offset = max(0, $offset - 20);
-		} while ($posted < $max && !$first_answer_reached);
+		}
 
 
-		function process_reply($replies, $i, $url, $needles, $feed_is_empty)
+		function process_reply($replies, $i, $needles, $feed_is_empty, $do_comments)
 		{
-			global $needles, $extract_link, $post_url, $preview_redir, $protocol;
+			global $extract_link, $post_url, $preview_redir, $answer;
 
-			print_debug("process_reply($replies, $i, $url, $needles, $feed_is_empty)");
+			print_debug("process_reply(replies=" . count($replies) . ", $i, $feed_is_empty)");
 			$needle_found = false;
 			foreach ($needles as $needle) {
 				print_debug("needle: $needle<br>");
@@ -86,52 +104,77 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				}
 			}
 
-			if (isset($needles) && !$needle_found) {
+			if (count($needles) > 0 && !$needle_found) {
 				return false;
 			}
 
-			$user =  extract_from_to($replies[$i], 'qa-user-link">', "</A>");
-			$title = "Answer by $user";
-			$index_behind_answer = strpos($replies[$i], 'qa-a-item-meta');
-			$anchor = extract_from_to(substr($replies[$i], $index_behind_answer), '#a', "\"");
-			$text = extract_from_to($replies[$i], '<div itemprop="text">', "</div>");
+			$answer_and_comments = explode('qa-c-list-item', $replies[$i]);
+			$answer_user = "";
+			for ($c = 0; $c < count($answer_and_comments); $c++) {
+				$is_comment = $c > 0;
 
-			$link = $post_url . '?show=' . $anchor . '#' . $anchor;
-			$description = $text;
-			$guid = $link;
-			if ($extract_link) {
-				$stripped_text = trim(strip_tags($text));
-				$index_of_link = strpos($stripped_text, "http");
-				if ($index_of_link > 0) {
-					$title = trim(substr($stripped_text, 0, $index_of_link));
-					$link = trim(substr($stripped_text, $index_of_link));
-				} else {
-					$title = $stripped_text;
-					$link = "";
+				if (stristr($answer_and_comments[$c], "previous comments")) {
+					continue;
 				}
-			} else if ($preview_redir) {
-				$link = "https://apps.wikitree.com/apps/straub620/g2gpeek.php" . htmlspecialchars("?post=$post_url&a=$anchor", ENT_XML1);
+
+				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</A>");
+				$title = "Answer by $user";
+				$token_behind_answer = 'qa-a-item-meta';
+				$token_before_post_id = "#a";
+				if ($is_comment) {
+					$token_behind_answer = 'qa-c-item-meta';
+					$title = "Comment by $user about answer from $answer_user";
+					$token_before_post_id = "#c";
+				} else {
+					$answer_user = $user;
+				}
+				$index_behind_answer = strpos($answer_and_comments[$c], $token_behind_answer);
+
+				/*
+				<span class="qa-c-item-meta">
+				<a href="https://www.wikitree.com/g2g/1629844/create-categories-from-wikipedia-find-grave-using-wikitree&amp;a=1634331" class="qa-c-item-what" itemprop="url">commented</a>
+				*/
+				$anchor = extract_from_to(substr($answer_and_comments[$c], $index_behind_answer), $token_before_post_id, "\"");
+				$text = extract_from_to($answer_and_comments[$c], '<div itemprop="text">', "</div>");
+
+				$link = $post_url . '?show=' . $anchor . '#' . $anchor;
+				$description = $text;
+				$guid = $link;
+				if ($extract_link) {
+					$stripped_text = trim(strip_tags($text));
+					$index_of_link = strpos($stripped_text, "http");
+					if ($index_of_link > 0) {
+						$title = trim(substr($stripped_text, 0, $index_of_link));
+						$link = trim(substr($stripped_text, $index_of_link));
+					} else {
+						$title = $stripped_text;
+						$link = "";
+					}
+				} else if ($preview_redir) {
+					$link = "https://apps.wikitree.com/apps/straub620/g2gpeek.php" . htmlspecialchars("?post=$post_url&a=$anchor", ENT_XML1);
+				}
+				//Mon, 22 May 2023 14:35:21 +0000
+
+				$date_raw = extract_from_to($answer_and_comments[$c], 'datetime="', "\"");
+				$date = date_parse($date_raw);
+
+				//will return local time, while the posted time is UTC!
+				$timestamp = mktime($date['hour'], $date['minute'], $date['second'], $date['month'], $date['day'], $date['year']);
+
+				if ($feed_is_empty) {
+					echo "    <pubDate>" . date("r", $timestamp) . "</pubDate>\n";
+					$feed_is_empty = false;
+				}
+
+				echo "    <item>\n";
+				echo "    	<title>" . html_entity_decode($title) . "</title>\n";
+				echo "    	<link>$link</link>\n";
+				echo "    	<guid>$guid</guid>\n";
+				// echo "    	<description><![CDATA[".$description."]]></description>\n";
+				echo "    	<description>" . htmlspecialchars($description) . "</description>\n";
+				echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
+				echo "    </item>\n";
 			}
-			//Mon, 22 May 2023 14:35:21 +0000
-
-			$date_raw = extract_from_to($replies[$i], 'datetime="', "\"");
-			$date = date_parse($date_raw);
-
-			//will return local time, while the posted time is UTC!
-			$timestamp = mktime($date['hour'], $date['minute'], $date['second'], $date['month'], $date['day'], $date['year']);
-
-			if ($feed_is_empty) {
-				echo "    <pubDate>" . date("r", $timestamp) . "</pubDate>\n";
-			}
-
-			echo "    <item>\n";
-			echo "    	<title>" . html_entity_decode($title) . "</title>\n";
-			echo "    	<link>$link</link>\n";
-			echo "    	<guid>$guid</guid>\n";
-			// echo "    	<description><![CDATA[".$description."]]></description>\n";
-			echo "    	<description>" . htmlspecialchars($description) . "</description>\n";
-			echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
-			echo "    </item>\n";
 			return true;
 		}
 
