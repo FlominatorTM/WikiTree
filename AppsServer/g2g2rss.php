@@ -44,11 +44,13 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		<language>en</language>
 		<title><?php echo extract_from_to($question_page, '<title>', "</title>"); ?></title>
 		<link><?php echo $post_url; ?></link>
+		<pubDate><?php echo (date("r")) ?></pubDate>
 		<?php
 
 		$offset = max(0, ($num_answers - $max));
 		$first_answer_reached = false;
 		$posted = 0;
+		$items = array();
 
 		$reply_separator = '<div class="qa-a-item-content qa-post-content">';
 
@@ -68,7 +70,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				$num_in_array = count($replies);
 				print_debug("num_in_array_" + $num_in_array);
 				for ($i = $num_in_array - 1; $i > 0; $i--) {
-					if (process_reply($replies, $i, $needles, ($posted == 0), true)) {
+					if (process_reply($replies, $i, $needles, $do_comments, $items)) {
 						$posted++;
 					}
 				}
@@ -83,17 +85,20 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 			for ($i = $num_in_array - 1; $i > 0; $i--) {
 				if (stristr($replies[$i], '<a name="' . $answer)) {
-					process_reply($replies, $i, array(), false, true);
+					process_reply($replies, $i, array(), true, $items);
 				}
 			}
 		}
+		krsort($items);
+		foreach ($items as $key => $item) {
+			echo $item;
+		}
 
-
-		function process_reply($replies, $i, $needles, $feed_is_empty, $do_comments)
+		function process_reply($replies, $i, $needles, $do_comments, &$items)
 		{
-			global $extract_link, $post_url, $preview_redir, $answer;
+			global $extract_link, $post_url, $preview_redir;
 
-			print_debug("process_reply(replies=" . count($replies) . ", $i, $feed_is_empty)");
+			print_debug("process_reply(replies=" . count($replies) . ", $i)");
 			$needle_found = false;
 			foreach ($needles as $needle) {
 				print_debug("needle: $needle<br>");
@@ -110,7 +115,11 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 			$answer_and_comments = explode('qa-c-list-item', $replies[$i]);
 			$answer_user = "";
-			for ($c = 0; $c < count($answer_and_comments); $c++) {
+			$until = count($answer_and_comments);
+			if (!$do_comments) {
+				$until = 1;
+			}
+			for ($c = 0; $c < $until; $c++) {
 				$is_comment = $c > 0;
 
 				if (stristr($answer_and_comments[$c], "previous comments")) {
@@ -161,19 +170,16 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				//will return local time, while the posted time is UTC!
 				$timestamp = mktime($date['hour'], $date['minute'], $date['second'], $date['month'], $date['day'], $date['year']);
 
-				if ($feed_is_empty) {
-					echo "    <pubDate>" . date("r", $timestamp) . "</pubDate>\n";
-					$feed_is_empty = false;
-				}
-
-				echo "    <item>\n";
-				echo "    	<title>" . html_entity_decode($title) . "</title>\n";
-				echo "    	<link>$link</link>\n";
-				echo "    	<guid>$guid</guid>\n";
-				// echo "    	<description><![CDATA[".$description."]]></description>\n";
-				echo "    	<description>" . htmlspecialchars($description) . "</description>\n";
-				echo "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
-				echo "    </item>\n";
+				$item = "";
+				$item .= "    <item>\n";
+				$item .= "    	<title>" . html_entity_decode($title) . "</title>\n";
+				$item .= "    	<link>$link</link>\n";
+				$item .= "    	<guid>$guid</guid>\n";
+				// $item.= "    	<description><![CDATA[".$description."]]></description>\n";
+				$item .= "    	<description>" . htmlspecialchars($description) . "</description>\n";
+				$item .= "    	<pubDate>" . date("r", $timestamp) . "</pubDate>\n";
+				$item .= "    </item>\n";
+				$items[$timestamp] = $item;
 			}
 			return true;
 		}
