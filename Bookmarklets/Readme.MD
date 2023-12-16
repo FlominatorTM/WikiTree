@@ -68,6 +68,10 @@ generates formatted source citations from gravesearch online at Volksbund Kriegs
 
 opens WieWasWie formater when being on a WieWasWie detail page (e.g. https://www.wiewaswie.nl/nl/detail/29373347 )
 
+### [WikidataTemplate.js](WikidataTemplate.js)
+
+creates Wikidata template from a Wikipedia page (e.g. `{{wikidata|Q215572|de}}` from https://de.wikipedia.org/wiki/Felix_Nussbaum)
+
 ### [zeitpunktNRW.js](zeitpunktNRW.js)
 
 generates formatted source citations from North-Rhine Westphalian newspaper pages (e.g. https://zeitpunkt.nrw/ulbms/periodical/zoom/17651643 )
