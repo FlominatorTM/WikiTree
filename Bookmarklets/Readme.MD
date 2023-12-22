@@ -159,3 +159,7 @@ opens a new German Wikipedia tab by using the text selected in the current tab
 ### [WikiTreeCountDescendants.js](WikiTreeCountDescendants.js)
 
 displays the number of descendants (per generation and in total) when being on "Descendant List" like https://www.wikitree.com/genealogy/Molesworth-Descendants-131
+
+### [WikiTreeSearch.js](WikiTreeSearch.js)
+
+select a person's name on any website and search WikiTree for that name
