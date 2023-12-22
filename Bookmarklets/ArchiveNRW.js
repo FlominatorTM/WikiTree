@@ -33,4 +33,5 @@ var citation =
   window.location +
   " Bild #]";
 
-alert(citation);
+prompt("", citation);
+void 0;

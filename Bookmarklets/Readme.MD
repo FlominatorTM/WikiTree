@@ -60,6 +60,10 @@ generates formatted source citations from the Bundesarchiv's Memorial Book, Vict
 
 generates formatted source citations from books at Porta fontium (e.g. from https://www.portafontium.eu/iipimage/30073845/pistov-standesamt-03_0050-o )
 
+### [RepertoriumAcademicum.js](RepertoriumAcademicum.js)
+
+generates formatted source citations from Repertorium Academicum Germanicum (e.g. from https://resource.database.rag-online.org/ngUK0P779Us50jqsoU9j0Sgj )
+
 ### [Riksarkivet.js](Riksarkivet.js)
 
 generates formatted source citations from Swedish Riksarkivet (e.g. https://sok.riksarkivet.se/bildvisning/C0013667_00133 )
