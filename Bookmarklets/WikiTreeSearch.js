@@ -1,6 +1,5 @@
-/* searches for a selected name in WikiTree by splitting it at the last blank */
 javascript: var selectedText = window.getSelection() + "";
-
+/* searches for a selected name in WikiTree by splitting it at the last blank */
 document.write(
   '<form action="https://www.wikitree.com//wiki/Special:SearchPerson" method="POST" id="theForm">'
 );
