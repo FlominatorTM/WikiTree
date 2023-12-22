@@ -52,6 +52,10 @@ generates formatted source citations from church book duplicates at Landesarchiv
 
 generates formatted source citations from church books at Matricula (e.g. from https://data.matricula-online.eu/de/deutschland/paderborn/DE_EBAP_10114/KB001-01-T/?pg=139 )
 
+### [MemorialBook.js](MemorialBook.js)
+
+generates formatted source citations from the Bundesarchiv's Memorial Book, Victims of the Persecution of Jews under the National Socialist Tyranny in Germany 1933 - 1945, e.g. https://www.bundesarchiv.de/gedenkbuch/en970740 (will use the English URL automatically, even if called from a German one)
+
 ### [PortaFontium.js](PortaFontium.js)
 
 generates formatted source citations from books at Porta fontium (e.g. from https://www.portafontium.eu/iipimage/30073845/pistov-standesamt-03_0050-o )
