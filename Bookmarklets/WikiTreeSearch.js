@@ -1,23 +1,36 @@
 javascript: var selectedText = window.getSelection() + "";
 /* searches for a selected name in WikiTree by splitting it at the last blank */
-document.write(
-  '<form action="https://www.wikitree.com//wiki/Special:SearchPerson" method="POST" id="theForm">'
-);
-document.write('<input type="text" name="wpFirst" id="wpFirst" size="35" ">');
-document.write('<input type="text" name="wpLast" id ="wpLast" size="35">');
-document.write(
-  '<input class="button white" type="submit" name="wpSearch" id="wpSearch" value="Search">'
-);
-document.write("</form>");
 
+if (selectedText == "") {
+  selectedText = prompt("please enter search text");
+  if (selectedText == null || selectedText == "") {
+    throw new Error("empty search string");
+  }
+}
 var selectedParts = selectedText.split(" ");
 var lastSelectedWord = selectedParts[selectedParts.length - 1];
-
+var firstName = "";
 if (selectedParts.length > 1) {
-  document.getElementById("wpFirst").value = selectedText.replace(
-    " " + lastSelectedWord,
-    ""
-  );
+  firstName = selectedText.replace(" " + lastSelectedWord, "");
 }
-document.getElementById("wpLast").value = lastSelectedWord;
-document.getElementById("wpSearch").click();
+
+win = window.open();
+win.document.write(
+  '<form action="https://www.wikitree.com//wiki/Special:SearchPerson" method="POST" id="theForm">'
+);
+win.document.write(
+  '<input type="text" name="wpFirst" id="wpFirst" size="35" value="' +
+    firstName +
+    '">'
+);
+win.document.write(
+  '<input type="text" name="wpLast" id="wpLast" size="35" value="' +
+    lastSelectedWord +
+    '">'
+);
+win.document.write(
+  '<input class="button white" type="submit" name="wpSearch" id="wpSearch" value="Search">'
+);
+win.document.write("</form>");
+win.document.getElementById("wpLast").value = lastSelectedWord;
+win.document.getElementById("wpSearch").click();
