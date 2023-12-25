@@ -44,7 +44,7 @@ var citation =
   dateEnglish +
   page +
   " ([" +
-  window.location +
+  encodeURI(window.location) +
   " Deutsches Zeitungsportal via " +
   library +
   "]" +
