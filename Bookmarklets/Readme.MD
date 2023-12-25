@@ -88,6 +88,12 @@ creates Wikidata template from a Wikipedia page (e.g. `{{wikidata|Q215572|de}}` 
 
 generates formatted source citations from North-Rhine Westphalian newspaper pages (e.g. https://zeitpunkt.nrw/ulbms/periodical/zoom/17651643 )
 
+### [Zeitungsportal.js] (Zeitungsportal.js)
+
+generates formatted source citations from Deutsches Zeitungsportal (e.g. https://www.deutsche-digitale-bibliothek.de/newspaper/item/AF6BUPU7QQZSTJBUQQGTZSUNQYXT2GEX )
+
+might require manual research of the proper newspaper name, if there are multiple listed
+
 ## Creating categories
 
 ### [CopyAndRenameCategory.js](CopyAndRenameCategory.js)
