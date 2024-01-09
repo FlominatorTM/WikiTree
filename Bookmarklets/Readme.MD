@@ -142,6 +142,12 @@ makes all links to wiki pages (e.g. in a contributions list) point directly to "
 
 marks all links containing counties in East Prussia that do not completely belong to present-day Poland as italic and adds small caps, in case they are shared with Poland.
 
+### [FamilySearchAddSource.js](FamilySearchAddSource.js)
+
+hacky reply to [G2G question about adding any WikiTree profile URL as source to FamilySearch](https://www.wikitree.com/g2g/1684829/question-re-familysearch-match-tool)
+
+usage: visit [page](https://apps.wikitree.com/apps/york1423/fs-match/), trigger bookmarklet and fill in WikiTree URL, name and FamilySearch IDs
+
 ### [GermanyLocationCleanup.js](GermanyLocationCleanup.js)
 
 trying to convert FamilySearch suggested location places to something more in line with [Space:Germany_Project_Location_Field_Guidelines](https://www.wikitree.com/wiki/Space:Germany_Project_Location_Field_Guidelines)
