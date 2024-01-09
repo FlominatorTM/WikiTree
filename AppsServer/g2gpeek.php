@@ -23,6 +23,13 @@ $indexEndUserName = strpos($page, "</", $indexStartUserName); //spelling of </a>
 $lengthUserName = $indexEndUserName - $indexStartUserName;
 $user = substr($page, $indexStartUserName, $lengthUserName);
 
+$removedUserToken = "anonymous";
+$indexAnonymous = strpos($page, $removedUserToken, $indexAfterText);
+if ($indexAnonymous > 0 && $indexAnonymous < $indexStartUserName) {
+    $user = "[deactivated user]";
+    $indexStartUserName = $indexAnonymous;
+}
+
 $lengthBetween = $indexStartUserName - $indexAfterText;
 $between = substr($page, $indexAfterText, $lengthBetween);
 $what = "Answer";
