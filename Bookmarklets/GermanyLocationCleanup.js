@@ -85,7 +85,7 @@ function removeCrap(date, place) {
     }
 
     if (placeBetter.indexOf("West Virginia") > -1) {
-      if (year < 1863 && placeBetter.indexOf("West Virginia") > -1) {
+      if (year < 1863) {
         placeBetter = placeBetter.replace("West Virginia", "Virginia");
       } else if (year == 1863) {
         alert("West Virginia only exists since 20 June 1863");
