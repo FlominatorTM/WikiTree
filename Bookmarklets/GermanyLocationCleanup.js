@@ -36,10 +36,13 @@ function removeCrap(date, place) {
     .replace("Oberamt ", "")
     .replace("Vereinigte Staaten", "United States")
     .replace("USA", "United States")
+    .replace("WV", "West Virginia")
     .replace("Ungarn", "Magyarország");
 
+  /* general replacements with comma, no clue why anymore */
   placeBetter = placeBetter.replace(", Germany", ", Deutschland");
   placeBetter = placeBetter.replace(", German Empire", ", Deutsches Reich");
+
   year_str = date.substr(date.length - 4);
   if (year_str != null && year_str.length == 4) {
     year = parseInt(year_str);

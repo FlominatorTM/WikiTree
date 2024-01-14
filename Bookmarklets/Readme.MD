@@ -88,7 +88,7 @@ creates Wikidata template from a Wikipedia page (e.g. `{{wikidata|Q215572|de}}` 
 
 generates formatted source citations from North-Rhine Westphalian newspaper pages (e.g. https://zeitpunkt.nrw/ulbms/periodical/zoom/17651643 )
 
-### [Zeitungsportal.js] (Zeitungsportal.js)
+### [Zeitungsportal.js](Zeitungsportal.js)
 
 generates formatted source citations from Deutsches Zeitungsportal (e.g. https://www.deutsche-digitale-bibliothek.de/newspaper/item/AF6BUPU7QQZSTJBUQQGTZSUNQYXT2GEX )
 
@@ -150,7 +150,7 @@ usage: visit [page](https://apps.wikitree.com/apps/york1423/fs-match/), trigger 
 
 ### [GermanyLocationCleanup.js](GermanyLocationCleanup.js)
 
-trying to convert FamilySearch suggested location places to something more in line with [Space:Germany_Project_Location_Field_Guidelines](https://www.wikitree.com/wiki/Space:Germany_Project_Location_Field_Guidelines)
+trying to convert FamilySearch suggested location places to something more in line with [Space:Germany_Project_Location_Field_Guidelines](https://www.wikitree.com/wiki/Space:Germany_Project_Location_Field_Guidelines), meanwhile also supporting a few other places like Nassau and West Virginia.
 
 ### [Profile2G2G.js](Profile2G2G.js)
 
