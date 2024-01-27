@@ -5,22 +5,22 @@ import argparse
 from datetime import datetime 
 from dateutil.relativedelta import relativedelta 
 
-badge = "germany"
 words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0'}
 months_any = 6
     
 def get_args():
     parser = argparse.ArgumentParser(description='Creates a report of one project')
-    parser.add_argument('--contribs', action='store_true', help='Checks edited profiles for project related keywords')
-    parser.add_argument('--last', action='store_true', help='Gets last edit')
-    parser.add_argument('--any', action='store_true', help='Checks for edits in last ' + str(months_any) + ' months')
-    parser.add_argument('--checkin', action='store_true', help='Checks is user received check-in message')
-    parser.add_argument('--reply', action='store_true', help='Checks is user replied to check-in message')
-    parser.add_argument('--unbadge', action='store_true', help='Adds link to remove badge')
-    parser.add_argument('--join', action='store_true', help='Adds join date')
-    parser.add_argument('--otherbadges', help='Checks if user also has these badges (pipe-eparated list)')
-    parser.add_argument('--users', help='link to text file with user names')
+    parser.add_argument('--badge', help='Badge name to be checked for', default="germany")
+    parser.add_argument('--contribs', action='store_true', help='Check edited profiles for project related keywords')
+    parser.add_argument('--last', action='store_true', help='Get last edit')
+    parser.add_argument('--any', action='store_true', help='Check for edits in last ' + str(months_any) + ' months')
+    parser.add_argument('--checkin', action='store_true', help='Check is user received check-in message')
+    parser.add_argument('--reply', action='store_true', help='Check is user replied to check-in message')
+    parser.add_argument('--unbadge', action='store_true', help='Add link to remove badge')
+    parser.add_argument('--join', action='store_true', help='Add join date')
+    parser.add_argument('--otherbadges', help='Check if user also has these badges (pipe-eparated list)')
+    parser.add_argument('--users', help='text file with user names')
     
     return parser.parse_args()
 
@@ -196,7 +196,7 @@ def get_checkin_requested(theUser, checkInToken):
     mId = userPage[indexMidStart:indexMidEnd]
 
     if args.join:
-        get_date_joined(theUser,  mId)
+        get_date_joined(theUser,  mId, args.badge)
     
     if args.otherbadges is not None:
         badgePage = get_badge_page(mId)
@@ -247,8 +247,7 @@ def get_badge_page(mId):
     return f.text[indexStartBadges:]
 
 
-def get_date_joined(theUser, mId):
-    global badge
+def get_date_joined(theUser, mId, badge):
     badgePage = get_badge_page(mId)
     
     # <li id="list_item_180">
@@ -389,7 +388,7 @@ profiles_global = {}
 members = []
 
 if not args.users:
-    members = get_member_users_project(badge)    
+    members = get_member_users_project(args.badge)    
 else:
     members= get_members_file(args.users)
 
