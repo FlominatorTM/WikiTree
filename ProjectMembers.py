@@ -17,13 +17,13 @@ def get_args():
     parser.add_argument('--unbadge', action='store_true', help='show link to remove badge')
     parser.add_argument('--contribs', action='store_true', help='check edited profiles for Germany Project related keywords')
     parser.add_argument('--anysince', type=int, help='check for any edits since this number of months ago')
-    parser.add_argument('--checkin', action='store_true', help='check if user received check-in message')
+    parser.add_argument('--checkin', help='part of the checkin-in message to check if user received it')
     parser.add_argument('--reply', action='store_true', help='check if user replied to check-in message')
     parser.add_argument('--otherbadges', help='check if user also has these badges (pipe-separated list)')
 
     args = parser.parse_args()
-    if args.badge and args.users:
-        parser.error("either use --badge to specify a badge OR --users to specify a text file with user names")
+    #if args.badge != None and args.users is not None:
+    #    parser.error("either use --badge to specify a badge OR --users to specify a text file with user names")
     return args
 
 def get_members_file(filename):
@@ -175,8 +175,10 @@ def does_profile_contain(link, words):
         return False
         
 
-def get_checkin_requested(theUser, checkInToken):
+def get_checkin_requested(theUser):
     global headers
+    global args
+    
     link = 'https://www.wikitree.com/wiki/' + theUser["id"]
     f = requests.get(link, headers=headers)
     userPage = f.text
@@ -192,8 +194,6 @@ def get_checkin_requested(theUser, checkInToken):
 
         return
 
-    indexCheckInToken = userPage.find(checkInToken)
-    
     midToken = 'data-mid="'
     indexMidStart = userPage.index(midToken) + len(midToken)
     indexMidEnd = userPage.index('"', indexMidStart)
@@ -207,9 +207,10 @@ def get_checkin_requested(theUser, checkInToken):
         for other_badge in args.otherbadges.split('|'):
             theUser["other-badge-" + other_badge] = other_badge.strip() in badgePage;
 
-    if args.checkin is False and args.reply is False:
+    if args.checkin is None and args.reply is False:
         return
-    
+
+    indexCheckInToken = userPage.find(args.checkin)    
     # print(str(indexCheckInToken))
     theUser["check-in-requested"] = indexCheckInToken > -1
     theUser["check-in-replied"] = False
@@ -287,7 +288,7 @@ def write_report(members):
     if args.last:
         f.write("<th>Last edit</th>")
         
-    if args.checkin:
+    if args.checkin is not None:
         f.write("<th>Check in?</th>")
     
     if args.reply:
@@ -331,7 +332,7 @@ def write_report(members):
             f.write( member["lastEditFormatted"])
             f.write("</td>")
             
-        if args.checkin:
+        if args.checkin is not None:
             f.write("<td>")
             if member["check-in-requested"]:
                 f.write("yes")
@@ -403,7 +404,7 @@ numMembers = str(len(members))
 done = 0
 for member in members:
     check_edit_history(member)
-    get_checkin_requested(member, "annual check-in time 2023. If you still ")
+    get_checkin_requested(member)
     done +=1
     print(str(done) +  "/" + numMembers + " " + str(member) + "\n", flush=True)
     
