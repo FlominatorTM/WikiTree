@@ -7,22 +7,24 @@ from dateutil.relativedelta import relativedelta
 
 words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0'}
-months_any = 6
     
 def get_args():
-    parser = argparse.ArgumentParser(description='Creates a report of one project')
+    parser = argparse.ArgumentParser(description='Creates a report about all users, who have a particular badge or who are in a list of user names')
     parser.add_argument('--badge', help='badge name to be checked for (default: germany)', default="germany")
-    parser.add_argument('--contribs', action='store_true', help='check edited profiles for project related keywords')
-    parser.add_argument('--last', action='store_true', help='get last edit')
-    parser.add_argument('--any', action='store_true', help='check for edits in last ' + str(months_any) + ' months')
-    parser.add_argument('--checkin', action='store_true', help='check is user received check-in message')
-    parser.add_argument('--reply', action='store_true', help='check is user replied to check-in message')
-    parser.add_argument('--unbadge', action='store_true', help='add link to remove badge')
-    parser.add_argument('--join', action='store_true', help='add join date')
-    parser.add_argument('--otherbadges', help='check if user also has these badges (pipe-eparated list)')
-    parser.add_argument('--users', help='text file with user names')
-    
-    return parser.parse_args()
+    parser.add_argument('--users', help='text file with user IDs (e.g. Straub-620) as alternative to --badge')
+    parser.add_argument('--join', action='store_true', help='show join date')
+    parser.add_argument('--last', action='store_true', help='show last edit')
+    parser.add_argument('--unbadge', action='store_true', help='show link to remove badge')
+    parser.add_argument('--contribs', action='store_true', help='check edited profiles for Germany Project related keywords')
+    parser.add_argument('--anysince', type=int, help='check for any edits since this number of months ago')
+    parser.add_argument('--checkin', action='store_true', help='check if user received check-in message')
+    parser.add_argument('--reply', action='store_true', help='check if user replied to check-in message')
+    parser.add_argument('--otherbadges', help='check if user also has these badges (pipe-separated list)')
+
+    args = parser.parse_args()
+    if args.badge and args.users:
+        parser.error("either use --badge to specify a badge OR --users to specify a text file with user names")
+    return args
 
 def get_members_file(filename):
     members = []
@@ -78,7 +80,6 @@ def get_member_users_project(project):
 def check_edit_history(theUser):
     global args
     global headers
-    global months_any
     link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=500&who=" + theUser["id"];
     f = requests.get(link, headers=headers)
     contribPage = f.text
@@ -95,6 +96,9 @@ def check_edit_history(theUser):
     contribPageParts = contribPage.split(beginnOfHistory)
     
     now = datetime.now()
+    months_any = 6;
+    if args.anysince is not None:
+        months_any = args.anysince
     six_months_ago = now + relativedelta(months=- months_any)
     
     dayNum = 0
@@ -114,11 +118,11 @@ def check_edit_history(theUser):
             theUser["lastEdit"] = editDate
             theUser["editedProject"] = False
             theUser["anyEdit"] = False
-            if args.last is False and args.contribs is False:
+            if args.last is False and args.contribs is False and args.anysince is None:
                 break
         
         #print (editDateFormatted)
-        if editDate > six_months_ago:
+        if args.anysince is not None and editDate > six_months_ago:
             theUser["anyEdit"] = True
             if args.contribs:
                 relevant_edit = did_user_perform_relevant_edit(oneDay)
@@ -271,7 +275,6 @@ def is_reply_negative(reply):
 
 def write_report(members):
     global args
-    global months_any
     f = open("members.htm", "w")
     f.write('<html><head></head><body><table border="1">')
     f.write("<tr>")
@@ -290,8 +293,8 @@ def write_report(members):
     if args.reply:
         f.write("<th>Reply check-in</th>")
     
-    if args.any:
-        f.write("<th>any in last " + str(months_any) + " months?</th>")
+    if args.anysince != None:
+        f.write("<th>any in last " + str(args.anysince) + " months?</th>")
     
     if args.contribs:
         f.write("<th>Project edit?</th>")
@@ -349,7 +352,7 @@ def write_report(members):
             f.write("</td>")
 
 
-        if args.any:
+        if args.anysince != None:
             f.write("<td>")
             if member["anyEdit"]:
                 f.write("yes")
@@ -384,6 +387,8 @@ def write_report(members):
         
 
 args = get_args()
+
+
 profiles_global = {}
 members = []
 
