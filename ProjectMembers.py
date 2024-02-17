@@ -431,7 +431,7 @@ try:
 except Exception as e:
     print("something very bad happened")    
     print(e)
+    for i in range(done, len(members)):
+        members.pop(done)
 
-for i in range(done, len(members)):
-    members.pop(done)
 write_report(members)
