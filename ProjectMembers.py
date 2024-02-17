@@ -317,6 +317,8 @@ def write_report(members):
         for member in members:
             if sortkey not in member:
                 member[sortkey] = datetime.now()
+            if "lastEditFormatted" not in member:
+                member["lastEditFormatted"] = ""
 
         for member in sorted(members, key=lambda d: d[sortkey]):
             f.write("<tr>")
@@ -417,8 +419,9 @@ if args.skip:
 numMembers = str(len(members))
 
 
+done = 0
+
 try:
-    done = 0
     for member in members:
         check_edit_history(member)
         get_checkin_requested(member)
@@ -428,5 +431,7 @@ try:
 except Exception as e:
     print("something very bad happened")    
     print(e)
-    
+
+for i in range(done, len(members)):
+    members.pop(done)
 write_report(members)
