@@ -17,6 +17,7 @@ def get_args():
     parser.add_argument('--unbadge', action='store_true', help='show link to remove badge')
     parser.add_argument('--contribs', action='store_true', help='check edited profiles for Germany Project related keywords')
     parser.add_argument('--anysince', type=int, help='check for any edits since this number of months ago')
+    parser.add_argument('--skip', type=int, help='skips the given number of initial users (to resume after previous crash)')
     parser.add_argument('--checkin', help='part of the checkin-in message to check if user received it')
     parser.add_argument('--reply', action='store_true', help='check if user replied to check-in message')
     parser.add_argument('--otherbadges', help='check if user also has these badges (pipe-separated list)')
@@ -276,115 +277,123 @@ def is_reply_negative(reply):
 
 def write_report(members):
     global args
-    f = open("members.htm", "w")
-    f.write('<html><head></head><body><table border="1">')
-    f.write("<tr>")
-    f.write("<th>ID</th>")
-    f.write("<th>Name</th>")
-    
-    if args.join:
-        f.write("<th>Date joined</th>")
-     
-    if args.last:
-        f.write("<th>Last edit</th>")
-        
-    if args.checkin is not None:
-        f.write("<th>Check in?</th>")
-    
-    if args.reply:
-        f.write("<th>Reply check-in</th>")
-    
-    if args.anysince != None:
-        f.write("<th>any in last " + str(args.anysince) + " months?</th>")
-    
-    if args.contribs:
-        f.write("<th>Project edit?</th>")
-
-    if args.otherbadges is not None:
-        for other_badge in args.otherbadges.split('|'):
-            f.write("<th>Badge " + other_badge + "</th>")
-
-    if args.unbadge:
-        f.write("<th>Badge</th>")
-    f.write("</tr>")
-    
-    if args.reply:
-        sortkey='check-in-reply-date'
-    else:
-        sortkey='lastEdit'
-    
-    for member in sorted(members, key=lambda d: d[sortkey]):
+    with open("members.htm", "w") as f:
+        f.write('<html><head></head><body><table border="1">')
         f.write("<tr>")
-        f.write("<td>")
-        f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
-        f.write("</td>")
-        f.write("<td>")
-        f.write(member["name"])
-        f.write("</td>")
-
+        f.write("<th>ID</th>")
+        f.write("<th>Name</th>")
+        
         if args.join:
-            f.write("<td>")
-            f.write( member["date-joined-formatted"])
-            f.write("</td>")
-
+            f.write("<th>Date joined</th>")
+        
         if args.last:
-            f.write("<td>")
-            f.write( member["lastEditFormatted"])
-            f.write("</td>")
+            f.write("<th>Last edit</th>")
             
         if args.checkin is not None:
-            f.write("<td>")
-            if member["check-in-requested"]:
-                f.write("yes")
-            else:
-                f.write("no")
-            f.write("</td>")
-
+            f.write("<th>Check in?</th>")
+        
         if args.reply:
-            f.write("<td>")
-            if member["check-in-replied"]:
-                if member["check-in-negative"]:
-                    f.write("<b>")
-                f.write(member["check-in-reply"])
-                if member["check-in-negative"]:
-                    f.write("</b>")            
-            else:
-                f.write("&nbsp");
-            f.write("</td>")
-
-
+            f.write("<th>Reply check-in</th>")
+        
         if args.anysince != None:
-            f.write("<td>")
-            if member["anyEdit"]:
-                f.write("yes")
-            else:
-                f.write("no")
-            f.write("</td>")    
+            f.write("<th>any in last " + str(args.anysince) + " months?</th>")
         
         if args.contribs:
-            f.write("<td>")
-            if member["editedProject"]:
-                f.write("yes")
-            else:
-                f.write("no")
-            f.write("</td>")
-            
+            f.write("<th>Project edit?</th>")
+
         if args.otherbadges is not None:
             for other_badge in args.otherbadges.split('|'):
-                f.write("<td>")
-                if member["other-badge-" + other_badge]:
-                    f.write("yes")
-                else:
-                    f.write("no")
-                f.write("</td>")
+                f.write("<th>Badge " + other_badge + "</th>")
 
         if args.unbadge:
-            f.write("<td>")
-            f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
-            f.write("</td>")
+            f.write("<th>Badge</th>")
         f.write("</tr>")
-    f.write("</table></body>")
-    f.close()
+        
+        if args.reply:
+            sortkey='check-in-reply-date'
+        else:
+            sortkey='lastEdit'
+
+        for member in members:
+            if sortkey not in member:
+                member[sortkey] = datetime.now()
+
+        for member in sorted(members, key=lambda d: d[sortkey]):
+            f.write("<tr>")
+            f.write("<td>")
+            try:
+                f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
+                f.write("</td>")
+                f.write("<td>")
+                f.write(member["name"])
+                f.write("</td>")
+
+                if args.join:
+                    f.write("<td>")
+                    f.write( member["date-joined-formatted"])
+                    f.write("</td>")
+
+                if args.last:
+                    f.write("<td>")
+                    f.write( member["lastEditFormatted"])
+                    f.write("</td>")
+                    
+                if args.checkin is not None:
+                    f.write("<td>")
+                    if member["check-in-requested"]:
+                        f.write("yes")
+                    else:
+                        f.write("no")
+                    f.write("</td>")
+
+                if args.reply:
+                    f.write("<td>")
+                    if member["check-in-replied"]:
+                        if member["check-in-negative"]:
+                            f.write("<b>")
+                        f.write(member["check-in-reply"])
+                        if member["check-in-negative"]:
+                            f.write("</b>")            
+                    else:
+                        f.write("&nbsp");
+                    f.write("</td>")
+
+
+                if args.anysince != None:
+                    f.write("<td>")
+                    if member["anyEdit"]:
+                        f.write("yes")
+                    else:
+                        f.write("no")
+                    f.write("</td>")    
+                
+                if args.contribs:
+                    f.write("<td>")
+                    if member["editedProject"]:
+                        f.write("yes")
+                    else:
+                        f.write("no")
+                    f.write("</td>")
+                    
+                if args.otherbadges is not None:
+                    for other_badge in args.otherbadges.split('|'):
+                        f.write("<td>")
+                        if member["other-badge-" + other_badge]:
+                            f.write("yes")
+                        else:
+                            f.write("no")
+                        f.write("</td>")
+
+                if args.unbadge:
+                    f.write("<td>")
+                    f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
+                    f.write("</td>")
+            except Exception as e:
+                print("another drama: ")
+                print(e)
+            f.write("</tr>")
+        f.write("</table></body>")
+        f.close()
         
 
 args = get_args()
@@ -400,12 +409,24 @@ else:
 
 #pgm
 
+
+if args.skip:
+    print("skipping first " + str(args.skip))
+    for i in range(args.skip):
+        members.pop(0)
 numMembers = str(len(members))
-done = 0
-for member in members:
-    check_edit_history(member)
-    get_checkin_requested(member)
-    done +=1
-    print(str(done) +  "/" + numMembers + " " + str(member) + "\n", flush=True)
+
+
+try:
+    done = 0
+    for member in members:
+        check_edit_history(member)
+        get_checkin_requested(member)
+        done +=1
+        print(str(done) +  "/" + numMembers + " " + str(member) + "\n", flush=True)
+
+except Exception as e:
+    print("something very bad happened")    
+    print(e)
     
 write_report(members)
