@@ -1,7 +1,7 @@
 import requests
 import dateutil.parser
 import argparse
-
+import re
 from datetime import datetime 
 from dateutil.relativedelta import relativedelta 
 
@@ -15,6 +15,7 @@ def get_args():
     parser.add_argument('--join', action='store_true', help='show join date')
     parser.add_argument('--last', action='store_true', help='show last edit')
     parser.add_argument('--unbadge', action='store_true', help='show link to remove badge')
+    parser.add_argument('--bid', type=int, help='ID of the badge (only needed with --users and --unbadge)')
     parser.add_argument('--contribs', action='store_true', help='check edited profiles for Germany Project related keywords')
     parser.add_argument('--anysince', type=int, help='check for any edits since this number of months ago')
     parser.add_argument('--skip', type=int, help='skips the given number of initial users (to resume after previous crash)')
@@ -23,6 +24,8 @@ def get_args():
     parser.add_argument('--otherbadges', help='check if user also has these badges (pipe-separated list)')
 
     args = parser.parse_args()
+    if args.users and args.unbadge and args.bid == None:
+        parser.error("usage of --users and --unbadge requires --bid")
     #if args.badge != None and args.users is not None:
     #    parser.error("either use --badge to specify a badge OR --users to specify a text file with user names")
     return args
@@ -40,6 +43,13 @@ def get_members_file(filename):
             members.append(theUser)
     return members
 
+def set_badge_id(page_content):
+    global args
+    #who wrote: <div style="display:inline;" id="commentWrapper_13256075_180"><span class="commentText"> 
+    comments = re.search('commentWrapper_(\d+)_(\d+)', page_content, re.IGNORECASE)
+    if comments:
+        args.bid = comments.group(2)
+
 def get_member_users_project(project):
 
     global headers;
@@ -47,6 +57,8 @@ def get_member_users_project(project):
     f = requests.get(link, headers=headers)
     memberPageContent = f.text
 
+    set_badge_id(f.text)
+    
     members = []
 
     # <span class="large"><a href="/wiki/Straub-620" target="_blank" title="">Florian Straub</a></span>
@@ -323,76 +335,74 @@ def write_report(members):
         for member in sorted(members, key=lambda d: d[sortkey]):
             f.write("<tr>")
             f.write("<td>")
-            try:
-                f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
-                f.write("</td>")
+
+            f.write('<a href="https://www.wikitree.com/wiki/' + member["id"] + '">' + member["id"] + '</a>')
+            f.write("</td>")
+            f.write("<td>")
+            f.write(member["name"])
+            f.write("</td>")
+
+            if args.join:
                 f.write("<td>")
-                f.write(member["name"])
+                f.write( member["date-joined-formatted"])
                 f.write("</td>")
 
-                if args.join:
-                    f.write("<td>")
-                    f.write( member["date-joined-formatted"])
-                    f.write("</td>")
-
-                if args.last:
-                    f.write("<td>")
-                    f.write( member["lastEditFormatted"])
-                    f.write("</td>")
-                    
-                if args.checkin is not None:
-                    f.write("<td>")
-                    if member["check-in-requested"]:
-                        f.write("yes")
-                    else:
-                        f.write("no")
-                    f.write("</td>")
-
-                if args.reply:
-                    f.write("<td>")
-                    if member["check-in-replied"]:
-                        if member["check-in-negative"]:
-                            f.write("<b>")
-                        f.write(member["check-in-reply"])
-                        if member["check-in-negative"]:
-                            f.write("</b>")            
-                    else:
-                        f.write("&nbsp");
-                    f.write("</td>")
-
-
-                if args.anysince != None:
-                    f.write("<td>")
-                    if member["anyEdit"]:
-                        f.write("yes")
-                    else:
-                        f.write("no")
-                    f.write("</td>")    
+            if args.last:
+                f.write("<td>")
+                f.write( member["lastEditFormatted"])
+                f.write("</td>")
                 
-                if args.contribs:
+            if args.checkin is not None:
+                f.write("<td>")
+                if member["check-in-requested"]:
+                    f.write("yes")
+                else:
+                    f.write("no")
+                f.write("</td>")
+
+            if args.reply:
+                f.write("<td>")
+                if member["check-in-replied"]:
+                    if member["check-in-negative"]:
+                        f.write("<b>")
+                    f.write(member["check-in-reply"])
+                    if member["check-in-negative"]:
+                        f.write("</b>")            
+                else:
+                    f.write("&nbsp");
+                f.write("</td>")
+
+
+            if args.anysince != None:
+                f.write("<td>")
+                if member["anyEdit"]:
+                    f.write("yes")
+                else:
+                    f.write("no")
+                f.write("</td>")    
+            
+            if args.contribs:
+                f.write("<td>")
+                if member["editedProject"]:
+                    f.write("yes")
+                else:
+                    f.write("no")
+                f.write("</td>")
+                
+            if args.otherbadges is not None:
+                for other_badge in args.otherbadges.split('|'):
                     f.write("<td>")
-                    if member["editedProject"]:
+                    if member["other-badge-" + other_badge]:
                         f.write("yes")
                     else:
                         f.write("no")
                     f.write("</td>")
-                    
-                if args.otherbadges is not None:
-                    for other_badge in args.otherbadges.split('|'):
-                        f.write("<td>")
-                        if member["other-badge-" + other_badge]:
-                            f.write("yes")
-                        else:
-                            f.write("no")
-                        f.write("</td>")
 
-                if args.unbadge:
-                    f.write("<td>")
-                    f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=180&users='+ member["id"]+'&action=remove">remove now</a>')
-                    f.write("</td>")
-            except Exception as e:
-                print("another drama: ")
-                print(e)
+            if args.unbadge:
+                f.write("<td>")
+                f.write('<a href="https://www.wikitree.com/index.php?title=Special:AwardBadge&badge_id=' + str(args.bid) + '&users='+ member["id"]+'&action=remove">remove now</a>')
+                f.write("</td>")
+
             f.write("</tr>")
         f.write("</table></body>")
         f.close()
@@ -418,9 +428,7 @@ if args.skip:
         members.pop(0)
 numMembers = str(len(members))
 
-
 done = 0
-
 try:
     for member in members:
         check_edit_history(member)
