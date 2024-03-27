@@ -21,6 +21,16 @@ if (substr($post_url, 0, 24) != "https://www.wikitree.com") {
 if (!isset($_REQUEST['debug'])) {
 	header("Content-Type: application/rss+xml");
 	echo ('<?xml version="1.0" encoding="UTF-8"?>');
+} else {
+	// Emulate the header BigPipe sends so we can test through Varnish.
+	header('Surrogate-Control: BigPipe/1.0');
+
+	// Explicitly disable caching so Varnish and other upstreams won't cache.
+	header("Cache-Control: no-cache, must-revalidate");
+
+	// Setting this header instructs Nginx to disable fastcgi_buffering and disable
+	// gzip for this request.
+	header('X-Accel-Buffering: no');
 }
 
 $needles = [];
@@ -68,8 +78,9 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 				$replies = explode($reply_separator, $replies_page);
 				$num_in_array = count($replies);
-				print_debug("num_in_array_" + $num_in_array);
+				//print_debug("num_in_array_" . $num_in_array);
 				for ($i = $num_in_array - 1; $i > 0; $i--) {
+					//print_debug("in for");
 					if (process_reply($replies, $i, $needles, $do_comments, $items)) {
 						$posted++;
 					}
@@ -120,6 +131,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				$until = 1;
 			}
 			for ($c = 0; $c < $until; $c++) {
+				//print_debug("in other for " . $c);
 				$is_comment = $c > 0;
 
 				if (stristr($answer_and_comments[$c], "previous comments")) {
@@ -197,7 +209,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		{
 			global $is_debug;
 			if ($is_debug) {
-				echo $line . "<br>";
+				echo $line . "<br>\n";
 			}
 		}
 		?>
