@@ -12,7 +12,7 @@ if (!isset($max) || $max == 0) {
 $post_url = $_REQUEST['post'];
 
 if (!isset($post_url)) {
-	die('usage ?post=[url to g2g post]&max=[num of posts to watch, default=10]&needles[string that are mandatory for entry to show up, separated by | character]');
+	die('usage ?post=[url to g2g post]&max=[num of posts to watch, default=10]&needles[string that are mandatory for entry to show up, separated by | character]&filters[string that will cause posts to be skipped, separated by | character]');
 }
 if (substr($post_url, 0, 24) != "https://www.wikitree.com") {
 	die("only g2g posts allowed");
@@ -36,6 +36,11 @@ if (!isset($_REQUEST['debug'])) {
 $needles = [];
 if (isset($_REQUEST['needles'])) {
 	$needles = explode('|', $_REQUEST['needles']);
+}
+
+$filters = [];
+if (isset($_REQUEST['filters'])) {
+	$filters = explode('|', $_REQUEST['filters']);
 }
 
 $extract_link = isset($_REQUEST['extract_link']);
@@ -81,7 +86,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				//print_debug("num_in_array_" . $num_in_array);
 				for ($i = $num_in_array - 1; $i > 0; $i--) {
 					//print_debug("in for");
-					if (process_reply($replies, $i, $needles, $do_comments, $items)) {
+					if (process_reply($replies, $i, $needles, $filters, $do_comments, $items)) {
 						$posted++;
 					}
 				}
@@ -96,7 +101,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 			for ($i = $num_in_array - 1; $i > 0; $i--) {
 				if (stristr($replies[$i], '<a name="' . $answer)) {
-					process_reply($replies, $i, array(), true, $items);
+					process_reply($replies, $i, array(), $filters, true, $items);
 				}
 			}
 		}
@@ -105,24 +110,29 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			echo $item;
 		}
 
-		function process_reply($replies, $i, $needles, $do_comments, &$items)
+		function needle_in_reply($needles, $reply)
+		{
+			foreach ($needles as $needle) {
+				print_debug("needle: $needle<br>");
+				if (stristr($reply, $needle)) {
+					print_debug("needle in reply<br>");
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function process_reply($replies, $i, $needles, $filters, $do_comments, &$items)
 		{
 			global $extract_link, $post_url, $preview_redir;
 
 			print_debug("process_reply(replies=" . count($replies) . ", $i)");
-			$needle_found = false;
-			foreach ($needles as $needle) {
-				print_debug("needle: $needle<br>");
-				if (stristr($replies[$i], $needle)) {
-					print_debug("needle in reply<br>");
-					$needle_found = true;
-					break;
-				}
-			}
+			$needle_found = needle_in_reply($needles, $replies[$i]);
 
 			if (count($needles) > 0 && !$needle_found) {
 				return false;
 			}
+
 
 			$answer_and_comments = explode('qa-c-list-item', $replies[$i]);
 			$answer_user = "";
@@ -137,7 +147,10 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				if (stristr($answer_and_comments[$c], "previous comments")) {
 					continue;
 				}
+				if (needle_in_reply($filters, $answer_and_comments[$c])) {
 
+					continue;
+				}
 				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</A>");
 				$title = "Answer by $user";
 				$token_behind_answer = 'qa-a-item-meta';
