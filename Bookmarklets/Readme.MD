@@ -16,6 +16,10 @@ generates formatted source citations from church books at http://archives.bas-rh
 
 generates formatted source citations for civil records like https://www.archive.nrw.de/archivsuche?link=VERZEICHUNGSEINHEIT-Vz_ebf6c396-02e3-458d-8e50-3814653d40e2
 
+### [ArolsenArchives.js](ArolsenArchives.js)
+
+generates formatted source citations for records like https://collections.arolsen-archives.org/en/search/person/6001017?s=Gottlieb%20Graze&t=1628028&p=0
+
 ### [Antenati.js](Antenati.js)
 
 calls [Antenati Citation Builder](https://apps.wikitree.com/apps/clarke11007/antenati.php) when being on a record like https://www.antenati.san.beniculturali.it/ark:/12657/an_ua267608/wEKr932
