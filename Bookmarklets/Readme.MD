@@ -158,7 +158,11 @@ trying to convert FamilySearch suggested location places to something more in li
 
 ### [Profile2G2G.js](Profile2G2G.js)
 
-copies link to the profile to clipboard having the persons name displayed, that can be pasted in G2G directly
+copies link to the profile to clipboard having the persons name displayed, that can be pasted in G2G directly (also works with any other website, not only profiles)
+
+### [ProfileCleanup.js](ProfileCleanup.js)
+
+cleans a profile (currently only puts categories on top)
 
 ### [ThonNormalized.js](ThonNormalized.js)
 
