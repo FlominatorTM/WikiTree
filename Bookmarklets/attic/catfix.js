@@ -1,4 +1,14 @@
 javascript:
+var bio = document.getElementById('wpTextbox1').value;
+document.getElementById('wpTextbox1').value = bio.replace(", Brandenburg", " (Kreis), Brandenburg");
+document.getElementById('wpSummary').value = "moving to (Kreis) ";
+saveButton = document.getElementById('wpSave');
+saveButton.disabled=false;
+saveButton.click();
+void(0);
+
+-------------------------------------------
+javascript:
 var cat = "Nitzkydorf, Rumänien";
 var catSyntax =  "[[Category:" + cat +"]]";
 var bio = document.getElementById('wpTextbox1').value;
