@@ -28,6 +28,7 @@ function removeCrap(date, place) {
   placeBetter = place
     .replace("Bezirksamt ", "")
     .replace("Kreis ", "")
+    .replace("Provinz ", "")
     .replace("Landkreis ", "")
     .replace("Amt ", "")
     .replace("Großherzogtum ", "")
@@ -106,6 +107,18 @@ function removeCrap(date, place) {
         placeBetter = placeBetter.replace("Viertäler", "Titisee");
       } else if (year == 1929) {
         alert("Viertäler became Titisee on 1 May 1929");
+      }
+    }
+
+    if (placeBetter.includes("Auschwitz")) {
+      if (placeBetter.includes("Birkenau")) {
+        if (year >= 1939 && year < 1941) {
+          placeBetter =
+            "Konzentrationslager Auschwitz-Birkenau, Bielitz, Schlesien, Preußen, Deutsches Reich ";
+        } else if (year <= 1945) {
+          placeBetter =
+            "Konzentrationslager Auschwitz-Birkenau, Bielitz, Oberschlesien, Preußen, Deutsches Reich ";
+        }
       }
     }
   }
