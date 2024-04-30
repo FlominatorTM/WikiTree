@@ -88,7 +88,11 @@ function removeCrap(date, place) {
         .replace("Deutscher Bund", "Deutschland");
     }
 
-    if (placeBetter.indexOf("West Virginia") > -1) {
+    if (
+      placeBetter.includes("West Virginia") &&
+      !placeBetter.includes("now West Virginia") &&
+      !placeBetter.includes("now: West Virginia")
+    ) {
       if (year < 1863) {
         placeBetter = placeBetter.replace("West Virginia", "Virginia");
       } else if (year == 1863) {
