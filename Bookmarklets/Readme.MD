@@ -164,6 +164,10 @@ copies link to the profile to clipboard having the persons name displayed, that 
 
 cleans a profile (currently only puts categories on top)
 
+### [RefExtract.js](RefExtract.js)
+
+Did you ever want to take an unnamed inline reference (e.g. \<ref>some very long source\</ref>), give it a name, replace the current usage by \<ref name="the name"/> and use it somewhere else, probably earlier in the profile? Just place the cursor inside the ref, click this bookmarklet and enter the name for the ref. Then you can copy it from the popup, while the original one is recuded to the tag with the name.
+
 ### [ThonNormalized.js](ThonNormalized.js)
 
 generates scores normalized points based on the official score sheet for [SourceAThon](https://wikitree.sdms.si/Challenges/SourceAThon/TeamAndUser.htm) and [ConnectAThon](https://wikitree.sdms.si/Challenges/ConnectAThon/TeamAndUser.htm)
