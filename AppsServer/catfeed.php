@@ -16,6 +16,10 @@ if (isset($_REQUEST['limit']) && $_REQUEST['limit'] != "") {
 	$limit = 0 + $_REQUEST['limit'];
 }
 
+$cats_only = false;
+if (isset($_REQUEST['cats_only']) && $_REQUEST['cats_only'] != "") {
+	$cats_only = true;
+}
 $display = "";
 if (isset($_REQUEST['display'])) {
 	$display = $_REQUEST['display'];
@@ -37,12 +41,12 @@ if ($display != "") {
 	$url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQUEST_URI'], ENT_XML1);
 
 	if (!check_has_any_data($cat, $depth)) {
-		get_current_content($cat, $depth);
+		get_current_content($cat, $depth, $cats_only);
 	} else if (has_new_data_available($cat, $depth)) {
 		// echo "new data";
 		$file_time_before = filemtime(current_file($cat, $depth));
 		$prev_filling = get_previous_content($cat, $depth);
-		get_current_content($cat, $depth);
+		get_current_content($cat, $depth, $cats_only);
 		compare_and_dump_contents($cat, $depth, $prev_filling, $file_time_before);
 	}
 ?>
@@ -169,41 +173,59 @@ if ($display != "") {
 
 	function get_summary($rows)
 	{
+		global $cats_only;
 		$summ = "";
+
 		foreach ($rows as $row) {
-			$cols = explode(';', $row);
-			$summ .= $cols[3] . " (" . $cols[1] . ") ";
+			if ($cats_only) {
+				$summ .= "Category:" . str_replace("_", " ", $row) . ", ";
+			} else {
+				$cols = explode(';', $row);
+
+				$summ .= $cols[3] . " (" . $cols[1] . ") ";
+			}
+		}
+
+		if ($cats_only) {
+			$summ = substr($summ, 0, strlen($summ) - strlen(", "));
 		}
 		return $summ;
 	}
 
 	function get_section($rows)
 	{
+		global $cats_only;
 		$wt = "https://www.wikitree.com/wiki/";
 		$html = "";
 
 		$i = 1;
 		foreach ($rows as $row) {
 			$cols = explode(';', $row);
-			$html .= '<h3>' . $i . '. <a href="' . $wt . $cols[1] . '">' . $cols[3] . "</a> (" . $cols[1] . ")\n";
-			$html .= '<a href="https://www.wikitree.com/index.php?title=Special:EditPerson&u=' . $cols[1 - 1] . '">[edit]</a> ';
-			$html .= '<a href="https://www.wikitree.com/index.php?title=Special:NetworkFeed&who=' . $cols[2 - 1] . '">[history]</a></h3>';
+			if ($cats_only) {
 
-			$categories_profile = explode('|', str_replace('"', '', $cols[19 - 1]));
-			$birth_date = $cols[5 - 1];
-			$birth_place = $cols[7 - 1];
-			$death_date = $cols[12 - 1];
-			$death_place = $cols[14 - 1];
+				$html .= '<h3>' . $i . '. <a href="' . $wt . "Category:" . $cols[0] . '">' . $cols[0] . "</a>\n";
+			} else {
 
-			$html .= "born " . $birth_date . " in " . $birth_place . "<br>";
-			$html .= "died " . $death_date . " in " . $death_place . "<br>";
-			$html .= '<ul>';
-			// $html.=$cols[18];
-			foreach ($categories_profile as $cat_profile) {
-				$html .= '<li><a href="' . $wt . 'Category:' .  $cat_profile . '">' . $cat_profile . "</a></li>\n";
+				$html .= '<h3>' . $i . '. <a href="' . $wt . $cols[1] . '">' . $cols[3] . "</a> (" . $cols[1] . ")\n";
+				$html .= '<a href="https://www.wikitree.com/index.php?title=Special:EditPerson&u=' . $cols[1 - 1] . '">[edit]</a> ';
+				$html .= '<a href="https://www.wikitree.com/index.php?title=Special:NetworkFeed&who=' . $cols[2 - 1] . '">[history]</a></h3>';
+
+				$categories_profile = explode('|', str_replace('"', '', $cols[19 - 1]));
+				$birth_date = $cols[5 - 1];
+				$birth_place = $cols[7 - 1];
+				$death_date = $cols[12 - 1];
+				$death_place = $cols[14 - 1];
+
+				$html .= "born " . $birth_date . " in " . $birth_place . "<br>";
+				$html .= "died " . $death_date . " in " . $death_place . "<br>";
+				$html .= '<ul>';
+				// $html.=$cols[18];
+				foreach ($categories_profile as $cat_profile) {
+					$html .= '<li><a href="' . $wt . 'Category:' .  $cat_profile . '">' . $cat_profile . "</a></li>\n";
+				}
+
+				$html .= '</ul>';
 			}
-
-			$html .= '</ul>';
 			$i++;
 		}
 
@@ -218,11 +240,16 @@ if ($display != "") {
 
 	function cat_dir($cat, $depth)
 	{
+		global $cats_only;
 		$dir = "/sftp/straub620/www/catdata/" . escape_cat($cat);
 
 		print_debug("depth=$depth");
 		if ($depth != 9 && $depth != "9") {
 			$dir = $dir . '_' . $depth;
+		}
+
+		if ($cats_only) {
+			$dir = $dir . '_';
 		}
 
 		if (!is_dir($dir)) {
@@ -246,13 +273,61 @@ if ($display != "") {
 		return is_file(current_file($cat, $depth));
 	}
 
-	function get_current_content($cat, $depth)
+	function get_current_content($cat, $depth, $cats_only)
 	{
 		print_debug("entering get_current_content");
+		$current_file = current_file($cat, $depth);
+
+		$lines = [];
+		if ($cats_only) {
+			$lines = get_categories_in_category($cat, $depth);
+		} else {
+			$lines = get_profiles_in_category($cat, $depth);
+		}
+
+		if (count($lines) == 0) {
+			return;
+		}
+		file_put_contents($current_file, implode("\n", $lines));
+		chmod($current_file, 0777);
+		$date_file = date_file($cat, $depth);
+
+		file_put_contents($date_file, get_wiki_tree_plus_date());
+		chmod($date_file, 0777);
+	}
+
+	function get_categories_in_category($cat, $depth)
+	{
+		$lines = [];
+		$url = "https://plus.wikitree.com/function/WTCatNavigate/Catfeed.htm?Category=" . urlencode($cat) . "&Levels=$depth&format=json&Include0=&Exclude0=&Include1=&Exclude1=&Include2=&Exclude2=&Details=";
+		$response = file_get_contents($url);
+
+		$json = json_decode(($response));
+		get_cat_children($json->response, $lines);
+		// var_dump($lines);
+		return $lines;
+	}
+
+	function get_cat_children($node, &$lines)
+	{
+		print_debug("<br>entering get_cat_children<br>");
+		// var_dump($node->children);
+		foreach ($node->children as $child) {
+			$lines[] = $child->name;
+			if (isset($child->children)) {
+				get_cat_children($child, $lines);
+			}
+		}
+		return;
+	}
+	function get_profiles_in_category($cat, $depth)
+	{
+
 		$url = "https://plus.wikitree.com/function/WTWebProfileSearch/Flo_CatFeed.csv?Query=subcat$depth=\"" . urlencode($cat) . "\"&MaxProfiles=15000&Format=CSV";
 		// echo $url."<br>";
 		$csv_page = file_get_contents($url);
-		$current_file = current_file($cat, $depth);
+
+
 
 		$arbitrary_byte_number = 100;
 		if (strlen($csv_page) < $arbitrary_byte_number) {
@@ -276,13 +351,7 @@ if ($display != "") {
 				}
 			}
 		}
-
-		file_put_contents($current_file, implode("\n", $lines));
-		chmod($current_file, 0777);
-		$date_file = date_file($cat, $depth);
-
-		file_put_contents($date_file, get_wiki_tree_plus_date());
-		chmod($date_file, 0777);
+		return $lines;
 	}
 
 	function get_wiki_tree_plus_date()
@@ -344,11 +413,14 @@ if ($display != "") {
 
 	function get_missing_rows($old, $new_rows)
 	{
+		global $cats_only;
 		$additions = array();
 
 		foreach ($new_rows as $new_row) {
 			$row_parts = explode(";", $new_row); {
-				if (is_numeric($row_parts[0]) && !stristr($old, $row_parts[0])) {
+				if (($cats_only || is_numeric($row_parts[0]))
+					&& !stristr($old, $row_parts[0])
+				) {
 					$additions[] = $new_row;
 					//todo: do something with line_wraps
 				}
@@ -452,12 +524,16 @@ if ($display != "") {
 
 	function print_profile_lines($rows)
 	{
-		global $use_discord_link_style;
+		global $use_discord_link_style, $cats_only;
 		echo "<ol>";
 		foreach ($rows as $row) {
 			// print_debug("row: $row");
 			if (strlen($row) > 1) {
 				$cols = explode(';', $row);
+				if ($cats_only) {
+					$cols[3] = $cols[0];
+					$cols[1] = "Category:" . $cols[0];
+				}
 				if ($use_discord_link_style) {
 					echo '<li>' . $cols[3] . ': <https://www.wikitree.com/wiki/' . $cols[1] . '></li>';
 				} else {
