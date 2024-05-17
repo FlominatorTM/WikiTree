@@ -144,7 +144,7 @@ if ($display != "") {
 		echo " <body>";
 		echo "  <h1>";
 		echo headline($show_only);
-		echo ' <a href="https://www.wikitree.com/wiki/Category:"' . $cat . '">Category:' . $cat . '</a>';
+		echo ' <a href="https://www.wikitree.com/wiki/Category:' . urlencode(str_replace(' ', '_', $cat)) . '">Category:' . $cat . '</a>';
 		echo "  </h1>";
 
 		if ($prev_file != "") {
