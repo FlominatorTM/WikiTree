@@ -1,7 +1,11 @@
 <?php
 $is_debug = isset($_REQUEST['debug']);
 $cat = str_replace('Category:', '', $_REQUEST['cat']);
-$show_only = $_REQUEST['show_only'];
+
+$show_only;
+if (isset($show_only)) {
+	$show_only = $_REQUEST['show_only'];
+}
 $depth = 9;
 if (isset($_REQUEST['depth']) && $_REQUEST['depth'] != "") {
 	$depth = 0 + $_REQUEST['depth'];
@@ -12,7 +16,10 @@ if (isset($_REQUEST['limit']) && $_REQUEST['limit'] != "") {
 	$limit = 0 + $_REQUEST['limit'];
 }
 
-$display = $_REQUEST['display'];
+$display = "";
+if (isset($_REQUEST['display'])) {
+	$display = $_REQUEST['display'];
+}
 
 if ($display != "") {
 	show_days_changes($display);
