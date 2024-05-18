@@ -20,9 +20,30 @@ function moveCategories() {
 
   if (top_ != "") {
     bottom = bottom.replace(/^\n+/, "");
+
+    var indexEndOfBioHeadline = bottom.indexOf("==\n") + "==\n".length;
+    var indexStartBioHeadline = bottom.indexOf("==");
+    if (indexStartBioHeadline > 1) {
+      /* template stuff */
+      var stuffBeforeBio = bottom.substring(0, indexStartBioHeadline);
+      var stuffAfterBio = bottom.substring(indexEndOfBioHeadline);
+      var bioHeadline = bottom.substring(
+        indexStartBioHeadline,
+        indexEndOfBioHeadline
+      );
+      alert(stuffBeforeBio);
+      alert(stuffAfterBio);
+      alert(bioHeadline);
+      bottom =
+        bioHeadline +
+        stuffBeforeBio.replace(/^\n+/, "").replace(/\n{2,}$/, "") +
+        "\n" +
+        stuffAfterBio.replace(/^\n+/, "").replace(/\n{2,}$/, "");
+    }
+
     ta.value = top_.substring(1) + "\n" + bottom;
     if (oldValue != ta.value) {
-      document.getElementById("wpSummary").value = "Categories up. ";
+      document.getElementById("wpSummary").value = "Formatting. ";
     }
   }
 }

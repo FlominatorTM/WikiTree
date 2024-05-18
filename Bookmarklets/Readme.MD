@@ -162,7 +162,7 @@ copies link to the profile to clipboard having the persons name displayed, that 
 
 ### [ProfileCleanup.js](ProfileCleanup.js)
 
-cleans a profile (currently only puts categories on top)
+cleans a profile (currently only puts categories on top and sticker below the biography headline)
 
 ### [RefExtract.js](RefExtract.js)
 
