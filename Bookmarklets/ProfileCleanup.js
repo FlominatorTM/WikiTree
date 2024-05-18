@@ -31,9 +31,6 @@ function moveCategories() {
         indexStartBioHeadline,
         indexEndOfBioHeadline
       );
-      alert(stuffBeforeBio);
-      alert(stuffAfterBio);
-      alert(bioHeadline);
       bottom =
         bioHeadline +
         stuffBeforeBio.replace(/^\n+/, "").replace(/\n{2,}$/, "") +
