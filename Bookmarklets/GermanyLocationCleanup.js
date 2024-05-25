@@ -114,6 +114,31 @@ function removeCrap(date, place) {
       }
     }
 
+    if (placeBetter.includes("Baden-Württemberg")) {
+      if (year > 1806 && year < 1952) {
+        placeBetter = placeBetter.replace(
+          "Baden-Württemberg",
+          "Baden or Württemberg"
+        );
+      }
+      if (year == 1952) {
+        alert("Baden-Württemberg started on 25 April 1952");
+      }
+    }
+
+    if (placeBetter.includes("Breisgau-Hochschwarzwald")) {
+      if (year > 1938 && year < 1973) {
+        placeBetter = placeBetter.replace(
+          "Breisgau-Hochschwarzwald",
+          "Freiburg or Müllheim or Hochschwarzwald"
+        );
+      }
+    } else if (placeBetter.includes("Hochschwarzwald")) {
+      if (year < 1956) {
+        placeBetter = placeBetter.replace("Hochschwarzwald", "Neustadt");
+      }
+    }
+
     if (placeBetter.includes("Auschwitz")) {
       if (placeBetter.includes("Birkenau")) {
         if (year >= 1939 && year < 1941) {
