@@ -1,51 +1,58 @@
-javascript:
 /* known issues: doesn't work with identical averages */
-var nameTDs = document.getElementsByClassName('level1 groupC groupL groupR groupT');
-var pointTDs = document.getElementsByClassName('level1 fieldC fieldR fieldT fieldB');
-var numMembersTD = document.getElementsByClassName('level2 fieldC fieldL fieldB');
+javascript: var nameTDs = document.getElementsByClassName(
+  "level1 groupC groupL groupR groupT"
+);
+var pointTDs = document.getElementsByClassName(
+  "level1 fieldC fieldR fieldT fieldB"
+);
+var numMembersTD = document.getElementsByClassName(
+  "level2 fieldC fieldL fieldB"
+);
 
 var points = [];
 var dict = {};
 var numMembers = [];
 var indexMembers = 0;
-for (var i=0; tdNode = nameTDs[i]; i++)
-{
-	var pointsForThisTeam = parseFloat(pointTDs[i].innerText.replace(".", "").replace(",", ""));
-	
-	var numberTeamMembers = 0;
-	if(nameTDs[i].nextSibling.className == "level2 groupC groupL groupR groupT")
-	{
-		numberTeamMembers = 1;
-	}
-	else
-	{
-		numberTeamMembers = parseFloat(numMembersTD[indexMembers].innerText);
-		indexMembers++;
-	}
-	
-	var normalizedPoints = pointsForThisTeam / numberTeamMembers;
-	normalizedPoints = Math.round(normalizedPoints*100)/100;
-	
-	while(normalizedPoints in dict)
-	{
-		normalizedPoints += "0";
-	}
-	dict[normalizedPoints] = tdNode.innerText;
-	
-	points[i] = normalizedPoints ;
+for (var i = 0; (tdNode = nameTDs[i]); i++) {
+  var pointsForThisTeam = parseFloat(
+    pointTDs[i].innerText.replace(".", "").replace(",", "")
+  );
+
+  var numberTeamMembers = 0;
+  if (
+    nameTDs[i].nextSibling.className == "level2 groupC groupL groupR groupT"
+  ) {
+    numberTeamMembers = 1;
+  } else {
+    numberTeamMembers = parseFloat(numMembersTD[indexMembers].innerText);
+    indexMembers++;
+  }
+
+  var normalizedPoints = pointsForThisTeam / numberTeamMembers;
+  normalizedPoints = Math.round(normalizedPoints * 100) / 100;
+
+  while (normalizedPoints in dict) {
+    if (normalizedPoints.includes(".")) {
+      normalizedPoints += "0";
+    } else {
+      normalizedPoints += ".0";
+    }
+  }
+  dict[normalizedPoints] = tdNode.innerText;
+  console.log(normalizedPoints + "=>" + tdNode.innerText);
+  points[i] = normalizedPoints;
 }
 
-points.sort(function(a, b) {
+points.sort(function (a, b) {
   return b - a;
 });
 
 var pos = 1;
 
 res = "";
-for (var i=0; i<points.length; i++)
-{
-	res+= pos + ".  " + dict[points[i]]  + ": " + points[i] + "\n";
-	pos++;
+for (var i = 0; i < points.length; i++) {
+  res += pos + ".  " + dict[points[i]] + ": " + points[i] + "\n";
+  pos++;
 }
 
 alert(res);
