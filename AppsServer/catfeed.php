@@ -2,8 +2,8 @@
 $is_debug = isset($_REQUEST['debug']);
 $cat = str_replace('Category:', '', $_REQUEST['cat']);
 
-$show_only;
-if (isset($show_only)) {
+$show_only = "";
+if (isset($_REQUEST['show_only'])) {
 	$show_only = $_REQUEST['show_only'];
 }
 $depth = 9;
@@ -83,7 +83,7 @@ if ($display != "") {
 
 	function show_days_changes($date_file_name_part)
 	{
-		global $cat, $show_only, $is_debug, $depth;
+		global $cat, $show_only, $depth;
 		$cat_dir =  cat_dir($cat, $depth);
 		$file_almost_path = $cat_dir . $date_file_name_part;
 
