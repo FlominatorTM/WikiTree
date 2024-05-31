@@ -150,6 +150,21 @@ function removeCrap(date, place) {
         }
       }
     }
+    if (placeBetter.includes("Hawaii") && !placeBetter.includes("Territory")) {
+      /*  before 21 August 1959    after 7 July 1898 */
+      if (year > 1898 && year < 1959) {
+        placeBetter = placeBetter.replace(", Hawaii,", ", Hawaii Territory,");
+        if (placeBetter == "Hawaii") {
+          placeBetter = "Hawaii Territory, United States";
+        }
+      }
+      if (year == 1898) {
+        alert("Hawaii was annexed on 7 July 1898");
+      }
+      if (year == 1959) {
+        alert("Hawaii became a state on 21 August 1959");
+      }
+    }
   }
   return placeBetter;
 }
