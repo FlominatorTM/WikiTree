@@ -160,6 +160,9 @@ function removeCrap(date, place) {
           );
         } else if (placeBetter == "Hawaii") {
           placeBetter = "Hawaii Territory, United States";
+        } else if (placeBetter.includes("Pearl Harbor")) {
+          placeBetter =
+            "Pearl Harbor, Oahu, Honolulu County, Hawaii Territory, United States";
         } else {
           placeBetter = placeBetter.replace(", Hawaii,", ", Hawaii Territory,");
         }
