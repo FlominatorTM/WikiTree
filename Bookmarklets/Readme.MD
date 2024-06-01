@@ -152,6 +152,10 @@ hacky reply to [G2G question about adding any WikiTree profile URL as source to 
 
 usage: visit [page](https://apps.wikitree.com/apps/york1423/fs-match/), trigger bookmarklet and fill in WikiTree URL, name and FamilySearch IDs
 
+### [FlipLocations.js](FlipLocations.js)
+
+reverses the order of locations, e.g. `Deutsches Reich, Freistaat Preußen, Provinz Hessen-Nassau, Regierungsbezirk Kassel, Kreis Marburg` turns into `Kreis Marburg, Regierungsbezirk Kassel, Provinz Hessen-Nassau, Freistaat Preußen, Deutsches Reich`
+
 ### [GermanyLocationCleanup.js](GermanyLocationCleanup.js)
 
 trying to convert FamilySearch suggested location places to something more in line with [Space:Germany_Project_Location_Field_Guidelines](https://www.wikitree.com/wiki/Space:Germany_Project_Location_Field_Guidelines), meanwhile also supporting a few other places like Nassau and West Virginia.
