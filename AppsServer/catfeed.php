@@ -203,7 +203,7 @@ if ($display != "") {
 			$cols = explode(';', $row);
 			if ($cats_only) {
 
-				$html .= '<h3>' . $i . '. <a href="' . $wt . "Category:" . $cols[0] . '">' . $cols[0] . "</a>\n";
+				$html .= '<h3>' . $i . '. <a style="text-decoration: none;" href="' . $wt . "Category:" . $cols[0] . '">' . str_replace("_", " ", $cols[0]) . "</a>\n";
 			} else {
 
 				$html .= '<h3>' . $i . '. <a href="' . $wt . $cols[1] . '">' . $cols[3] . "</a> (" . $cols[1] . ")\n";
