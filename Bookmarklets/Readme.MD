@@ -46,7 +46,11 @@ generates formatted source citation for Hessian civil records in LAGIS like http
 
 ### [FindAGrave.js](FindAGrave.js)
 
-generates combines the citation prepared by FindAGrave with [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) for the memorial currently displayed in browser (inpired by [this post](https://www.wikitree.com/g2g/569133/citation-help-findagrave-now-provides-citation-suggestion) by Allison Mackler)
+generates combines the citation prepared by FindAGrave with [external link template](https://www.wikitree.com/wiki/Template:FindAGrave) for the memorial currently displayed in browser (inspired by [this post](https://www.wikitree.com/g2g/569133/citation-help-findagrave-now-provides-citation-suggestion) by Allison Mackler)
+
+### [ICRC.js](ICRC.js)
+
+generates formatted source citation from the ICRC Historical Archives' Prisoners of the First World War database, like https://grandeguerre.icrc.org/en/List/2901843/897/9101/
 
 ### [LABW.js](LABW.js)
 
