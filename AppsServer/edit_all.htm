@@ -1,0 +1,18 @@
+<html></html>
+<title>Edit all profiles</title>
+<body>
+    <textarea id="wptext1"></textarea>
+    <button onclick="openall()">und los</button>
+    <script>
+        function openall()
+        {
+            var text = document.getElementById("wptext1").value;
+            var lines = text.split("\n");
+            for (let i = 0; i < lines.length; i++) {
+                var win = window.open("https://www.wikitree.com/index.php?title=Special:EditPerson&w=" + lines[i]);
+                const element = lines[i];
+                
+            }
+        }
+    </script>
+</body>
