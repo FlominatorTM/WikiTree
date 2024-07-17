@@ -104,6 +104,10 @@ might require manual research of the proper newspaper name, if there are multipl
 
 ## Creating categories
 
+### [CategoryCreate.js](CategoryCreate.js)
+
+select text from the profile / space page main text field in edit open and click bookmarklet to create a category from the selected expression
+
 ### [CopyAndRenameCategory.js](CopyAndRenameCategory.js)
 
 creates a category preview based on a given name and the content of the category that one has open in edit mode while triggering this bookmarklet
