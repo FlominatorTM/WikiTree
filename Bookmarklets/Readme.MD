@@ -166,7 +166,11 @@ reverses the order of locations, e.g. `Deutsches Reich, Freistaat Preußen, Prov
 
 ### [GermanyLocationCleanup.js](GermanyLocationCleanup.js)
 
-trying to convert FamilySearch suggested location places to something more in line with [Space:Germany_Project_Location_Field_Guidelines](https://www.wikitree.com/wiki/Space:Germany_Project_Location_Field_Guidelines), meanwhile also supporting a few other places like Nassau and West Virginia.
+trying to convert FamilySearch suggested location places to something more in line with [Space:Germany Project Location Field Guidelines](https://www.wikitree.com/wiki/Space:Germany_Project_Location_Field_Guidelines), meanwhile also supporting a few other places like Nassau and West Virginia.
+
+### [OnePlaceTable.js](OnePlaceTable.js)
+
+when being on a One Place Study page, this bookmarklet creates wiki code for inserting it as a row into [Space:One Place Studies - Project Members](https://www.wikitree.com/wiki/Space:One_Place_Studies_-_Project_Members)
 
 ### [Profile2G2G.js](Profile2G2G.js)
 
