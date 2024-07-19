@@ -84,7 +84,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				$replies = explode($reply_separator, $replies_page);
 				$num_in_array = count($replies);
 				//print_debug("num_in_array_" . $num_in_array);
-				for ($i = $num_in_array - 1; $i > 0; $i--) {
+				for ($i = $num_in_array - 1; $i >= 0; $i--) {
 					//print_debug("in for");
 					if (process_reply($replies, $i, $needles, $filters, $do_comments, $items)) {
 						$posted++;
@@ -153,11 +153,17 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				}
 				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</A>");
 				$title = "Answer by $user";
+				$about = "answer";
+				if ($i == 0) {
+					$title = "Question by $user";
+					$about = "question";
+				}
+
 				$token_behind_answer = 'qa-a-item-meta';
 				$token_before_post_id = "#a";
 				if ($is_comment) {
 					$token_behind_answer = 'qa-c-item-meta';
-					$title = "Comment by $user about answer from $answer_user";
+					$title = "Comment by $user about $about from $answer_user";
 					$token_before_post_id = "#c";
 				} else {
 					$answer_user = $user;
@@ -172,9 +178,12 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				$text = extract_from_to($answer_and_comments[$c], '<div itemprop="text">', "</div>");
 
 				$link = $post_url . '?show=' . $anchor . '#' . $anchor;
+
+
 				$description = $text;
 				$guid = $link;
 				if ($extract_link) {
+					//e.g. for Mastodon
 					$stripped_text = trim(strip_tags($text));
 					$index_of_link = strpos($stripped_text, "http");
 					if ($index_of_link > 0) {
@@ -186,6 +195,10 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 					}
 				} else if ($preview_redir) {
 					$link = "https://apps.wikitree.com/apps/straub620/g2gpeek.php" . htmlspecialchars("?post=$post_url&a=$anchor", ENT_XML1);
+				}
+				if ($i == 0 && !$is_comment) {
+					$link = $post_url;
+					$guid = $link;
 				}
 				//Mon, 22 May 2023 14:35:21 +0000
 
