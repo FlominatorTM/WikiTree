@@ -42,6 +42,7 @@ function removeCrap(date, place) {
     .replace("Ungarn", "Magyarország");
 
   /* general replacements with comma, no clue why anymore */
+  placeBetter = placeBetter.replace(", DE", ", Deutschland");
   placeBetter = placeBetter.replace(", Germany", ", Deutschland");
   placeBetter = placeBetter.replace(", German Empire", ", Deutsches Reich");
 
