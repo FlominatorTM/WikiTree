@@ -8,6 +8,15 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 $config = urldecode($_REQUEST['config']);
 $feeds = get_feed_urls($config);
 
+// Emulate the header BigPipe sends so we can test through Varnish.
+header('Surrogate-Control: BigPipe/1.0');
+
+// Explicitly disable caching so Varnish and other upstreams won't cache.
+header("Cache-Control: no-cache, must-revalidate");
+
+// Setting this header instructs Nginx to disable fastcgi_buffering and disable
+// gzip for this request.
+header('X-Accel-Buffering: no');
 if (!$is_debug) {
 	header("Content-Type: application/rss+xml");
 	header('Content-Disposition: inline;Filename=' . urlencode($config) . ".xml");
@@ -33,6 +42,10 @@ if (!$is_debug) {
 		$posts = array();
 
 		foreach ($feeds as $feed) {
+
+			if (!stristr($feed, 'http')) {
+				continue;
+			}
 			$xml_all = file_get_contents($feed);
 
 
