@@ -25,7 +25,7 @@ firstName = firstName.toLowerCase();
 
 var lastName = lastSelectedWord.replace("_", " ");
 
-const replacements = {
+let replacements = {
   josef: "jose*",
   joseph: "jose*",
 };
