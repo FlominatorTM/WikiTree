@@ -8,23 +8,16 @@ var indexStartRef = wpTextbox.value.lastIndexOf("<ref>", indexEndRef);
 if (indexEndRef == -1 || indexStartRef == -1) {
   alert("please place cursor inside the ref tags");
 } else {
-  var lengthRefContentIncludingClosingTag =
-    indexEndRef + "</ref>".length - indexStartRef;
+  var lengthSourceEnd = indexEndRef + "</ref>".length - indexStartRef;
 
-  var refWithoutName = wpTextbox.value.substr(
-    indexStartRef,
-    lengthRefContentIncludingClosingTag
-  );
-  var refWithName = refWithoutName.replace(
-    "<ref>",
-    '<ref name="' + name + '">'
-  );
+  var wholeSource = wpTextbox.value.substr(indexStartRef, lengthSourceEnd);
+  var ref = wholeSource.replace("<ref>", '<ref name="' + name + '">');
   wpTextbox.value = wpTextbox.value.replace(
-    refWithoutName,
+    wholeSource,
     '<ref name="' + name + '"/>'
   );
   wpTextbox.selectionStart = selectionStart;
   wpTextbox.selectionEnd = selectionStart;
-  prompt("", refWithName);
+  prompt("", ref);
 }
 void 0;

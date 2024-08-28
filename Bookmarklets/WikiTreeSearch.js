@@ -22,27 +22,16 @@ if (selectedParts.length > 1) {
   firstName = selectedText.replace(" " + lastSelectedWord, "");
 }
 
-win = window.open("");
-win.document.write(
-  '<form action="https://www.wikitree.com/wiki/Special:SearchPerson" method="POST" id="theForm">'
-);
-win.document.write(
-  '<input type="text" name="wpFirst" id="wpFirst" size="35" value="' +
-    firstName +
-    '">'
-);
-win.document.write(
-  '<input type="text" name="wpLast" id="wpLast" size="35" value="' +
-    lastSelectedWord +
-    '">'
-);
-win.document.write(
-  '<input class="button white" type="submit" name="wpSearch" id="wpSearch" value="Search">'
-);
-win.document.write("</form>");
-win.document.getElementById("wpLast").value = lastSelectedWord.replace(
-  "_",
-  " "
-);
+var lastName = lastSelectedWord.replace("_", " ");
 
-win.document.getElementById("wpSearch").click();
+const replacements = {
+  Josef: "Jose*",
+  Joseph: "Jose*",
+};
+
+window.open(
+  "https://apps.wikitree.com/apps/straub620/wt_search.php?first_name=" +
+    firstName +
+    "&last_name=" +
+    lastName
+);
