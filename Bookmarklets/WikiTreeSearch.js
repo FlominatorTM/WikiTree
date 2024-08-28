@@ -21,13 +21,19 @@ var firstName = "";
 if (selectedParts.length > 1) {
   firstName = selectedText.replace(" " + lastSelectedWord, "");
 }
+firstName = firstName.toLowerCase();
 
 var lastName = lastSelectedWord.replace("_", " ");
 
 const replacements = {
-  Josef: "Jose*",
-  Joseph: "Jose*",
+  josef: "jose*",
+  joseph: "jose*",
 };
+
+if(replacements[firstName] != null)
+{
+  firstName = replacements[firstName];
+}
 
 window.open(
   "https://apps.wikitree.com/apps/straub620/wt_search.php?first_name=" +
@@ -35,3 +41,4 @@ window.open(
     "&last_name=" +
     lastName
 );
+void(0);
