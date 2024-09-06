@@ -36,6 +36,7 @@ function removeCrap(date, place) {
     .replace("Königreich ", "")
     .replace("Landeskommissärbezirk ", "")
     .replace("Oberamt ", "")
+    .replace("Landamt ", "")
     .replace("Vereinigte Staaten", "United States")
     .replace("USA", "United States")
     .replace("WV", "West Virginia")
