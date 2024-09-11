@@ -134,10 +134,17 @@ if ($display != "") {
 			}
 		}
 
+		$info_file = $cat_dir . "info.txt";
+		$info = "";
+		if (is_file($info_file)) {
+			$info = file_get_contents($info_file);
+		}
+
+
 		header('Content-Type: text/html; charset=utf-8');
 		echo "<html>";
 		echo " <head>";
-		echo '  <meta property="og:description" content="' .  $summary_add . $summary_rem . '">';
+		echo '  <meta property="og:description" content="' . $info .  $summary_add . $summary_rem . '">';
 		echo '  <meta property="og:title" content="' .  headline($show_only)  . ' Category:' . $cat . '">';
 		echo '  <title>catfeed ' . $cat  . '</title>';
 		echo " </head>";
