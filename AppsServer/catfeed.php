@@ -296,11 +296,11 @@ if ($display != "") {
 			return;
 		}
 		file_put_contents($current_file, implode("\n", $lines));
-		chmod($current_file, 0777);
+		chmod($current_file, 0666);
 		$date_file = date_file($cat, $depth);
 
 		file_put_contents($date_file, get_wiki_tree_plus_date());
-		chmod($date_file, 0777);
+		chmod($date_file, 0666);
 	}
 
 	function get_categories_in_category($cat, $depth)
@@ -411,8 +411,12 @@ if ($display != "") {
 
 		$dir = cat_dir($cat, $depth);
 		if (count($additions) > 0 || count($removals) > 0) {
-			file_put_contents($dir . $list_date . "+.csv", implode("\n", $additions));
-			file_put_contents($dir . $list_date . "-.csv", implode("\n", $removals));
+			$plus_file = $dir . $list_date . "+.csv";
+			file_put_contents($plus_file, implode("\n", $additions));
+			chmod($plus_file, 0666);
+			$minus_file = $dir . $list_date . "-.csv";
+			file_put_contents($minus_file, implode("\n", $removals));
+			chmod($minus_file, 0666);
 		} else {
 			touch($current_file, $file_time_before);
 		}
