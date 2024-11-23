@@ -152,6 +152,9 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 					continue;
 				}
 				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</A>");
+				if (stristr($answer_and_comments[$c], 'qa-a-item-who-data">anonymous')) {
+					$user = "Anonymous";
+				}
 				$title = "Answer by $user";
 				$about = "answer";
 				if ($i == 0) {
