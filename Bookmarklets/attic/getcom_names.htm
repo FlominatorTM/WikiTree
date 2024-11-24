@@ -1,0 +1,33 @@
+<html>
+<body>
+<h2>Get all GEDCOMs from user contributions</h2>
+<ol>
+    <li>change number of contributions to 5000 (<a href="https://www.wikitree.com/index.php?title=Special:Contributions&who=Sigmund-6&l=5000">example</a>)</li>
+    <li>copy all text from all pages</li>
+    <li>paste into textarea below (maybe filter with searching for .ged in Notepad++ before)    </li>
+    <li>click button</li>
+</ol>
+
+<input type="button" value="hallo" onclick='
+const text = document.getElementById("textarea").value;
+const lines = text.split("\n");
+let gedcoms = "";
+
+for (let i = 0; i < lines.length; i++) {
+    if(lines[i].includes("from"))
+{
+    const fromPart = lines[i].split("from ")[1];
+    const gedcom = fromPart.split("[")[0];
+    if(!gedcoms.includes(gedcom))
+    {
+        gedcoms+= gedcom + "\n";
+    }
+}   
+}
+alert(gedcoms);
+'   >
+
+<textarea id="textarea"></textarea>
+
+</body>    
+</html>
