@@ -25,7 +25,7 @@ def get_related_ids(url, coming_from_id, steps):
     print(url)
     soup = BeautifulSoup(requests.get(url).content, "html.parser")
     name = get_name_from_title(soup.find("title").contents[0])
-    info_line = "#" + (str) (len(visited_ids)) + ": " + this_id + " => "+ name +" coming from " + coming_from_id
+    info_line = "#" + (str) (len(visited_ids)) + ": " + this_id + " => "+ "name" +" coming from " + coming_from_id
     print (info_line)
     G.add_edge(this_id, coming_from_id, weight=steps)
     for a_tag in soup.findAll("a"):
@@ -63,11 +63,14 @@ class recursion_depth:
         
 G = nx.Graph()
 visited_ids = []
-start = "I5319";
-searching_for = "I2770"
+start = "I7342"
+searching_for = "I3935"
+ofb_part = "asslar"
+ofb_part = "buehlertal"
+
 
 with recursion_depth(10000):
-    get_related_ids('https://www.online-ofb.de/famreport.php?ofb=asslar&ID='+start, "initial call searching for " + searching_for, 0)
+    get_related_ids('https://www.online-ofb.de/famreport.php?ofb=' + ofb_part +'&ID='+start, "initial call searching for " + searching_for, 0)
 
 for node in G.nodes:
     print_and_optimize(start, node)
