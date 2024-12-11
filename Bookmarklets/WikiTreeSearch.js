@@ -25,14 +25,16 @@ firstName = firstName.toLowerCase();
 
 var lastName = lastSelectedWord.replace("_", " ");
 
-let replacements = {
+let replacements1 = {
   josef: "jose*",
   joseph: "jose*",
+  catharina: "*atharina",
+  katharina: "*atharina",
 };
 
-if(replacements[firstName] != null)
+if(replacements1[firstName] != null)
 {
-  firstName = replacements[firstName];
+  firstName = replacements1[firstName];
 }
 
 window.open(
