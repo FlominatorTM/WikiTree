@@ -9,6 +9,10 @@ All scripts require python 3.x
 - tries to find a connection between two given IDs in one family book at http://www.online-ofb.de
 - IDs and name of the family book have to be changed directly in code
 
+## PhotosGEDCOM.py
+
+downloads all FILE entries (mostly images) from a GEDCOM, that was exported from WikiTree, into a local subfolder and generates a GEDCOM file that links to the local files
+
 ## ProjectMembers.py
 
 - lists members of a given Project and their activity status and other statistics
