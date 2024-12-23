@@ -27,6 +27,7 @@
 
     define("PAGE_PARAM", "?pg=");
 
+    $is_debug = isset($_REQUEST['debug']);
     $csv = "matriculix.csv";
 
     if (isset($_REQUEST["new"]) && isset($_REQUEST["old"])) {
@@ -50,7 +51,7 @@
         @$old_exists = file_get_contents($old);
 
         if (!$old_exists) {
-            echo "Link really is broken<br/>\n";
+            echo "Link really is broken<br/><br>\n";
 
             $link_parts = explode("/", $old);
 
@@ -58,7 +59,7 @@
             $csv_content = file_get_contents($csv);
             $csv_lines = explode("\n", $csv_content);
             $csv_line_with_parish = "";
-            $csv_line_with_book = "";
+            $csv_lines_with_book = [];
             foreach ($csv_lines as $line) {
 
                 $parts_line = explode(";", $line);
@@ -66,18 +67,17 @@
                 $csv_old = explode("/", trim($parts_line[0]));
                 $csv_new = explode("/", trim($parts_line[1]));
                 if ($csv_old[COUNTRY] == $link_parts[COUNTRY]) {
-                    echo ("Country found<br>\n");
+                    print_debug("Country found");
                     if ($csv_old[DIOCESE] == $link_parts[DIOCESE]) {
-                        echo ("Diocese found<br>\n");
+                        print_debug("Diocese found");
                         // echo "old: " . $csv_old[PARISH] . "  link: " . $link_parts[PARISH] . "<br>\n";
                         if ($csv_old[PARISH] == $link_parts[PARISH]) {
                             $csv_line_with_parish = $line;
-                            echo ("Parish found<br>\n");
+                            print_debug("Parish found");
 
                             if ($csv_old[BOOK] == $link_parts[BOOK]) {
-                                $csv_line_with_book = $line;
-                                echo ("Book found<br>\n");
-                                break;
+                                $csv_lines_with_book[] = $line;
+                                print_debug("Book found");
                             }
                         }
                     }
@@ -86,33 +86,50 @@
 
             $link_parts_new = array_merge([], $link_parts);
 
-            if ($csv_line_with_book != "") {
-                echo "Building book link with offset<br>\n";
-                $csv_line_parts = explode(";", $csv_line_with_book);
-                $csv_old = explode("/", trim($csv_line_parts[0]));
-                $csv_new = explode("/", trim($csv_line_parts[1]));
-                $page_old_complete = $csv_old[PAGE];
-                $page_new_complete = $csv_new[PAGE];
-                $page_old_int = substr($page_old_complete, strlen(PAGE_PARAM));
-                $page_new_int = substr($page_new_complete, strlen(PAGE_PARAM));
-                $offset = $page_new_int - $page_old_int;
-                // print("offset:" . $offset);
-                $page_curr_int = substr($link_parts[PAGE], strlen(PAGE_PARAM));
-                $link_parts_new[PAGE] = PAGE_PARAM . ($page_curr_int + $offset);
-                $link_parts_new[BOOK] = $csv_new[BOOK];
-                $link_parts_new[PARISH] = $csv_new[PARISH];
-                $book_link = join("/", $link_parts_new);
-                echo '<a href="' . $book_link . '">' . "Potential link to book page" . "</a><br>\n";
+            if (count($csv_lines_with_book) > 0) {
+                foreach ($csv_lines_with_book as $csv_line_with_book) {
+                    print_debug("Building book link with offset");
+                    $csv_line_parts = explode(";", $csv_line_with_book);
+                    $csv_old = explode("/", trim($csv_line_parts[0]));
+                    $csv_new = explode("/", trim($csv_line_parts[1]));
+                    $page_old_complete = $csv_old[PAGE];
+                    $page_new_complete = $csv_new[PAGE];
+                    $page_old_int = substr($page_old_complete, strlen(PAGE_PARAM));
+                    $page_new_int = substr($page_new_complete, strlen(PAGE_PARAM));
+                    $offset = $page_new_int - $page_old_int;
+                    print_debug("offset:" . $offset);
+                    $page_curr_int = substr($link_parts[PAGE], strlen(PAGE_PARAM));
+                    $diff_old_and_csv = abs($page_old_int - $page_curr_int);
+                    $link_parts_new[PAGE] = PAGE_PARAM . ($page_curr_int + $offset);
+                    $link_parts_new[BOOK] = $csv_new[BOOK];
+                    $link_parts_new[PARISH] = $csv_new[PARISH];
+                    $book_link = join("/", $link_parts_new);
+                    echo '<a href="' . $book_link . '">' . "Potential link to book page:" . "</a><br>\n";
+                    echo "Distance to known page: " . $diff_old_and_csv . "<br>\n";
 
-                //determine pages offset
+                    /*
+                    $book_page = file_get_contents($book_link);
+                    $book_page_parts = explode("<tr><th>", $book_page);
+
+                    for ($i = 1; $i < count($book_page_parts); $i++) {
+                        $book_detail_key_value = explode("</table>", $book_page_parts[$i])[0];
+                        $book_detail = explode("</th><td>", $book_detail_key_value)[1];
+                        //$book_detail = str_replace("</th><td>", "\n", $book_detail);
+                        if (strlen($book_detail) > 0) {
+                            echo strip_tags($book_detail) . "<br>";
+                        }
+                    }*/
+                    echo "<br>\n";
+                }
+                add_new_link($old, "In case none of the links go to the correct <i>book</i>, feel free to add the correct link:");
             } else if ($csv_line_with_parish != "") {
-                echo "Building parish link<br>\n";
+                print_debug("Building parish link");
                 $csv_line_parts = explode(";", $csv_line_with_parish);
                 $csv_new = explode("/", trim($csv_line_parts[1]));
                 $link_parts_new = array_slice($link_parts_new, 0, PARISH);
                 $link_parts_new[PARISH] = $csv_new[PARISH];
                 echo 'Found <a href=" ' . join("/", $link_parts_new) . '" target="_blank">link to parish</a>, but not to book.' . "<br>\n";
-                add_new_link($old);
+                add_new_link($old, "Please consider submitting the corrected link to improve this service:");
             } else {
 
                 echo "Found neither book nor parish, guessing new parish link<br>\n";
@@ -158,21 +175,40 @@
                 }
 
                 //guess parish
-                add_new_link($old);
+                add_new_link($old, "Please consider submitting the corrected link to improve this service:");
             }
         } else {
             echo "Link seems to work, nothing to do";
         }
     }
 
-    function add_new_link($old)
+
+    function extract_from_to($haystack, $prefix, $suffix)
     {
-        echo "<br>Please consider submitting the corrected link to improve this service:";
+        $index_prefix = strpos($haystack, $prefix) + strlen($prefix);
+        $index_suffix = strpos($haystack, $suffix, $index_prefix);
+        $length = $index_suffix - $index_prefix;
+        // echo "$length = $index_suffix - $index_prefix<br>";
+        return substr($haystack, $index_prefix, $length);
+    }
+
+
+    function add_new_link($old, $msg)
+    {
+        echo "<br> $msg";
         echo "<form>\n";
         echo "Old link <input name=\"old\" value=\"$old\" size=\"120\"><br>\n";
         echo "New link <input name=\"new\" size=\"120\"><br>\n";
         echo "<input type=\"submit\" value=\"Submit fixed link\">\n";
         echo "</form>\n";
+    }
+
+    function print_debug($line)
+    {
+        global $is_debug;
+        if ($is_debug) {
+            echo $line . "<br>\n";
+        }
     }
 
     ?>
