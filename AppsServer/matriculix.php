@@ -6,8 +6,9 @@
 
 <body>
     <h1>Matriculix</h1>
+    ... helping to repair the mess, that matricula created by changing nearly everything for a certain diocese, e.g. Osnabrück<br><br>
     <form>
-        Old link: <input name="old">
+        Check link <input name="old" size="120">
         <input type="submit" value="go">
     </form>
 
@@ -55,19 +56,20 @@
 
 
             $csv_content = file_get_contents($csv);
-            $csv_lines = explode("\\n", $csv_content);
-
+            $csv_lines = explode("\n", $csv_content);
             $csv_line_with_parish = "";
             $csv_line_with_book = "";
             foreach ($csv_lines as $line) {
 
                 $parts_line = explode(";", $line);
+
                 $csv_old = explode("/", trim($parts_line[0]));
                 $csv_new = explode("/", trim($parts_line[1]));
                 if ($csv_old[COUNTRY] == $link_parts[COUNTRY]) {
                     echo ("Country found<br>\n");
                     if ($csv_old[DIOCESE] == $link_parts[DIOCESE]) {
                         echo ("Diocese found<br>\n");
+                        // echo "old: " . $csv_old[PARISH] . "  link: " . $link_parts[PARISH] . "<br>\n";
                         if ($csv_old[PARISH] == $link_parts[PARISH]) {
                             $csv_line_with_parish = $line;
                             echo ("Parish found<br>\n");
@@ -94,11 +96,13 @@
                 $page_old_int = substr($page_old_complete, strlen(PAGE_PARAM));
                 $page_new_int = substr($page_new_complete, strlen(PAGE_PARAM));
                 $offset = $page_new_int - $page_old_int;
-                print("offset:" . $offset);
+                // print("offset:" . $offset);
                 $page_curr_int = substr($link_parts[PAGE], strlen(PAGE_PARAM));
                 $link_parts_new[PAGE] = PAGE_PARAM . ($page_curr_int + $offset);
                 $link_parts_new[BOOK] = $csv_new[BOOK];
                 $link_parts_new[PARISH] = $csv_new[PARISH];
+                $book_link = join("/", $link_parts_new);
+                echo '<a href="' . $book_link . '">' . "Potential link to book page" . "</a><br>\n";
 
                 //determine pages offset
             } else if ($csv_line_with_parish != "") {
@@ -163,10 +167,10 @@
 
     function add_new_link($old)
     {
-        echo "<br>Please consider submitting the new link to improve this service:";
+        echo "<br>Please consider submitting the corrected link to improve this service:";
         echo "<form>\n";
-        echo "<input name=\"new\">\n";
-        echo "<input name=\"old\" type=\"hidden\" value=\"$old\">\n";
+        echo "Old link <input name=\"old\" value=\"$old\" size=\"120\"><br>\n";
+        echo "New link <input name=\"new\" size=\"120\"><br>\n";
         echo "<input type=\"submit\" value=\"Submit fixed link\">\n";
         echo "</form>\n";
     }
