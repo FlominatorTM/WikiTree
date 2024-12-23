@@ -1,4 +1,10 @@
 <html>
+<?php
+$inc_dir = "matriculix_lang";
+$user_lang = read_language();
+get_language('en', $inc_dir); //not translated messages will be printed in English
+get_language($user_lang, $inc_dir);
+?>
 
 <head>
     <title>Matriculix</title>
@@ -6,10 +12,10 @@
 
 <body>
     <h1>Matriculix</h1>
-    ... helping to repair the mess, that matricula created by changing nearly everything for a certain diocese, e.g. Osnabrück<br><br>
+    <?php echo $messages['purpose'] ?><br><br>
     <form>
-        Check link <input name="old" size="120">
-        <input type="submit" value="go">
+        <?php echo $messages['check_link'] ?> <input name="old" size="120">
+        <input type="submit" value="<?php echo $messages['go'] ?>">
     </form>
 
     <?php
@@ -36,22 +42,22 @@
             if (!stristr($csv_content, $_REQUEST["old"])) {
                 $line = $_REQUEST["old"] . ';' . $_REQUEST["new"] . "\n";
                 file_put_contents($csv, $line, FILE_APPEND);
-                echo "Link " . $_REQUEST["new"]  . " added successfully<br>\n";
+                echo str_replace("__LINK__", $_REQUEST["new"], $messages['link_added']);
             } else {
-                "Link already known<br>\n";
+                echo $messages['link_known'] . "<br>\n";
             }
         } else {
-            echo "Wrong format of link<br>\n";
+            echo $messages['link_wrong'] . "<br>\n";
         }
     } else if (isset($_REQUEST['old'])) {
         $old = $_REQUEST['old'];
 
-        echo "<h2>Results</h2>\n";
+        echo "<h2>" . $messages['results'] . "</h2>\n";
 
         @$old_exists = file_get_contents($old);
 
         if (!$old_exists) {
-            echo "Link really is broken<br/><br>\n";
+            echo $messages['link_broken'] . "<br/><br>\n";
 
             $link_parts = explode("/", $old);
 
@@ -104,8 +110,8 @@
                     $link_parts_new[BOOK] = $csv_new[BOOK];
                     $link_parts_new[PARISH] = $csv_new[PARISH];
                     $book_link = join("/", $link_parts_new);
-                    echo '<a href="' . $book_link . '">' . "Potential link to book page:" . "</a><br>\n";
-                    echo "Distance to known page: " . $diff_old_and_csv . "<br>\n";
+                    echo '<a href="' . $book_link . '">' . $messages['potential_book'] . ":" . "</a><br>\n";
+                    echo $messages['distance_page'] . ": " . $diff_old_and_csv . "<br>\n";
 
                     /*
                     $book_page = file_get_contents($book_link);
@@ -121,18 +127,18 @@
                     }*/
                     echo "<br>\n";
                 }
-                add_new_link($old, "In case none of the links go to the correct <i>book</i>, feel free to add the correct link:");
+                add_new_link($old,  $messages['feel_free'] . ":");
             } else if ($csv_line_with_parish != "") {
                 print_debug("Building parish link");
                 $csv_line_parts = explode(";", $csv_line_with_parish);
                 $csv_new = explode("/", trim($csv_line_parts[1]));
                 $link_parts_new = array_slice($link_parts_new, 0, PARISH);
                 $link_parts_new[PARISH] = $csv_new[PARISH];
-                echo 'Found <a href=" ' . join("/", $link_parts_new) . '" target="_blank">link to parish</a>, but not to book.' . "<br>\n";
-                add_new_link($old, "Please consider submitting the corrected link to improve this service:");
+                echo str_replace("__LINK__", join("/", $link_parts_new), $messages['parish_no_book']) . "<br>\n";
+                add_new_link($old, $messages['please_consider'] . ":");
             } else {
 
-                echo "Found neither book nor parish, guessing new parish link<br>\n";
+                echo $messages['no_book_or_parish'] . "<br>\n";
                 $diocese_link_parts = array_slice($link_parts, 0, PARISH);
                 $dio_link = join("/", $diocese_link_parts);
                 $diocese_page = file_get_contents($dio_link);
@@ -175,10 +181,10 @@
                 }
 
                 //guess parish
-                add_new_link($old, "Please consider submitting the corrected link to improve this service:");
+                add_new_link($old, $messages['please_consider'] . ":");
             }
         } else {
-            echo "Link seems to work, nothing to do";
+            echo $messages['link_ok'];
         }
     }
 
@@ -195,11 +201,12 @@
 
     function add_new_link($old, $msg)
     {
+        global $messages;
         echo "<br> $msg";
         echo "<form>\n";
-        echo "Old link <input name=\"old\" value=\"$old\" size=\"120\"><br>\n";
-        echo "New link <input name=\"new\" size=\"120\"><br>\n";
-        echo "<input type=\"submit\" value=\"Submit fixed link\">\n";
+        echo $messages['old_link'] . " <input name=\"old\" value=\"$old\" size=\"120\"><br>\n";
+        echo $messages['new_link'] . " <input name=\"new\" size=\"120\"><br>\n";
+        echo "<input type=\"submit\" value=\"" . $messages['submit_fixed'] . "\">\n";
         echo "</form>\n";
     }
 
@@ -211,9 +218,78 @@
         }
     }
 
+
+    function get_language_list($inc_dir)
+    {
+        $dir_ref = opendir($inc_dir);
+        rewinddir($dir_ref);
+        $list = array();
+
+        do {
+            $file = readdir($dir_ref); //get next file of inc directory
+            clearstatcache();
+
+            if ((substr($file, 0, 1) != ".") && (!is_dir($inc_dir . "/" . $file)) && ($file != "")) //current file is really a file and no directory
+            {
+                if ((stristr($file, '.php')) && (!stristr($file, 'qqq'))) //file is really a language file (qqq comes from translatewiki)
+                {
+                    $list[] = str_replace('.php', '', $file); //add language of file to the list
+                }
+            }
+        } while ($file);
+
+        sort($list);
+        closedir($dir_ref);
+        return $list;
+    }
+
+    function get_language($lang, $inc_dir)
+    {
+        global $messages;
+        if (strlen($lang) > 9) //3 was too small because of be-tarask
+        {
+            $lang = 'en';
+        }
+        $langfile = "$inc_dir/$lang.php";
+
+        if (!@include($langfile)) {
+            //echo "Using default language: english";
+            include("$inc_dir/en.php");
+        }
+    }
+
+    //tries to retrieve the language of the browser
+    function read_language()
+    {
+
+        $user_lang = isset($_REQUEST['user_lang']) ? $_REQUEST['user_lang'] : "";
+
+        if ($user_lang == "") {
+            //https://www.php-resource.de/forum/php-developer-forum/22545-unterschiede-zwischen-versch-browsern-bei-http_accept_language.html
+            preg_match("/^([a-z]+)-?([^,;]*)/i", $_SERVER["HTTP_ACCEPT_LANGUAGE"], $matches);
+
+            $user_lang = $matches[1];
+            //echo $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+            if ($user_lang == "") {
+                $user_lang = 'en';
+            }
+            if ($matches[1] == 'zh') {
+                switch (strtolower($matches[2])) {
+                    case "tw":
+                    case "hk": {
+                            $user_lang = "zh-hant";
+                            break;
+                        }
+                    default: {
+                            $user_lang = "zh-hans";
+                            break;
+                        }
+                }
+            }
+        }
+        return $user_lang;
+    }
     ?>
-
-
 </body>
 
 </html>
