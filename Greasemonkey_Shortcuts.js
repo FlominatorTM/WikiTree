@@ -2,8 +2,8 @@
 // @name          WikiTree input
 // @namespace     https://www.wikitree.com/
 // @description   adding some shortcuts and changing some links (see below for details)
-// @match https://www.wikitree.com/*
-// @include   https://www.wikitree.com/
+// @match https://*.wikitree.com/*
+// @include   https://*.wikitree.com/
 // ==/UserScript==
 
 /*
@@ -19,6 +19,22 @@ Features:
 - remove right column in edit mode and make input field bigger instead
 */
 
+// automatically select Germany challenge
+if(window.location.href.includes("WTChallenge"))
+{
+	var checkboxes = document.getElementsByName("challengex");
+	for(let i=0;i<checkboxes.length;i++)
+	{
+	  if(checkboxes[i].value.includes("Germany"))
+	  {
+		 checkboxes[i].checked = true;
+		 break;
+	  }
+	}
+
+	const buttons = document.getElementsByClassName("btn btn-default");
+	buttons[0].focus();
+}
 
 //add "and" in parents linking example
 var allExamples = document.getElementsByClassName("EXAMPLE");
@@ -39,10 +55,10 @@ for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
 		brBeforeHere = spanRootsSearch.nextSibling.nextSibling;
 		if(null == brBeforeHere)
 		{
-      var unsafeWindow = window.wrappedJSObject;
-      var insertTag = document.createElement("span");
-      var linkAddFamilySearch = '<a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a>';
-      var linkSearchFamilyTree = '<a href="https://www.familysearch.org/tree/find/name">search</a>';
+		var unsafeWindow = window.wrappedJSObject;
+		var insertTag = document.createElement("span");
+		var linkAddFamilySearch = '<a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a>';
+		var linkSearchFamilyTree = '<a href="https://www.familysearch.org/tree/find/name">search</a>';
 			insertTag.innerHTML=/* */'<h3>'+ linkAddFamilySearch +'</h3><br>' + linkSearchFamilyTree ;/* */
 			spanRootsSearch.parentNode.insertBefore(insertTag, spanRootsSearch);
 		 
@@ -62,10 +78,10 @@ if (window.location.search.match(/Special:EditFamilySearch/))
 {
   for (var i=0; aNode = document.getElementsByTagName("a")[i]; i++)
   {
-    if(aNode.target="_blank")
-    {
-      aNode.target="";
-    }
+	 if(aNode.target="_blank")
+	 {
+		aNode.target="";
+	 }
   }
 }
 
@@ -74,8 +90,8 @@ for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].childre
 {
   if(aNode.title == "Edit Profile and Family Relationships" || aNode.title == "Edit this Profile")
   {
-    aNode.accessKey="e";
-    break;
+	 aNode.accessKey="e";
+	 break;
   }
 }
 
@@ -101,7 +117,7 @@ if(null != inputMiddleName)
 {
   if(inputMiddleName.value == "")
   {
-    document.getElementById('mStatus_MiddleName_blank').checked = true;
+	 document.getElementById('mStatus_MiddleName_blank').checked = true;
   }
 }
 
@@ -125,7 +141,7 @@ if(wpTextbox != null)
 {
   if(match==null && wpTextbox.value.indexOf("Category") == -1)
   {
-    alert("Category is missing");
+	 alert("Category is missing");
   }
   
   //remove right column in edit mode and made textbox bigger
