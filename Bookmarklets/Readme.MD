@@ -184,6 +184,10 @@ cleans a profile (currently only puts categories on top and sticker below the bi
 
 Did you ever want to take an unnamed inline reference (e.g. \<ref>some very long source\</ref>), give it a name, replace the current usage by \<ref name="the name"/> and use it somewhere else, probably earlier in the profile? Just place the cursor inside the ref, click this bookmarklet and enter the name for the ref. Then you can copy it from the popup, while the original one is recuded to the tag with the name.
 
+### [ThonHistogramFilter.js](ThonHistogramFilter.js)
+
+asks for a text (e.g. Germany) to only show user histograms from the official score sheet for [SourceAThon](https://plus.wikitree.com/Challenges/SourceAThon/UsersHistogram.htm) and [ConnectAThon](https://plus.wikitree.com/Challenges/ConnectAThon/UsersHistogram.htm
+
 ### [ThonNormalized.js](ThonNormalized.js)
 
 generates scores normalized points based on the official score sheet for [SourceAThon](https://wikitree.sdms.si/Challenges/SourceAThon/TeamAndUser.htm) and [ConnectAThon](https://wikitree.sdms.si/Challenges/ConnectAThon/TeamAndUser.htm)
