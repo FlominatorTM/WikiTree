@@ -36,6 +36,31 @@ if(window.location.href.includes("WTChallenge"))
 	buttons[0].focus();
 }
 
+//Hack to make summary checkbox enable wpSave after 2025 redesign
+if (window.location.href.includes("EditPerson")) {
+  const saveButtonsSection = document.getElementById("saveButtons");
+  const config = { attributes: false, childList: true, subtree: true };
+  const observer = new MutationObserver((mutationList, observer) => {
+    for (const mutation of mutationList) {
+      mutation.addedNodes.forEach((node) => {
+        if (node.id == "changeSummaryGears") {
+          var checkboxes = document.getElementsByClassName(
+            "form-check-input summary-suggestion"
+          );
+          for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener("change", () => {
+              const saveButton = document.getElementById("wpSave");
+              saveButton.disabled = false;
+            });
+          }
+          observer.disconnect();
+        }
+      });
+    }
+  });
+  observer.observe(saveButtonsSection, config);
+}
+
 //add "and" in parents linking example
 var allExamples = document.getElementsByClassName("EXAMPLE");
 
