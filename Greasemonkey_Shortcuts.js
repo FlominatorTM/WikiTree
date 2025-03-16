@@ -161,22 +161,32 @@ if(match!=null)
 //except summary was provided, because then I want to be fast
 var wpTextbox = document.getElementById('wpTextbox1');
 
-
 if(wpTextbox != null)
 {
-  if(match==null && wpTextbox.value.indexOf("Category") == -1)
-  {
-	 alert("Category is missing");
-  }
-  
   //remove right column in edit mode and made textbox bigger
-  wpTextbox.cols="1000"
+  wpTextbox.cols="280"
 
-  var rightColumn = document.getElementsByClassName('six columns omega')[0];
+  // var rightColumn = document.getElementsByClassName('six columns omega')[0];
+  var rightColumn = document.getElementById('Lower-Sidebar');
   rightColumn.remove();
  
-  var editdiv = document.getElementsByClassName('ten columns alpha')[0];
-  editdiv.style.width = "100%";
+	applyIansCssIHaveNoClueAboutAndThatGeminiConvertedToJavascript();
+  
+  function applyIansCssIHaveNoClueAboutAndThatGeminiConvertedToJavascript() {
+    const elements = [
+      document.getElementById('wpTextbox1'),
+      document.querySelector('div.CodeMirror'),
+      document.querySelector('#editform .col-lg-8')
+    ];
+
+    elements.forEach(element => {
+      if (element) {
+        element.style.width = 'auto';
+        element.style.maxWidth = '80vw'; // Prevent exceeding screen width
+        element.style.setProperty('width', 'auto', 'important'); // Mimic !important
+      }
+    });
+   }
 }
 
 //replace German country names by English ones
