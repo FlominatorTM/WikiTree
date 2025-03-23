@@ -45,14 +45,23 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			return $b['timestamp'] - $a['timestamp'];
 		});
 
+
+		$already_posted_feed = "";
+		if (isset($_REQUEST['check_url'])) {
+			$already_posted_feed = file_get_contents($_REQUEST['check_url']);
+		}
+
+
 		foreach ($posts as $post) {
-			echo "    <item>\n";
-			echo "    	<title>" . html_entity_decode($post['title']) . "</title>\n";
-			echo "    	<link>" . $post['title'] . "</link>\n";
-			echo "    	<guid isPermaLink='false'>" . $post['guid'] . "</guid>\n";
-			echo "    	<description>" . htmlspecialchars($post['title']) . "</description>\n";
-			echo "    	<pubDate>" . date("r", $post['timestamp']) . "</pubDate>\n";
-			echo "    </item>\n";
+			if (!stristr($already_posted_feed, $post['link'])) {
+				echo "    <item>\n";
+				echo "    	<title>" . html_entity_decode($post['title']) . "</title>\n";
+				echo "    	<link>" . $post['link'] . "</link>\n";
+				echo "    	<guid isPermaLink='false'>" . $post['guid'] . "</guid>\n";
+				echo "    	<description>" . htmlspecialchars($post['title']) . "</description>\n";
+				echo "    	<pubDate>" . date("r", $post['timestamp']) . "</pubDate>\n";
+				echo "    </item>\n";
+			}
 		}
 
 
