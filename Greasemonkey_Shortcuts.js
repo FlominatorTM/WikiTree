@@ -6,187 +6,160 @@
 // @include   https://*.wikitree.com/
 // ==/UserScript==
 
-/*
-Features:
-- adding "and" in syntax example containing wiki links to the parents
-- keyboard shortcuts for edit (E) and preview (P), see browser manual for details (in Firefox is ALT + SHIFT + shortcut)
-- showing private profile after saving instead of leaving edit mask open
-- automatically select "no middle name" if field is empty when editing a profile
-- show message box when there is no category present
-- copy URL parameter wpSummary into the summary field 
-- show "Add FamilySearch ID" if needed
-- do not open links on result page of "Add FamilySearch ID" in new window
-- remove right column in edit mode and make input field bigger instead
-*/
 
-// automatically select Germany challenge
-if(window.location.href.includes("WTChallenge"))
-{
-	var checkboxes = document.getElementsByName("challengex");
-	for(let i=0;i<checkboxes.length;i++)
-	{
-	  if(checkboxes[i].value.includes("Germany"))
-	  {
-		 checkboxes[i].checked = true;
-		 break;
-	  }
-	}
-
-	const buttons = document.getElementsByClassName("btn btn-default");
-	buttons[0].focus();
+//focus on Challenge Tracker after saving profile
+if (window.location.href.includes("errcode=saved")) {
+  const aTags = document.getElementsByTagName("a");
+  for (let i = 0; i < aTags.length; i++) {
+    if (
+      aTags[i].href != null &&
+      aTags[i].href.includes("Challenge.htm") &&
+      aTags[i].title.includes("Click here")
+    ) {
+      aTags[i].focus();
+    }
+  }
 }
 
-//Hack to make summary checkbox enable wpSave after 2025 redesign
-if (window.location.href.includes("EditPerson")) {
-  const saveButtonsSection = document.getElementById("saveButtons");
-  const config = { attributes: false, childList: true, subtree: true };
-  const observer = new MutationObserver((mutationList, observer) => {
-    for (const mutation of mutationList) {
-      mutation.addedNodes.forEach((node) => {
-        if (node.id == "changeSummaryGears") {
-          var checkboxes = document.getElementsByClassName(
-            "form-check-input summary-suggestion"
-          );
-          for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].addEventListener("change", () => {
-              const saveButton = document.getElementById("wpSave");
-              saveButton.disabled = false;
-            });
-          }
-          observer.disconnect();
-        }
-      });
+// automatically select Germany challenge
+if (window.location.href.includes("WTChallenge")) {
+  var checkboxes = document.getElementsByName("challengex");
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].value.includes("Germany")) {
+      checkboxes[i].checked = true;
+      break;
     }
-  });
-  observer.observe(saveButtonsSection, config);
+  }
+
+  const buttons = document.getElementsByClassName("btn btn-default");
+  buttons[0].focus();
 }
 
 //add "and" in parents linking example
 var allExamples = document.getElementsByClassName("EXAMPLE");
 
-if(allExamples[2].innerHTML != null && allExamples[2].innerHTML.search(/\]\] \[\[/)>-1)
-{
-	allExamples[2].innerText = allExamples[2].innerHTML.replace("]] [[", "]] and [[");
+if (
+  allExamples[2].innerHTML != null &&
+  allExamples[2].innerHTML.search(/\]\] \[\[/) > -1
+) {
+  allExamples[2].innerText = allExamples[2].innerHTML.replace(
+    "]] [[",
+    "]] and [["
+  );
 }
 
-
-
 //show link to add FamilySearch ID if not present
-for (var i=0; strongNode = document.getElementsByTagName("strong")[i]; i++)
-{
-	if(strongNode.textContent == "Research")
-	{
-		spanRootsSearch = strongNode.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling;
-		brBeforeHere = spanRootsSearch.nextSibling.nextSibling;
-		if(null == brBeforeHere)
-		{
-		var unsafeWindow = window.wrappedJSObject;
-		var insertTag = document.createElement("span");
-		var linkAddFamilySearch = '<a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name='+unsafeWindow['wgPageName']+'">Add FamilySearch ID</a>';
-		var linkSearchFamilyTree = '<a href="https://www.familysearch.org/tree/find/name">search</a>';
-			insertTag.innerHTML=/* */'<h3>'+ linkAddFamilySearch +'</h3><br>' + linkSearchFamilyTree ;/* */
-			spanRootsSearch.parentNode.insertBefore(insertTag, spanRootsSearch);
-		 
-			/* HTML of profile without FamilySearch ID looks like this
+for (
+  var i = 0;
+  (strongNode = document.getElementsByTagName("strong")[i]);
+  i++
+) {
+  if (strongNode.textContent == "Research") {
+    spanRootsSearch =
+      strongNode.parentNode.nextSibling.nextSibling.nextSibling.nextSibling
+        .nextSibling;
+    brBeforeHere = spanRootsSearch.nextSibling.nextSibling;
+    if (null == brBeforeHere) {
+      var unsafeWindow = window.wrappedJSObject;
+      var insertTag = document.createElement("span");
+      var linkAddFamilySearch =
+        '<a href="https://www.wikitree.com/index.php?title=Special:EditFamilySearch&action=viewUser&user_name=' +
+        unsafeWindow["wgPageName"] +
+        '">Add FamilySearch ID</a>';
+      var linkSearchFamilyTree =
+        '<a href="https://www.familysearch.org/tree/find/name">search</a>';
+      insertTag.innerHTML =
+        /* */ "<h3>" +
+        linkAddFamilySearch +
+        "</h3><br>" +
+        linkSearchFamilyTree; /* */
+      spanRootsSearch.parentNode.insertBefore(insertTag, spanRootsSearch);
+
+      /* HTML of profile without FamilySearch ID looks like this
 			<span class="large"><strong>Research</strong></span><br/>
 			<a href="https://apps.wikitree.com/apps/york1423/rootssearch/?profile=Huber-4117" target="_blank">RootsSearch for Lorenz Huber</a>: conveniently search 20+ genealogy websites.
 			<span class="SMALL">[<a href="/wiki/RootsSearch" target="_Help" title="More information about the RootsSearch app">more info</a>]</span>
 			</div>
 			</div> <!-- end 7 -->
 			*/
-		}//if
-	}//if
-}//for
+    } //if
+  } //if
+} //for
 
 //do not open links from the FamilySearch connection result page in new window
-if (window.location.search.match(/Special:EditFamilySearch/))
-{
-  for (var i=0; aNode = document.getElementsByTagName("a")[i]; i++)
-  {
-	 if(aNode.target="_blank")
-	 {
-		aNode.target="";
-	 }
+if (window.location.search.match(/Special:EditFamilySearch/)) {
+  for (var i = 0; (aNode = document.getElementsByTagName("a")[i]); i++) {
+    if ((aNode.target = "_blank")) {
+      aNode.target = "";
+    }
   }
 }
 
 //shortcut e for edit button
-for (var j=0; aNode = document.getElementsByClassName("profile-tabs")[0].children[j]; j++)
-{
-  if(aNode.title == "Edit Profile and Family Relationships" || aNode.title == "Edit this Profile")
-  {
-	 aNode.accessKey="e";
-	 break;
+for (
+  var j = 0;
+  (aNode = document.getElementsByClassName("profile-tabs")[0].children[j]);
+  j++
+) {
+  if (
+    aNode.title == "Edit Profile and Family Relationships" ||
+    aNode.title == "Edit this Profile"
+  ) {
+    aNode.accessKey = "e";
+    break;
   }
 }
 
-
 //go to private view after saving (currently not working for FreeSpace pages
-if(window.location.search.match(/errcode=saved/) != null)
-{
-  var personID = document.getElementsByClassName("pureCssMenui0")[1].firstChild.innerHTML;
-  window.location="https://www.wikitree.com/wiki/" + personID + "?public=1";
+if (window.location.search.match(/errcode=saved/) != null) {
+  var personID =
+    document.getElementsByClassName("pureCssMenui0")[1].firstChild.innerHTML;
+  window.location = "https://www.wikitree.com/wiki/" + personID + "?public=1";
 }
 
 //shortcut p for preview button
 var previewButton = document.getElementsByName("preview")[0];
-if(null != previewButton)
-{
-  previewButton.accessKey="p";
+if (null != previewButton) {
+  previewButton.accessKey = "p";
 }
 
-  
 // automatically check "no middle name"
-var inputMiddleName = document.getElementById('mMiddleName');
-if(null != inputMiddleName)
-{
-  if(inputMiddleName.value == "")
-  {
-	 document.getElementById('mStatus_MiddleName_blank').checked = true;
+var inputMiddleName = document.getElementById("mMiddleName");
+if (null != inputMiddleName) {
+  if (inputMiddleName.value == "") {
+    document.getElementById("mStatus_MiddleName_blank").checked = true;
   }
 }
 
 insert_link_before("span", "previewbox", '<a name="preview_box">');
 
-
 //copy summary from URL parameter wpSummary into summary field (if provided explicitly)
 var match = window.location.search.match(/(\?|&)wpSummary\=([^&]*)/);
-if(match!=null)
-{
-	var parameterValue = decodeURIComponent(match[2]);
-	document.getElementById('wpSummary2').value = parameterValue;
+if (match != null) {
+  var parameterValue = decodeURIComponent(match[2]);
+  document.getElementById("wpSummary2").value = parameterValue;
 }
 
 //show message box when there is no "Category" present
 //except summary was provided, because then I want to be fast
-var wpTextbox = document.getElementById('wpTextbox1');
+var wpTextbox = document.getElementById("wpTextbox1");
 
-if(wpTextbox != null)
-{
+if (wpTextbox != null) {
   //remove right column in edit mode and made textbox bigger
-  wpTextbox.cols="280"
+  wpTextbox.cols = "280";
 
-  // var rightColumn = document.getElementsByClassName('six columns omega')[0];
-  var rightColumn = document.getElementById('Lower-Sidebar');
-  rightColumn.remove();
- 
-	applyIansCssIHaveNoClueAboutAndThatGeminiConvertedToJavascript();
-  
-  function applyIansCssIHaveNoClueAboutAndThatGeminiConvertedToJavascript() {
-    const elements = [
-      document.getElementById('wpTextbox1'),
-      document.querySelector('div.CodeMirror'),
-      document.querySelector('#editform .col-lg-8')
-    ];
+  const lowerSidebar = document.querySelector("#Lower-Sidebar");
+  if (lowerSidebar) {
+    lowerSidebar.remove();
+  }
 
-    elements.forEach(element => {
-      if (element) {
-        element.style.width = 'auto';
-        element.style.maxWidth = '80vw'; // Prevent exceeding screen width
-        element.style.setProperty('width', 'auto', 'important'); // Mimic !important
-      }
-    });
-   }
+  const els = document.querySelectorAll(
+    "#wpTextbox1, div.CodeMirror, #editform .col-lg-8"
+  );
+
+  els.forEach((el) => {
+    el.style.setProperty("width", "auto", "important");
+  });
 }
 
 //replace German country names by English ones
@@ -205,13 +178,11 @@ if(deathLocation != null)
 }*/
 
 //Insert any tag before any element with an id
-function insert_link_before(tagname, previous_element, linkcode)
-{
-	var vl_logout = document.getElementById(previous_element);
- 	if (vl_logout) 
- 	{
- 		var ins_li = document.createElement(tagname);
- 		ins_li.innerHTML=/* */linkcode;/* */
- 		 vl_logout.parentNode.insertBefore(ins_li, vl_logout);
- 	}
+function insert_link_before(tagname, previous_element, linkcode) {
+  var vl_logout = document.getElementById(previous_element);
+  if (vl_logout) {
+    var ins_li = document.createElement(tagname);
+    ins_li.innerHTML = /* */ linkcode; /* */
+    vl_logout.parentNode.insertBefore(ins_li, vl_logout);
+  }
 }
