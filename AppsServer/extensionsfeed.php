@@ -23,23 +23,36 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		<?php
 
 		$posts = [];
+		$firefox = 0;
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-browser-extension/", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ncjafpiokcjepnnlmgdaphkkjehapbln", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 		$posts[] = write_safari_ext("https://apps.apple.com/ca/app/wikitree-browser-extension/id6447643999", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
+		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wt-browser-extension-test/", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ijipjpbjobecdgkkjdfpemcidfdmnkid", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
+		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee/", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/bldfdpnmijncfmaokfjgdmcjdhafihoh", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
+		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee-preview/", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/hckhlflohlkolfmhlncgonocmkdkopfa", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
-
+		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-sourcer/", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
 		$posts[] = write_chrome_ext("https://chrome.google.com/webstore/detail/wikitree-sourcer/jaokbnmpdigpgfjckhgpdacpcokipoha", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 		$posts[] = write_safari_ext("https://apps.apple.com/us/app/wikitree-sourcer/id1590224647", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+
+
 
 		usort($posts, function ($a, $b) {
 			return $b['timestamp'] - $a['timestamp'];
@@ -54,17 +67,31 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 		foreach ($posts as $post) {
 			if (!stristr($already_posted_feed, $post['link'])) {
+				$title =  $post['title'];
+				if (strlen($post['changes']) > 1) {
+					$title .= " - " . $post['changes'];
+				}
 				echo "    <item>\n";
-				echo "    	<title>" . html_entity_decode($post['title']) . "</title>\n";
+				echo "    	<title>" . html_entity_decode($title) . "</title>\n";
 				echo "    	<link>" . $post['link'] . "</link>\n";
 				echo "    	<guid isPermaLink='false'>" . $post['guid'] . "</guid>\n";
-				echo "    	<description>" . htmlspecialchars($post['title']) . "</description>\n";
+				echo "    	<description>" . htmlspecialchars($title) . "</description>\n";
 				echo "    	<pubDate>" . date("r", $post['timestamp']) . "</pubDate>\n";
 				echo "    </item>\n";
 			}
 		}
 
-
+		function copy_changes_from_firefox(&$posts, $id_firefox,  $id_this)
+		{
+			print_debug("Version this:"  . $posts[$id_this]['version']);
+			print_debug("Version FF:"  . $posts[$id_firefox]['version']);
+			print_debug("Changes FF:"  . $posts[$id_firefox]['changes']);
+			print_debug("ID FF:"  . $id_firefox);
+			print_debug("ID this:"  . $id_this);
+			if ($posts[$id_this]['version'] == $posts[$id_firefox]['version']) {
+				$posts[$id_this]['changes'] = $posts[$id_firefox]['changes'];
+			}
+		}
 
 		function write_firefox_ext($url, $name, $changelog)
 		{
@@ -72,8 +99,16 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			$update_date = extract_from_to($page, '"last_updated":"', '"');
 			$timestamp = date("U", strtotime($update_date));
 			$version = extract_from_to($page, '"version":"', '"');
+			$release_notes = json_decode(extract_from_to($page, '"releaseNotes":', ',"version'));
+
+
+			$post['version'] = $version;
 			$post['timestamp'] = make_today_now($timestamp);
 			$post['title'] = "$name released in version $version for Firefox";
+			if (strlen($release_notes) > 1 && $name != "WikiTree Sourcer") {
+				// $post['changes'] =  strtolower($release_notes[0]) . substr($release_notes, 1);
+				$post['changes'] =  $release_notes;
+			}
 			$post['link'] = "$changelog#$timestamp";
 			$post['guid'] = $name . $update_date . $version;
 			return $post;
@@ -88,6 +123,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			$post['title'] = "$name released in version $version for Chrome";
 			$post['link'] = "$changelog#$timestamp";
 			$post['guid'] = $name . $timestamp . $version;
+			$post['version'] = $version;
 			return $post;
 		}
 
@@ -98,9 +134,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			$version = extract_from_to($page, 'whats-new__latest__version">Version ', '</p');
 			$update_date = extract_from_to($page, 'data-test-we-datetime datetime="',  '"');
 			$timestamp = date("U", strtotime($update_date));
-
-
-
+			$post['version'] = $version;
 			$post['timestamp'] = make_today_now($timestamp);
 			$post['title'] = "$name released in version $version for Safari";
 			$post['link'] = "$changelog#$timestamp";
