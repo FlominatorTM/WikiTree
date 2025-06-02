@@ -2,12 +2,12 @@ javascript:
 var library = document.title.substring(0, document.title.indexOf(" / "));
 var newspaper = document.querySelector('.newspaper').innerText;
 var vol = document.querySelector('.journal_volume').innerText;
-var dateLink = document.querySelector('.vl-plinks-date').firstChild.href;
-var dateIso = dateLink.substring(dateLink.indexOf("=")+"=".length);
-var dateParts = dateIso.split("-");
-
+var twitterTag = document.querySelector('meta[name="twitter:title"]').content;
+var dateBracket = twitterTag.match(/\d{1,2}\.\d{1,2}\.\d{4}/)[0];
+var dateDe = dateBracket.replace("(", "").replace(")", "");
+var dateParts = dateDe.split(".");
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-var dateEnglish = dateParts[2] + ' ' + months[dateParts[1]-1] + ' ' + dateParts[0];
+var dateEnglish = dateParts[0] + ' ' + months[dateParts[1]-1] + ' ' + dateParts[2];
 
 var d = new Date();
 var dateFormatted = d.toLocaleString("en-GB", {
