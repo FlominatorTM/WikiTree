@@ -1,4 +1,5 @@
 <?php
+$messages['title'] = "Matriculix - fixing the mess … together!";
 $messages['purpose'] = "... helping to repair the mess, that matricula created by changing nearly the whole structure for a certain diocese, e.g. Osnabrück";
 $messages['check_link'] = "Check link";
 $messages['go'] = "go";
@@ -17,3 +18,5 @@ $messages['link_ok'] = "Link seems to work, nothing to do";
 $messages['old_link'] = "Old link";
 $messages['new_link'] = "New link";
 $messages['submit_fixed'] = "Submit fixed link";
+$messages['about'] = "Über";
+$messages['about_link'] = "https://www.wikitree.com/g2g/1831466/matricula-adds-years-diocese-osnabruck-records-breaks-links";

@@ -7,7 +7,7 @@ get_language($user_lang, $inc_dir);
 ?>
 
 <head>
-    <title>Matriculix</title>
+    <title><?php echo $messages['title'] ?></title>
 </head>
 
 <body>
@@ -290,6 +290,9 @@ get_language($user_lang, $inc_dir);
         return $user_lang;
     }
     ?>
+    <br><br />
+    <hr>
+    <a href="<?php echo $messages['about_link'] ?>"><?php echo $messages['about'] ?></a>
 </body>
 
 </html>

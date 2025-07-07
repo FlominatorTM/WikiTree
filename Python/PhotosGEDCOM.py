@@ -10,7 +10,8 @@ args = parser.parse_args()
 gedcom = args.gedcom
 img_folder = args.folder
 gedcom_new = gedcom[0:gedcom.rfind(".")] + "_local.ged"
-gedcom_path = os.path.dirname(gedcom)
+gedcom_path = os.getcwd()
+#os.path.dirname(gedcom)
 
 print(gedcom_new)
 img_dir_path = os.path.join(gedcom_path, img_folder)
