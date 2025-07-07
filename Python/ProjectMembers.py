@@ -54,6 +54,8 @@ def get_member_users_project(project):
 
     global headers;
     link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5000'
+    link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5'
+    print(link)
     f = requests.get(link, headers=headers)
     memberPageContent = f.text
 
@@ -61,10 +63,10 @@ def get_member_users_project(project):
     
     members = []
 
-    # <span class="large"><a href="/wiki/Straub-620" target="_blank" title="">Florian Straub</a></span>
-
+    # was: <span class="large"><a href="/wiki/Straub-620" target="_blank" title="">Florian Straub</a></span>
+    # is: <span>\n<a href="/wiki/Herud-22" target="_blank">Gerd Herud</a>\n</span>
     isFirstRound = True
-    for member in memberPageContent.split('class="large"><a href="/wiki/'):
+    for member in memberPageContent.split('<span>\n<a href="/wiki/'):
         if isFirstRound == True:
             isFirstRound = False
             continue
@@ -75,7 +77,7 @@ def get_member_users_project(project):
         betweenIdAndName = '" target="_blank">'
         indexIdEnds = member.find(betweenIdAndName)
         indexNameBeginns = indexIdEnds + len(betweenIdAndName)
-        afterName = "</a></span>"
+        afterName = "</a>\n</span>"
         indexNameEnds = member.find(afterName);
         if indexNameBeginns > 0:
             theUser["id"] = member[0:indexIdEnds];
@@ -97,6 +99,8 @@ def check_edit_history(theUser):
     f = requests.get(link, headers=headers)
     contribPage = f.text
     
+    print(contribPage)
+
     if "The page you were looking for was moved or deleted" in contribPage:
         print(theUser["id"] + " doesn't exist")
         return
@@ -261,6 +265,7 @@ def get_badge_page(mId):
     f = requests.get(link, headers=headers)
 
     startBadges =  "<!-- list of badges for this user -->";
+    startBadges =  "earned badges of";
     indexStartBadges = f.text.index(startBadges);
     return f.text[indexStartBadges:]
 
@@ -268,6 +273,7 @@ def get_badge_page(mId):
 def get_date_joined(theUser, mId, badge):
     badgePage = get_badge_page(mId)
     
+    #was:
     # <li id="list_item_180">
     # <a href="/index.php?title=Special:Badges&amp;b=germany"><img src="/images/badge/germany.gif.pagespeed.ce.9pUpJX44h-.gif" alt="Germany Project Member" width="125" height="70" border="0"></a> <br>
     # <span class="large">Germany Project Member</span><br>
@@ -275,9 +281,29 @@ def get_date_joined(theUser, mId, badge):
     # 29 Oct 2019
     # <br>
     # Awarded by <a href="/wiki/Haese-11" title="">Kylie Haese</a>
+
+    #is:
+    #<li id="list_item_180" class="w-auto mb-5">
+    # <div class="d-flex align-items-center">
+    # <a href="/index.php?title=Special:Badges&b=germany">
+    # <img src="/images/badge/germany.gif.pagespeed.ce.9pUpJX44h-.gif" width="125" height="70" alt="Germany Project Member"/>
+    # </a>
+    # <span class="d-block small ms-2 mt-2">
+    # <input type="checkbox" class="form-check-input me-2" name="hide_180" value="1">
+    # hide from profile
+    # </span>
+    # </div>
+    # <div class="lead">Germany Project Member</div>
+    # <div>Active participant in the <a href="http://www.wikitree.com/wiki/Project:Germany">Germany/German Roots Project</a>.</div>
+    # <span>30 Apr 2023</span>
+    # <span>Awarded by
+    # <a href="/wiki/Eckstädt-2">
+    # Jelena
+    # Eckstädt
+    # </a>
     
     indexLinkToBadge = badgePage.index("b=" + badge)
-    indexBelowDate = badgePage.index("Awarded by ", indexLinkToBadge)
+    indexBelowDate = badgePage.index("<span>Awarded by", indexLinkToBadge)
     indexBrAfterDate = badgePage.rindex("<", indexLinkToBadge, indexBelowDate) 
     indexBrBeforeDate = badgePage.rindex('>', indexLinkToBadge, indexBrAfterDate) + len('>')
     theUser["date-joined-formatted"] = badgePage[indexBrBeforeDate:indexBrAfterDate]
@@ -437,6 +463,7 @@ try:
         print(str(done) +  "/" + numMembers + " " + str(member) + "\n", flush=True)
 
 except Exception as e:
+    raise
     print("something very bad happened")    
     print(e)
     for i in range(done, len(members)):
