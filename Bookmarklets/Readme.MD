@@ -64,6 +64,9 @@ generates formatted source citations from church books at Matricula (e.g. from h
 
 generates formatted source citations from the Bundesarchiv's Memorial Book, Victims of the Persecution of Jews under the National Socialist Tyranny in Germany 1933 - 1945, e.g. https://www.bundesarchiv.de/gedenkbuch/en970740 (will use the English URL automatically, even if called from a German one)
 
+### [OpenArchieven.js](OpenArchieven.js)
+generates formatted source citations for scans from openarchieven.nl, e.g. https://www.openarchieven.nl/hua:08977DAA-3EE3-7BDD-E053-4701000A4B62
+
 ### [PortaFontium.js](PortaFontium.js)
 
 generates formatted source citations from books at Porta fontium (e.g. from https://www.portafontium.eu/iipimage/30073845/pistov-standesamt-03_0050-o )
