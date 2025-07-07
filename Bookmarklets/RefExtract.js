@@ -11,13 +11,18 @@ if (indexEndRef == -1 || indexStartRef == -1) {
   var lengthSourceEnd = indexEndRef + "</ref>".length - indexStartRef;
 
   var wholeSource = wpTextbox.value.substr(indexStartRef, lengthSourceEnd);
-  var ref = wholeSource.replace("<ref>", '<ref name="' + name + '">');
+  var ref = wholeSource
+    .replace("<ref>", '<ref name="' + name + '">')
+    .split("\n")
+    .join("<br />");
   wpTextbox.value = wpTextbox.value.replace(
     wholeSource,
     '<ref name="' + name + '"/>'
   );
-  wpTextbox.selectionStart = selectionStart;
-  wpTextbox.selectionEnd = selectionStart;
-  prompt("", ref);
+
+  if (prompt("", ref) != null) {
+    wpTextbox.selectionStart = selectionStart;
+    wpTextbox.selectionEnd = selectionStart;
+  }
 }
 void 0;
