@@ -8,7 +8,7 @@ import argparse
 from typing import Optional, Tuple, List # Import Optional, Tuple, and List from the typing module
 
 # WikiTree API endpoints
-WIKITREE_API_URL = "https://api.wikitree.com/api.php"
+API_URL = "https://api.wikitree.com/api.php"
 WIKITREE_PLUS_URL = "https://plus.wikitree.com/function/WTWebProfileSearch/Profiles.json"
 
 def format_date(date_str: str) -> Optional[str]:
@@ -64,7 +64,7 @@ def authenticate_session(session: Session, email: str, password: str) -> None:
     }
     try:
         resp = session.post(
-            WIKITREE_API_URL,
+            API_URL,
             data=data,
             allow_redirects=False,  # necessary to POST without redirect, we need to capture the Location header
         )
@@ -92,7 +92,7 @@ def authenticate_session(session: Session, email: str, password: str) -> None:
     # Step 2: Send back the authcode to finish the authentication
     data = {"action": "clientLogin", "authcode": authcode}
     try:
-        resp = session.post(WIKITREE_API_URL, data=data, allow_redirects=False)
+        resp = session.post(API_URL, data=data, allow_redirects=False)
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(f"Error during second authentication step: {e}")
@@ -143,7 +143,7 @@ def fetch_wikitree_plus_keys(query: str) -> List[str]:
     }
 
     try:
-        response = requests.get(WIKITREE_PLUS_URL, params=params)
+        response = requests.get(WIKITREE_PLUS_URL, params=params, verify=False)
         response.raise_for_status()
         
         result = response.json()
@@ -199,7 +199,7 @@ def fetch_wikitree_data(session: Session, keys: list) -> dict:
         
         try:
             print(f"Fetching chunk {i // chunk_size + 1} of {len(keys) // chunk_size + 1} with {len(chunk)} keys...")
-            response = session.post(WIKITREE_API_URL, data=payload)
+            response = session.post(API_URL, data=payload)
             response.raise_for_status()  # Raise an exception for bad status codes
             
             # The API returns a list with a single dictionary, so we access the first element
@@ -336,6 +336,7 @@ def process_wikitree_data(people_data: dict) -> Tuple[list, list]:
 def create_gedcom_file(filename: str, individuals: list, families: list) -> None:
     """
     Creates a simple GEDCOM file from a list of individuals and families.
+    Each individual profile now includes a source link to their WikiTree page.
 
     Args:
         filename (str): The name of the file to create (e.g., 'my_family.ged').
@@ -367,6 +368,11 @@ def create_gedcom_file(filename: str, individuals: list, families: list) -> None
                 surname = individual.get('surname') or ''
                 f.write(f"1 NAME {given_name} /{surname}/\n")
                 
+                # Add a source record for each profile that links to their WikiTree page
+                if individual.get('wikitree_name'):
+                    source_xref = f"S{individual['xref'][1:]}" # S<the numeric part of the xref>
+                    f.write(f"1 SOUR @{source_xref}@\n")
+                
                 # Add the WikiTree Name as a NOTE field for additional information
                 if individual.get('wikitree_name'):
                     f.write(f"1 NOTE WikiTree Name: {individual['wikitree_name']}\n")
@@ -393,6 +399,14 @@ def create_gedcom_file(filename: str, individuals: list, families: list) -> None
                 
                 if individual.get('family_as_spouse'):
                     f.write(f"1 FAMS @{individual['family_as_spouse']}@\n")
+
+            # --- Source Records ---
+            for individual in individuals:
+                if individual.get('wikitree_name'):
+                    source_xref = f"S{individual['xref'][1:]}"
+                    wikitree_url = f"https://www.wikitree.com/wiki/{individual['wikitree_name']}"
+                    f.write(f"0 @{source_xref}@ SOUR\n")
+                    f.write(f"1 TITL {wikitree_url}\n")
 
             # --- Families ---
             for family in families:
