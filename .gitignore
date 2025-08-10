@@ -7,3 +7,6 @@ AppsServer/catdata
 AppsServer/catdata_backup
 AppsServer/merge_config
 .vscode
+/Python/img
+/Python/members
+/Python/*.ged

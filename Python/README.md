@@ -13,6 +13,10 @@ All scripts require python 3.x
 
 downloads all FILE entries (mostly images) from a GEDCOM, that was exported from WikiTree, into a local subfolder and generates a GEDCOM file that links to the local files
 
+### WikiTreePlus2GEDCOM.py
+
+takes email, password and a WikiTree+ query and turns the result into a GEDCOM file named wikitree_data.ged
+
 ## ProjectMembers.py
 
 - lists members of a given Project and their activity status and other statistics
