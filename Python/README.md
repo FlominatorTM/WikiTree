@@ -18,7 +18,7 @@ usage: `python PhotosGEDCOM.py --folder img --gedcom file.ged`
 ### WikiTreePlus2GEDCOM.py
 
 takes email, password and a WikiTree+ query and turns the result into a GEDCOM file named wikitree_data.ged
-
+preparation: `pip install requests`
 usage: `python WikiTreePlus2GEDCOM.py --email email@example.com --password secret --query CategoryWord="Mansbach, Hessen One Place Study"`
 
 ## ProjectMembers.py
