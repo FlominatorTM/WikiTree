@@ -86,7 +86,7 @@ def authenticate_session(session: Session, email: str, password: str) -> None:
     if matches is None:
         print("Cannot authenticate with Wikitree API: authcode was not obtained")
         return
-        
+    
     authcode = matches.groupdict().get("authcode")
 
     # Step 2: Send back the authcode to finish the authentication
@@ -226,13 +226,23 @@ def fetch_wikitree_data(session: Session, keys: list) -> dict:
     print(f"\nAll chunks fetched. Total profiles retrieved: {len(people_data)}")
     return people_data
 
-def process_wikitree_data(people_data: dict) -> Tuple[list, list]:
+def _process_location(location_str: Optional[str]) -> Optional[str]:
+    """
+    Splits a location string by the first comma and returns the first part.
+    This is an internal helper function.
+    """
+    if location_str and isinstance(location_str, str):
+        return location_str.split(',')[0].strip()
+    return None
+
+def process_wikitree_data(people_data: dict, first_location_only: bool) -> Tuple[list, list]:
     """
     Processes WikiTree API JSON data from getRelatives and generates GEDCOM-compliant lists
     for individuals and families, including marriage data.
 
     Args:
         people_data (dict): A dictionary with WikiTree people data.
+        first_location_only (bool): If True, only the first part of the location string is used.
 
     Returns:
         tuple: A tuple containing lists of individuals and families.
@@ -244,6 +254,18 @@ def process_wikitree_data(people_data: dict) -> Tuple[list, list]:
     # First pass: Create individual records for all people and prepare family links
     for person_id, person_data in people_data.items():
         xref_id = f"I{person_id}"
+        
+        # Determine the location string based on the command-line flag
+        birth_location_str = person_data.get('BirthLocation')
+        death_location_str = person_data.get('DeathLocation')
+        
+        if first_location_only:
+            birth_location = _process_location(birth_location_str)
+            death_location = _process_location(death_location_str)
+        else:
+            birth_location = birth_location_str
+            death_location = death_location_str
+
         individuals_dict[xref_id] = {
             'xref': xref_id,
             'given_name': person_data.get('FirstName'),
@@ -251,9 +273,9 @@ def process_wikitree_data(people_data: dict) -> Tuple[list, list]:
             'wikitree_name': person_data.get('Name'),
             'sex': person_data.get('Gender'),
             'birth_date': format_date(person_data.get('BirthDate')),
-            'birth_place': person_data.get('BirthLocation'),
+            'birth_place': birth_location,
             'death_date': format_date(person_data.get('DeathDate')),
-            'death_place': person_data.get('DeathLocation'),
+            'death_place': death_location,
             'Spouses': person_data.get('Spouses', {}) # Store spouse data temporarily
         }
 
@@ -301,6 +323,13 @@ def process_wikitree_data(people_data: dict) -> Tuple[list, list]:
                 # Create a unique key for the family based on spouses' xrefs
                 family_key = tuple(sorted(list(filter(None, [husband_xref, wife_xref]))))
 
+                # Process marriage location based on the flag
+                marriage_location_str = spouse_data.get('marriage_location')
+                if first_location_only:
+                    marriage_location = _process_location(marriage_location_str)
+                else:
+                    marriage_location = marriage_location_str
+
                 if family_key not in families_dict:
                     family_counter += 1
                     family_xref = f"F{family_counter}"
@@ -310,14 +339,14 @@ def process_wikitree_data(people_data: dict) -> Tuple[list, list]:
                         'wife_xref': wife_xref,
                         'children_xrefs': [],
                         'marriage_date': format_date(spouse_data.get('marriage_date')),
-                        'marriage_place': spouse_data.get('marriage_location')
+                        'marriage_place': marriage_location
                     }
                 else:
                     # Update existing family with marriage data if it's new
                     if not families_dict[family_key].get('marriage_date') and spouse_data.get('marriage_date'):
                         families_dict[family_key]['marriage_date'] = format_date(spouse_data.get('marriage_date'))
-                    if not families_dict[family_key].get('marriage_place') and spouse_data.get('marriage_location'):
-                        families_dict[family_key]['marriage_place'] = spouse_data.get('marriage_location')
+                    if not families_dict[family_key].get('marriage_place') and marriage_location:
+                        families_dict[family_key]['marriage_place'] = marriage_location
 
                 family_xref = families_dict[family_key]['xref']
                 individuals_dict[child_xref]['family_as_spouse'] = family_xref
@@ -441,6 +470,12 @@ if __name__ == '__main__':
     parser.add_argument('--email', '-e', required=True, help='Your WikiTree login email.')
     parser.add_argument('--password', '-p', required=True, help='Your WikiTree password.')
     parser.add_argument('--query', '-q', required=True, help='The WikiTree+ search query.')
+    # Added new optional argument to control location splitting
+    parser.add_argument(
+        '--first-location-only',
+        action='store_true',
+        help='Use only the first part of the location string before the first comma.'
+    )
     
     args = parser.parse_args()
 
@@ -461,7 +496,7 @@ if __name__ == '__main__':
 
         if wikitree_data:
             # Process the fetched data to get GEDCOM-compliant lists
-            individuals_list, families_list = process_wikitree_data(wikitree_data)
+            individuals_list, families_list = process_wikitree_data(wikitree_data, args.first_location_only)
 
             # Call the function to create the file
             create_gedcom_file('wikitree_data.ged', individuals_list, families_list)
