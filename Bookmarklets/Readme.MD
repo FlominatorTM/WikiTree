@@ -65,6 +65,7 @@ generates formatted source citations from church books at Matricula (e.g. from h
 generates formatted source citations from the Bundesarchiv's Memorial Book, Victims of the Persecution of Jews under the National Socialist Tyranny in Germany 1933 - 1945, e.g. https://www.bundesarchiv.de/gedenkbuch/en970740 (will use the English URL automatically, even if called from a German one)
 
 ### [OpenArchieven.js](OpenArchieven.js)
+
 generates formatted source citations for scans from openarchieven.nl, e.g. https://www.openarchieven.nl/hua:08977DAA-3EE3-7BDD-E053-4701000A4B62
 
 ### [PortaFontium.js](PortaFontium.js)
@@ -186,6 +187,10 @@ cleans a profile (currently only puts categories on top and sticker below the bi
 ### [RefExtract.js](RefExtract.js)
 
 Did you ever want to take an unnamed inline reference (e.g. \<ref>some very long source\</ref>), give it a name, replace the current usage by \<ref name="the name"/> and use it somewhere else, probably earlier in the profile? Just place the cursor inside the ref, click this bookmarklet and enter the name for the ref. Then you can copy it from the popup, while the original one is recuded to the tag with the name.
+
+### [RefFromBullet.js](RefFromBullet.js)
+
+Did you ever want to take an bulleted source and turn it into a named inline reference? Just place the cursor inside the bullet source, click this bookmarklet and enter the name for the ref. Then you can copy it from the popup, while the original one is removed. This won't work with sources containing line-wraps and you might lose the bullet in the process, so make sure, you have it saved somewhere.
 
 ### [ThonHistogramFilter.js](ThonHistogramFilter.js)
 
