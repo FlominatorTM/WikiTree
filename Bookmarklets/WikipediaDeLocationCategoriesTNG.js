@@ -92,7 +92,7 @@ for (var i = 0; i < allAnkerNodes.length; i++) {
   if ((href = allAnkerNodes[i].getAttribute("href"))) {
     hrefParts = href.split("/");
     if (hrefParts[4] == "Special:EntityPage") {
-      wikidata = wikidata + hrefParts[5];
+      wikidata = wikidata + hrefParts[5].split("#")[0];
       break;
     }
   }
