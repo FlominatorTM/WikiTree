@@ -54,7 +54,7 @@ def get_member_users_project(project):
 
     global headers;
     link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5000'
-    link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5'
+    # link = 'https://www.wikitree.com/index.php?title=Special:Badges&b=' + project + '&limit=5'
     print(link)
     f = requests.get(link, headers=headers)
     memberPageContent = f.text
@@ -99,7 +99,7 @@ def check_edit_history(theUser):
     f = requests.get(link, headers=headers)
     contribPage = f.text
     
-    print(contribPage)
+    #print(contribPage)
 
     if "The page you were looking for was moved or deleted" in contribPage:
         print(theUser["id"] + " doesn't exist")
@@ -370,7 +370,10 @@ def write_report(members):
 
             if args.join:
                 f.write("<td>")
-                f.write( member["date-joined-formatted"])
+                if "date-joined-formatted" in member:
+                    f.write( member["date-joined-formatted"])
+                else:
+                    f.write("---")
                 f.write("</td>")
 
             if args.last:
