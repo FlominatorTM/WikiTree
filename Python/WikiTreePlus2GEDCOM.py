@@ -9,7 +9,7 @@ from typing import Optional, Tuple, List # Import Optional, Tuple, and List from
 
 # WikiTree API endpoints
 API_URL = "https://api.wikitree.com/api.php"
-WIKITREE_PLUS_URL = "https://plus.wikitree.com/function/WTWebProfileSearch/Profiles.json"
+WIKITREE_PLUS_URL = "https://plus.wikitree.com/function/WTWebProfileSearch/WikiTreePlus2GEDCOM.json"
 
 def format_date(date_str: str) -> Optional[str]:
     """
@@ -194,7 +194,8 @@ def fetch_wikitree_data(session: Session, keys: list) -> dict:
             "action": "getRelatives",
             "keys": key_string,
             "fields": "Id,PageId,Name,FirstName,LastNameAtBirth,BirthDate,DeathDate,Father,Mother,Gender,BirthLocation,DeathLocation",
-            "getSpouses": 1
+            "getSpouses": 1,
+            "appId" : "WikiTreePlus2GEDCOM"
         }
         
         try:
