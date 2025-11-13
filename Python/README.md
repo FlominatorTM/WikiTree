@@ -15,13 +15,20 @@ downloads all FILE entries (mostly images) from a GEDCOM, that was exported from
 
 usage: `python PhotosGEDCOM.py --folder img --gedcom file.ged`
 
-### WikiTreePlus2GEDCOM.py
+## WikiTreePlus2GEDCOM.py
 
 takes email, password and a WikiTree+ query and turns the result into a GEDCOM file named wikitree_data.ged
 
 preparation: `pip install requests`
 
 usage: `python WikiTreePlus2GEDCOM.py --email email@example.com --password secret --query CategoryWord="Mansbach, Hessen One Place Study"`
+
+in case you end up with an error saying something like ``(Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1006)'))`` please execute the following commands:
+
+```
+pip uninstall urllib3
+pip install urllib3==1.26.20
+```
 
 ## ProjectMembers.py
 
