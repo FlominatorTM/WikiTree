@@ -151,7 +151,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 
 					continue;
 				}
-				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</A>");
+				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</a>");
 				if (stristr($answer_and_comments[$c], 'qa-a-item-who-data">anonymous')) {
 					$user = "Anonymous";
 				}
