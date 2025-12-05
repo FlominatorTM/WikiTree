@@ -131,11 +131,8 @@ def check_edit_history(theUser):
     global args
     global headers
     link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=500&who=" + theUser["id"];
-    #f = requests.get(link, headers=headers)
     contribPage = get_url_logged_in(link)
     
-    print(contribPage)
-
     if "The page you were looking for was moved or deleted" in contribPage:
         print(theUser["id"] + " doesn't exist")
         return
@@ -144,7 +141,6 @@ def check_edit_history(theUser):
         indexQuote = contribPage.find("'", indexH1)
         theUser["name"] = contribPage[indexH1:indexQuote]
 
-    beginnOfHistory = "<span class='HISTORY-DATE'>"
     beginnOfHistory = '<span class="feed-date">'
     contribPageParts = contribPage.split(beginnOfHistory)
     
@@ -156,11 +152,9 @@ def check_edit_history(theUser):
     print(len(contribPageParts))
     dayNum = 0
     for oneDay in contribPageParts[1:] :
-        print(oneDay)
+        # print(oneDay)
         dayNum+=1
         indexDateEnd = oneDay.find('</span>');
-        # print (oneDay)
-        # print ( contribPage[indexDate:indexDateEnd] )
         editDateFormatted = oneDay[0:indexDateEnd]
         editDate =   dateutil.parser.parse(editDateFormatted)
         
