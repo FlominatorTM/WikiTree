@@ -23,7 +23,7 @@ preparation: `pip install requests`
 
 usage: `python WikiTreePlus2GEDCOM.py --email email@example.com --password secret --query CategoryWord="Mansbach, Hessen One Place Study"`
 
-in case you end up with an error saying something like ``(Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1006)'))`` please execute the following commands:
+in case you end up with an error saying something like `(Caused by SSLError(SSLError(1, '[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1006)'))` please execute the following commands:
 
 ```
 pip uninstall urllib3
@@ -34,6 +34,7 @@ pip install urllib3==1.26.20
 
 - lists members of a given Project and their activity status and other statistics
 - installing additional libraries: `pip install -r ProjectMembers_requirements`
+- additionally requires installed Firefox and Geckodriver from https://github.com/mozilla/geckodriver/releases
 
 ## ThonTeamMates.py
 

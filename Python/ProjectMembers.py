@@ -5,9 +5,21 @@ import re
 from datetime import datetime 
 from dateutil.relativedelta import relativedelta 
 
+# The selenium module
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+
 words = ["German", "Deutsch", "Heiliges", "Holy Roman", "Prussia", "Preußen", "Alsace", "Elsass"]
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0'}
-    
+# op = Options()
+# op.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+# driver = webdriver.Firefox(op) # if you want to use chrome, replace Firefox() with Chrome()
+driver = None
+
 def get_args():
     parser = argparse.ArgumentParser(description='Creates a report about all users, who have a particular badge or who are in a list of user names')
     parser.add_argument('--badge', help='badge name to be checked for (default: germany)', default="germany")
@@ -22,13 +34,36 @@ def get_args():
     parser.add_argument('--checkin', help='part of the checkin-in message to check if user received it')
     parser.add_argument('--reply', action='store_true', help='check if user replied to check-in message')
     parser.add_argument('--otherbadges', help='check if user also has these badges (pipe-separated list)')
-
+    parser.add_argument('--user', required=True, help="WikiTree user name to post as")
+    parser.add_argument('--password', required=True, help="password of said user")
     args = parser.parse_args()
     if args.users and args.unbadge and args.bid == None:
         parser.error("usage of --users and --unbadge requires --bid")
     #if args.badge != None and args.users is not None:
     #    parser.error("either use --badge to specify a badge OR --users to specify a text file with user names")
     return args
+
+#make sure you have geckodriver from https://github.com/mozilla/geckodriver/releases in PATH
+
+def log_in ():
+    global driver
+    options = Options()
+    options.binary_location = 'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
+    driver = webdriver.Firefox(options) # if you want to use chrome, replace Firefox() with Chrome()
+    print("logging in as " + args.user)
+    driver.get("https://www.wikitree.com/index.php?title=Special:Userlogin") # load the web page
+    user = driver.find_element(By.NAME, "wpEmail")
+    user.send_keys(args.user)
+    pwd = driver.find_element(By.NAME, "wpPassword")
+    pwd.send_keys(args.password)
+    pwd.submit()
+    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "dropdown-toggle"))) # waits till the element with the specific id appears
+
+def get_url_logged_in(url):
+    if driver == None:
+        log_in()
+    driver.get(url)
+    return driver.page_source
 
 def get_members_file(filename):
     members = []
@@ -96,20 +131,21 @@ def check_edit_history(theUser):
     global args
     global headers
     link = "https://www.wikitree.com/index.php?title=Special:Contributions&l=500&who=" + theUser["id"];
-    f = requests.get(link, headers=headers)
-    contribPage = f.text
+    #f = requests.get(link, headers=headers)
+    contribPage = get_url_logged_in(link)
     
-    #print(contribPage)
+    print(contribPage)
 
     if "The page you were looking for was moved or deleted" in contribPage:
         print(theUser["id"] + " doesn't exist")
         return
     if theUser["name"] == " ":
-        indexH1 = contribPage.find("h1") + len("<h1>")
+        indexH1 = contribPage.find("h1") + len("<h1Feeds:n")
         indexQuote = contribPage.find("'", indexH1)
         theUser["name"] = contribPage[indexH1:indexQuote]
 
     beginnOfHistory = "<span class='HISTORY-DATE'>"
+    beginnOfHistory = '<span class="feed-date">'
     contribPageParts = contribPage.split(beginnOfHistory)
     
     now = datetime.now()
@@ -117,11 +153,10 @@ def check_edit_history(theUser):
     if args.anysince is not None:
         months_any = args.anysince
     six_months_ago = now + relativedelta(months=- months_any)
-    
+    print(len(contribPageParts))
     dayNum = 0
     for oneDay in contribPageParts[1:] :
-        # print(oneDay)
-        "<span class='HISTORY-ITEM'>"
+        print(oneDay)
         dayNum+=1
         indexDateEnd = oneDay.find('</span>');
         # print (oneDay)
@@ -154,7 +189,8 @@ def check_edit_history(theUser):
 
 def did_user_perform_relevant_edit(oneDay):
     global words
-    editsPerDay = oneDay.split("<span class='HISTORY-ITEM'>")
+    # editsPerDay = oneDay.split("<span class='HISTORY-ITEM'>")
+    editsPerDay = oneDay.split('<span class="feed-item">')
     for oneEdit in editsPerDay[1:]:
         linksInEdit = oneEdit.split("<a href=\"")
         
@@ -473,3 +509,6 @@ except Exception as e:
         members.pop(done)
 
 write_report(members)
+
+if driver:
+    driver.close()
