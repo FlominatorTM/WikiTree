@@ -147,10 +147,6 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 				if (stristr($answer_and_comments[$c], "previous comments")) {
 					continue;
 				}
-				if (needle_in_reply($filters, $answer_and_comments[$c])) {
-
-					continue;
-				}
 				$user =  extract_from_to($answer_and_comments[$c], 'qa-user-link">', "</a>");
 				if (stristr($answer_and_comments[$c], 'qa-a-item-who-data">anonymous')) {
 					$user = "Anonymous";
@@ -162,6 +158,8 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 					$about = "question";
 				}
 
+
+
 				$token_behind_answer = 'qa-a-item-meta';
 				$token_before_post_id = "#a";
 				if ($is_comment) {
@@ -172,7 +170,10 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 					$answer_user = $user;
 				}
 				$index_behind_answer = strpos($answer_and_comments[$c], $token_behind_answer);
+				if (needle_in_reply($filters, $answer_and_comments[$c])) {
 
+					continue;
+				}
 				/*
 				<span class="qa-c-item-meta">
 				<a href="https://www.wikitree.com/g2g/1629844/create-categories-from-wikipedia-find-grave-using-wikitree&amp;a=1634331" class="qa-c-item-what" itemprop="url">commented</a>
