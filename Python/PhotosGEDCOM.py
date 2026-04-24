@@ -4,7 +4,6 @@ import argparse
 import re
 import urllib
 def add_found_links(bio, links, src):
-    pattern = r"\[\[(.*?)\]\]"
     for bracket_content in re.findall(r"\[\[(.*?)\]\]", bio, re.DOTALL):
         if not ":" in bracket_content and bracket_content[0] != "#":
             piped_parts = bracket_content.split("|")
@@ -12,8 +11,6 @@ def add_found_links(bio, links, src):
             alias = id
             if len (piped_parts) == 2:
                 alias = piped_parts[1]
-            # elif len(piped_parts) == 1:
-            #     links[piped_parts[0]] = piped_parts[0]
             links[id] = { "id": id, "alias": alias, "from" : src }
 
 parser = argparse.ArgumentParser(description='Downloads all images from a WikiTree GEDCOM file to a subfolder img and updates the GEDCOM file')
@@ -44,7 +41,6 @@ if os.path.exists(whitelist):
             if not whitelist_line[0] == '#':
                 found_profiles.append(whitelist_line.strip())
         print(found_profiles)
-        input()
 
 linked_profiles = {}
 cont_lines = ""
@@ -87,16 +83,12 @@ with open(gedcom, "r", encoding="utf8", errors="ignore") as f:
                 found_profiles.append(wt_id)
             if " INDI" in line:
                 add_found_links(cont_lines, linked_profiles, wt_id)
-                if "Nally" in cont_lines:
-                    input(cont_lines)
-
             if "1 NOTE " in line:
                 #this is the whole bio of the previous person
                 #print(cont_lines)
                 cont_lines = line.split("1 NOTE ")[1]
             if "2 CONT " in line:
                 cont_lines += line.split("2 CONT ")[1]
-
 
 print ("missing")
 for linked_profile_id in linked_profiles:
