@@ -15,6 +15,8 @@ downloads all FILE entries (mostly images) from a GEDCOM, that was exported from
 
 usage: `python PhotosGEDCOM.py --folder img --gedcom file.ged`
 
+it will also check for profiles, that are linked from the biographies in the GEDCOM, but are not included in it. Adding a file named gedcom_whitelist.txt with one WikiTree ID per row will exclude the profiles in it from the check
+
 ## WikiTreePlus2GEDCOM.py
 
 takes email, password and a WikiTree+ query and turns the result into a GEDCOM file named wikitree_data.ged
