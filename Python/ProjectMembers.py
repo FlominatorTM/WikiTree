@@ -81,7 +81,7 @@ def get_members_file(filename):
 def set_badge_id(page_content):
     global args
     #who wrote: <div style="display:inline;" id="commentWrapper_13256075_180"><span class="commentText"> 
-    comments = re.search('commentWrapper_(\d+)_(\d+)', page_content, re.IGNORECASE)
+    comments = re.search(r'commentWrapper_(\d+)_(\d+)', page_content, re.IGNORECASE)
     if comments:
         args.bid = comments.group(2)
 
@@ -149,7 +149,6 @@ def check_edit_history(theUser):
     if args.anysince is not None:
         months_any = args.anysince
     six_months_ago = now + relativedelta(months=- months_any)
-    print(len(contribPageParts))
     dayNum = 0
     for oneDay in contribPageParts[1:] :
         # print(oneDay)
@@ -159,16 +158,16 @@ def check_edit_history(theUser):
         editDate =   dateutil.parser.parse(editDateFormatted)
         
         # print (editDateFormatted)
-        if dayNum is 1:
+        if dayNum == 1:
             theUser["lastEditFormatted"] = editDateFormatted
             theUser["lastEdit"] = editDate
             theUser["editedProject"] = False
             theUser["anyEdit"] = False
-            if args.last is False and args.contribs is False and args.anysince is None:
+            if args.last is False and args.contribs is False:
                 break
         
         #print (editDateFormatted)
-        if args.anysince is not None and editDate > six_months_ago:
+        if editDate > six_months_ago:
             theUser["anyEdit"] = True
             if args.contribs:
                 relevant_edit = did_user_perform_relevant_edit(oneDay)

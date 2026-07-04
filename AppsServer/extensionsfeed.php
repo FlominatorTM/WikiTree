@@ -1,7 +1,7 @@
 <?php
 //shows browser extensions releases
 $is_debug = isset($_REQUEST['debug']);
-
+$oldest_first = isset($_REQUEST['oldest_first']);
 if (!isset($_REQUEST['debug'])) {
 	header("Content-Type: application/rss+xml");
 	// header('sContent-Disposition: inline;Filename=WikiTreeExtensionsFeed.rss');
@@ -25,37 +25,54 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		$posts = [];
 		$firefox = 0;
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-browser-extension/", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		print_debug("WBE FF done");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ncjafpiokcjepnnlmgdaphkkjehapbln", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		print_debug("WBE Chrome done");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 		$posts[] = write_safari_ext("https://apps.apple.com/ca/app/wikitree-browser-extension/id6447643999", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		print_debug("WBE Safari done");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
 		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wt-browser-extension-test/", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		print_debug("WBE FF test done");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ijipjpbjobecdgkkjdfpemcidfdmnkid", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+		print_debug("WBE Chrome test done");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
 		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee/", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
+		print_debug("BEE FF done");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/bldfdpnmijncfmaokfjgdmcjdhafihoh", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
+		print_debug("BEE Chrome done");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
 		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee-preview/", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
+		print_debug("BEE FF test done");
 		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/hckhlflohlkolfmhlncgonocmkdkopfa", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
+		print_debug("BEE Chrome test done");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
 		$firefox = count($posts);
 		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-sourcer/", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+		print_debug("Source FF done");
 		$posts[] = write_chrome_ext("https://chrome.google.com/webstore/detail/wikitree-sourcer/jaokbnmpdigpgfjckhgpdacpcokipoha", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+		print_debug("Source Chrome done");
 		$posts[] = write_safari_ext("https://apps.apple.com/us/app/wikitree-sourcer/id1590224647", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+		print_debug("Source Safari done");
 		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
 
 
 		usort($posts, function ($a, $b) {
-			return $b['timestamp'] - $a['timestamp'];
+			global $oldest_first;
+			if (!$oldest_first) {
+				return $b['timestamp'] - $a['timestamp'];
+			} else {
+				return $a['timestamp'] - $b['timestamp'];
+			}
 		});
 
 
@@ -130,9 +147,11 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		function write_safari_ext($url, $name, $changelog)
 		{
 			$page = file_get_contents($url);
-			// $version = extract_from_to($page, '"+15053737726"],null,null,"', '"');
-			$version = extract_from_to($page, 'whats-new__latest__version">Version ', '</p');
-			$update_date = extract_from_to($page, 'data-test-we-datetime datetime="',  '"');
+
+			$version = extract_from_to($page, '"primarySubtitle":"Version ', '"');
+
+			$update_date = extract_from_to($page, 'time datetime="',  '"');
+
 			$timestamp = date("U", strtotime($update_date));
 			$post['version'] = $version;
 			$post['timestamp'] = make_today_now($timestamp);
@@ -147,7 +166,7 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 			if (isset($_REQUEST['today_now'])) {
 				$now = time();
 				$diff = $now - $timestamp;
-				$oneDay = 60 * 60 * 24;
+				$oneDay = 60 * 60 * 24 * 5;
 
 				if ($diff < $oneDay) {
 					$timestamp = $now;
