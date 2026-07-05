@@ -22,82 +22,94 @@ $url_here = $protocol . $_SERVER['HTTP_HOST'] .  htmlspecialchars($_SERVER['REQU
 		<pubDate><?php echo (date("r")) ?></pubDate>
 		<?php
 
-		$posts = [];
-		$firefox = 0;
-		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-browser-extension/", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
-		print_debug("WBE FF done");
-		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ncjafpiokcjepnnlmgdaphkkjehapbln", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
-		print_debug("WBE Chrome done");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
-		$posts[] = write_safari_ext("https://apps.apple.com/ca/app/wikitree-browser-extension/id6447643999", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
-		print_debug("WBE Safari done");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+		if (isset($_REQUEST['test_firefox'])) {
+			post_one_post(write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-browser-extension/", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update"));
+		} else if (isset($_REQUEST['test_chrome'])) {
+			post_one_post(write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ncjafpiokcjepnnlmgdaphkkjehapbln", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update"));
+		} else if (isset($_REQUEST['test_safari'])) {
+			post_one_post(write_safari_ext("https://apps.apple.com/ca/app/wikitree-browser-extension/id6447643999", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update"));
+		} else {
 
-		$firefox = count($posts);
-		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wt-browser-extension-test/", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
-		print_debug("WBE FF test done");
-		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ijipjpbjobecdgkkjdfpemcidfdmnkid", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
-		print_debug("WBE Chrome test done");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+			$posts = [];
+			$firefox = 0;
+			$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-browser-extension/", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+			print_debug("WBE FF done");
+			$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ncjafpiokcjepnnlmgdaphkkjehapbln", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+			print_debug("WBE Chrome done");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+			$posts[] = write_safari_ext("https://apps.apple.com/ca/app/wikitree-browser-extension/id6447643999", "WikiTree Browser Extension", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+			print_debug("WBE Safari done");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
-		$firefox = count($posts);
-		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee/", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
-		print_debug("BEE FF done");
-		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/bldfdpnmijncfmaokfjgdmcjdhafihoh", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
-		print_debug("BEE Chrome done");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+			$firefox = count($posts);
+			$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wt-browser-extension-test/", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+			print_debug("WBE FF test done");
+			$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/ijipjpbjobecdgkkjdfpemcidfdmnkid", "WikiTree Browser Extension Preview", "https://www.wikitree.com/wiki/Space:WikiTree_Browser_Extension_Update");
+			print_debug("WBE Chrome test done");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
-		$firefox = count($posts);
-		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee-preview/", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
-		print_debug("BEE FF test done");
-		$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/hckhlflohlkolfmhlncgonocmkdkopfa", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
-		print_debug("BEE Chrome test done");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+			$firefox = count($posts);
+			$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee/", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
+			print_debug("BEE FF done");
+			$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/bldfdpnmijncfmaokfjgdmcjdhafihoh", "WikiTree BEE", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_Update");
+			print_debug("BEE Chrome done");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
-		$firefox = count($posts);
-		$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-sourcer/", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
-		print_debug("Source FF done");
-		$posts[] = write_chrome_ext("https://chrome.google.com/webstore/detail/wikitree-sourcer/jaokbnmpdigpgfjckhgpdacpcokipoha", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
-		print_debug("Source Chrome done");
-		$posts[] = write_safari_ext("https://apps.apple.com/us/app/wikitree-sourcer/id1590224647", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
-		print_debug("Source Safari done");
-		copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+			$firefox = count($posts);
+			$posts[] = write_firefox_ext("https://addons.mozilla.org/en-GB/firefox/addon/wikitree-bee-preview/", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
+			print_debug("BEE FF test done");
+			$posts[] = write_chrome_ext("https://chromewebstore.google.com/detail/wikitree-browser-extensio/hckhlflohlkolfmhlncgonocmkdkopfa", "WikiTree BEE Preview", "https://www.wikitree.com/wiki/Space:WikiTree_BEE_%28Preview%29_Update");
+			print_debug("BEE Chrome test done");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
-
-
-		usort($posts, function ($a, $b) {
-			global $oldest_first;
-			if (!$oldest_first) {
-				return $b['timestamp'] - $a['timestamp'];
-			} else {
-				return $a['timestamp'] - $b['timestamp'];
-			}
-		});
+			$firefox = count($posts);
+			$posts[] = write_firefox_ext("https://addons.mozilla.org/en-US/firefox/addon/wikitree-sourcer/", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+			print_debug("Source FF done");
+			$posts[] = write_chrome_ext("https://chrome.google.com/webstore/detail/wikitree-sourcer/jaokbnmpdigpgfjckhgpdacpcokipoha", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
+			print_debug("Source Chrome done");
+			$posts[] = write_safari_ext("https://apps.apple.com/us/app/wikitree-sourcer/id1590224647", "WikiTree Sourcer", "https://www.wikitree.com/wiki/Space:WikiTree_Sourcer_Release_Notes");
+			print_debug("Source Safari done");
+			copy_changes_from_firefox($posts, $firefox, count($posts) - 1);
 
 
-		$already_posted_feed = "";
-		if (isset($_REQUEST['check_url'])) {
-			$already_posted_feed = file_get_contents($_REQUEST['check_url']);
-		}
 
-
-		foreach ($posts as $post) {
-			if (!stristr($already_posted_feed, $post['link'])) {
-				$title =  $post['title'];
-				if (strlen($post['changes']) > 1) {
-					$title .= " - " . $post['changes'];
+			usort($posts, function ($a, $b) {
+				global $oldest_first;
+				if (!$oldest_first) {
+					return $b['timestamp'] - $a['timestamp'];
+				} else {
+					return $a['timestamp'] - $b['timestamp'];
 				}
-				echo "    <item>\n";
-				echo "    	<title>" . html_entity_decode($title) . "</title>\n";
-				echo "    	<link>" . $post['link'] . "</link>\n";
-				echo "    	<guid isPermaLink='false'>" . $post['guid'] . "</guid>\n";
-				echo "    	<description>" . htmlspecialchars($title) . "</description>\n";
-				echo "    	<pubDate>" . date("r", $post['timestamp']) . "</pubDate>\n";
-				echo "    </item>\n";
+			});
+
+
+			$already_posted_feed = "";
+			if (isset($_REQUEST['check_url'])) {
+				$already_posted_feed = file_get_contents($_REQUEST['check_url']);
+			}
+
+
+			foreach ($posts as $post) {
+				if (!stristr($already_posted_feed, $post['link'])) {
+					post_one_post($post);
+				}
 			}
 		}
-
+		function post_one_post($post)
+		{
+			$title =  $post['title'];
+			if (strlen($post['changes']) > 1) {
+				$title .= " - " . $post['changes'];
+			}
+			echo "    <item>\n";
+			echo "    	<title>" . html_entity_decode($title) . "</title>\n";
+			echo "    	<link>" . $post['link'] . "</link>\n";
+			echo "    	<guid isPermaLink='false'>" . $post['guid'] . "</guid>\n";
+			echo "    	<description>" . htmlspecialchars($title) . "</description>\n";
+			echo "    	<pubDate>" . date("r", $post['timestamp']) . "</pubDate>\n";
+			echo "    </item>\n";
+		}
 		function copy_changes_from_firefox(&$posts, $id_firefox,  $id_this)
 		{
 			print_debug("Version this:"  . $posts[$id_this]['version']);
