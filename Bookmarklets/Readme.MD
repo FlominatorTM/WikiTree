@@ -192,6 +192,10 @@ Did you ever want to take an unnamed inline reference (e.g. \<ref>some very long
 
 Did you ever want to take an bulleted source and turn it into a named inline reference? Just place the cursor inside the bullet source, click this bookmarklet and enter the name for the ref. Then you can copy it from the popup, while the original one is removed. This won't work with sources containing line-wraps and you might lose the bullet in the process, so make sure, you have it saved somewhere.
 
+### [ThonHistoCummulated.js](ThonHistoCummulated.js)
+
+will acccumulated sums to tooltips in histograms from the official score sheet for [SourceAThon](https://plus.wikitree.com/Challenges/SourceAThon/UsersHistogram.htm) and [ConnectAThon](https://plus.wikitree.com/Challenges/ConnectAThon/UsersHistogram.htm
+
 ### [ThonHistogramFilter.js](ThonHistogramFilter.js)
 
 asks for a text (e.g. Germany) to only show user histograms from the official score sheet for [SourceAThon](https://plus.wikitree.com/Challenges/SourceAThon/UsersHistogram.htm) and [ConnectAThon](https://plus.wikitree.com/Challenges/ConnectAThon/UsersHistogram.htm
